@@ -21,10 +21,6 @@ function Test() {
         diaryRes.response, diaryRes.data
       )
     }
-    console.log(
-      // event.currentTarget
-      event.currentTarget.name
-    )
     fetchData(event.currentTarget.name)
   }
 
