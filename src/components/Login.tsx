@@ -1,4 +1,8 @@
 import React from 'react';
+// import jwt_decode from 'jwt-decode';
+// import dayjs from 'dayjs'
+import fetchInstance from '../utils/fetchInstance';
+import inMemoryJWTManager from "../utils/inMemoryJwt"
 
 interface LoginProps {
 
@@ -43,15 +47,31 @@ class Login extends React.Component<LoginProps, LoginState> {
     const handleSubmit = (event: React.FormEvent) => {
       event.preventDefault();
       console.log(this.state.inputs);
+
       fetch('http://localhost:2602/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify(this.state.inputs)
       }).then(res => res.json())
-        .then(res => console.log(res));
+        .then(async function (res) {
+          console.log('--->', res)
+          // console.log(res.accessToken)
+          // const token: any = jwt_decode(res.accessToken)
+          // console.log(token)
+          // console.log(token.exp)
+          // console.log(dayjs.unix(token.exp).diff(dayjs()))
+          // console.log(dayjs.unix(token.exp).diff(dayjs()) < 1)
+          inMemoryJWTManager.setToken(res.accessToken)
+          const diaryRes = await fetchInstance("/api/v1/diary/test")
+          console.log(
+            diaryRes.response, diaryRes.data
+          )
+
+        });
 
 
     }

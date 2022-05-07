@@ -1,15 +1,14 @@
-import React from 'react';
 import {
   Routes,
   Route,
   Link,
 } from "react-router-dom";
 
-import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Register from './components/Register';
+import Test from "./components/Test";
 
 function App() {
   return (
@@ -21,6 +20,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="test" element={<Test />} />
 
           <Route path="*" element={<NoMatch />} />
         </Route>
