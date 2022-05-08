@@ -1,8 +1,15 @@
+import { tokenToString } from "typescript";
 import inMemoryJWTManager from "./inMemoryJwt"
 
 let baseURL = 'http://localhost:2602'
 
-let originalRequest = async (url: RequestInfo, config: RequestInit | undefined) => {
+type fetchData = {
+  response: Response;
+  data: any;
+  type?: string
+}
+
+let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<fetchData> => {
   url = `${baseURL}${url}`
   let response = await fetch(url, config)
   let data = await response.json()
@@ -17,36 +24,39 @@ let refreshToken = async () => {
     credentials: 'include',
   })
   let data = await response.json()
-  // console.debug("saved-token--->", data.accessToken)
-  inMemoryJWTManager.setToken(data.accessToken)
-  return data.accessToken
+  return data
 }
 
-let customFetcher = async (url: any, config: any = {}) => {
+let customFetcher = async (url: any, config: RequestInit = {}): Promise<fetchData> => {
   let accessToken = inMemoryJWTManager.getToken()
-  // console.debug("getToken-====--->", accessToken)
 
   config['headers'] = {
     Authorization: `Bearer ${accessToken}`
   }
 
-  // console.debug('Before Request')
-  let { response, data } = await originalRequest(url, config)
-  // console.debug('After Request')
+  let { response: originalResponse, data: originalData } = await originalRequest(url, config)
 
-  if (response.statusText === 'Unauthorized') {
-    accessToken = await refreshToken()
+  if (originalResponse.statusText === 'Unauthorized') {
+    let refTokenData = await refreshToken()
+    // if (data.type === 'TokenExpiredError') return <Redirect to='/login' />
+    // if (refTokenData.type === 'TokenExpiredError') return refTokenData
+    if (refTokenData.type === 'TokenExpiredError') return { response: originalResponse, data: refTokenData, type: refTokenData.type }
+    inMemoryJWTManager.setToken(refTokenData.accessToken)
 
-    config['headers'] = {
-      Authorization: `Bearer ${accessToken}`
-    }
+    // config['headers'] = {
+    //   Authorization: `Bearer ${refreshTokenData.accessToken}`
+    // }
 
-    let newResponse = await originalRequest(url, config)
-    response = newResponse.response
-    data = newResponse.data
+    let originalReqAgain = await originalRequest(
+      url, {
+      headers: { Authorization: `Bearer ${refTokenData.accessToken}` }
+    })
+
+    originalResponse = originalReqAgain.response
+    originalData = originalReqAgain.data
 
   }
 
-  return { response, data }
+  return { response: originalResponse, data: originalData }
 }
 export default customFetcher;
