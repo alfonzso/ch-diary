@@ -39,7 +39,7 @@ function Test() {
         diaryObject.response.statusText, diaryObject.response, diaryObject.body, diaryObject
       )
       // return <Redirect to='/login' />
-      if (diaryObject.body.type === 'TokenExpiredError') {
+      if (diaryObject.type === 'TokenExpiredError') {
         console.log('fefefefefef')
         setTokenError(true)
       }
