@@ -1,47 +1,74 @@
-import { tokenToString } from "typescript";
+// import { tokenToString } from "typescript";
+import exp from "constants";
+import { IFetchData, IFetchInstance } from "../types/fetchInstance";
 import inMemoryJWTManager from "./inMemoryJwt"
 
 let baseURL = 'http://localhost:2602'
 
-type fetchData = {
-  response: Response;
-  data: any;
-  type?: string
-}
+// type fetchData = {
+//   response: Response;
+//   data: any;
+//   type?: string
+// }
 
-let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<fetchData> => {
+// type fetchInstance = {
+//   fetchObject: {
+//     response: Response;
+//     body: any;
+//     type?: string
+//   }
+// }
+
+let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<IFetchInstance> => {
   url = `${baseURL}${url}`
   let response = await fetch(url, config)
-  let data = await response.json()
-  // console.debug('REQUESTING:', data)
-  return { response, data }
+  let body = await response.json()
+  return { fetchObject: { response, body } }
 }
 
 let refreshToken = async () => {
-
   let response = await fetch(`${baseURL}/api/v1/auth/refreshToken`, {
     method: 'GET',
     credentials: 'include',
   })
-  let data = await response.json()
-  return data
+  let body = await response.json()
+  return { fetchObject: { response, body, type: body.type! } } as IFetchInstance
+  // return fetchObject
 }
 
-let customFetcher = async (url: any, config: RequestInit = {}): Promise<fetchData> => {
+
+// function checkTokenIsExpired({ fetchObject: refTokenObject }: IFetchInstance, { fetchObject }: IFetchInstance) {
+// function checkTokenIsExpired({ fetchObject: refTokenObject }: IFetchInstance, { fetchObject }: IFetchInstance) {
+function checkTokenIsExpired(refTokenObject: IFetchData, fetchObject: IFetchData) {
+  if (refTokenObject.type === 'TokenExpiredError') {
+    fetchObject.type = 'TokenExpiredError'
+    return { expired: true, fetchObject }
+  }
+  return { expired: true, fetchObject }
+}
+
+let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchInstance> => {
   let accessToken = inMemoryJWTManager.getToken()
 
   config['headers'] = {
     Authorization: `Bearer ${accessToken}`
   }
 
-  let { response: originalResponse, data: originalData } = await originalRequest(url, config)
+  let { fetchObject }: IFetchInstance = await originalRequest(url, config)
 
-  if (originalResponse.statusText === 'Unauthorized') {
-    let refTokenData = await refreshToken()
+  if (fetchObject.response.statusText === 'Unauthorized') {
+    // let { fetchObject: refTokenObject } = await refreshToken()
+    let { fetchObject: refTokenObject } = await refreshToken()
     // if (data.type === 'TokenExpiredError') return <Redirect to='/login' />
     // if (refTokenData.type === 'TokenExpiredError') return refTokenData
-    if (refTokenData.type === 'TokenExpiredError') return { response: originalResponse, data: refTokenData, type: refTokenData.type }
-    inMemoryJWTManager.setToken(refTokenData.accessToken)
+    // if (refTokenObject.type === 'TokenExpiredError') return { fetchObject }
+    // let expired: boolean = false
+    // { expired, refTokenObject } = checkTokenIsExpired(refTokenObject, { fetchObject: fetchObject })
+    // let { expired, { fetchObject: refTokenObject } } = checkTokenIsExpired({ fetchObject: refTokenObject }, { fetchObject: fetchObject })
+    let { expired, fetchObject: checkedRefTokenObject } = checkTokenIsExpired(refTokenObject, fetchObject)
+    if (expired) return { fetchObject: checkedRefTokenObject }
+
+    inMemoryJWTManager.setToken(checkedRefTokenObject.body.accessToken)
 
     // config['headers'] = {
     //   Authorization: `Bearer ${refreshTokenData.accessToken}`
@@ -49,14 +76,12 @@ let customFetcher = async (url: any, config: RequestInit = {}): Promise<fetchDat
 
     let originalReqAgain = await originalRequest(
       url, {
-      headers: { Authorization: `Bearer ${refTokenData.accessToken}` }
+      headers: { Authorization: `Bearer ${checkedRefTokenObject.body.accessToken}` }
     })
 
-    originalResponse = originalReqAgain.response
-    originalData = originalReqAgain.data
-
+    fetchObject = originalReqAgain.fetchObject
   }
 
-  return { response: originalResponse, data: originalData }
+  return { fetchObject }
 }
 export default customFetcher;

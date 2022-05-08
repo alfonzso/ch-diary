@@ -2,12 +2,13 @@ import React, { useEffect, MouseEvent, useState } from 'react';
 import fetchInstance from '../utils/fetchInstance';
 // import  { Redirect } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
+import { IFetchInstance } from '../types/fetchInstance';
 
-type fetchData = {
-  response: Response;
-  data: any;
-  type?: string
-}
+// type fetchInstance = {
+//   response: Response;
+//   data: any;
+//   type?: string
+// }
 
 function Test() {
   function Redirect({ to }: { to: any }) {
@@ -18,7 +19,7 @@ function Test() {
     return null;
   }
   // this.setState({ diaryRes:  });
-  const [diaryRes, setDiarRes] = useState({} as fetchData)
+  const [diaryRes, setDiarRes] = useState({} as IFetchInstance)
   const [tokenError, setTokenError] = useState(false)
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -33,12 +34,12 @@ function Test() {
   // const shoot = (event: MouseEventHandler<HTMLButtonElement>) => {
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
     const fetchData = async (name: string) => {
-      const diaryRes: fetchData = await fetchInstance(`/api/v1/diary/${name}`)
+      const { fetchObject: diaryObject }: IFetchInstance = await fetchInstance(`/api/v1/diary/${name}`)
       console.log(
-        diaryRes.response, diaryRes.data, diaryRes
+        diaryObject.response.statusText, diaryObject.response, diaryObject.body, diaryObject
       )
       // return <Redirect to='/login' />
-      if (diaryRes.type === 'TokenExpiredError') {
+      if (diaryObject.body.type === 'TokenExpiredError') {
         console.log('fefefefefef')
         setTokenError(true)
       }

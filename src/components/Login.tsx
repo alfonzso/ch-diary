@@ -66,9 +66,9 @@ class Login extends React.Component<LoginProps, LoginState> {
           // console.log(dayjs.unix(token.exp).diff(dayjs()))
           // console.log(dayjs.unix(token.exp).diff(dayjs()) < 1)
           inMemoryJWTManager.setToken(res.accessToken)
-          const diaryRes = await fetchInstance("/api/v1/diary/test")
+          const { fetchObject: diaryObject } = await fetchInstance("/api/v1/diary/test")
           console.log(
-            diaryRes.response, diaryRes.data
+            diaryObject.response.statusText, diaryObject.response, diaryObject.body, diaryObject
           )
 
         });
