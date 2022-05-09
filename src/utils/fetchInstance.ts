@@ -1,5 +1,5 @@
 import { IFetchData, IFetchInstance } from "../types/fetchInstance";
-import inMemoryJWTManager from "./inMemoryJwt"
+import inMemoryJwt from "./inMemoryJwt";
 
 let baseURL = 'http://localhost:2602'
 
@@ -11,7 +11,7 @@ let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promis
 }
 
 let refreshToken = async () => {
-  let response = await fetch(`${baseURL}/api/v1/auth/refreshToken`, { method: 'GET', credentials: 'include', })
+  let response = await fetch(`${baseURL}/api/auth/refreshToken`, { method: 'GET', credentials: 'include', })
   let body = await response.json()
   return { response, body } as IFetchData
 }
@@ -24,7 +24,7 @@ function checkTokenIsExpired(refTokenObject: IFetchData) {
 }
 
 let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchInstance> => {
-  let accessToken = inMemoryJWTManager.getToken()
+  let accessToken = inMemoryJwt.getToken()
 
   config['headers'] = {
     Authorization: `Bearer ${accessToken}`
@@ -36,7 +36,7 @@ let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchIn
     const [expired, checkedRefTokenObject] = checkTokenIsExpired(await refreshToken())
     if (expired) return { fetchObject: checkedRefTokenObject }
 
-    inMemoryJWTManager.setToken(checkedRefTokenObject.body.accessToken)
+    inMemoryJwt.setToken(checkedRefTokenObject.body.accessToken)
 
     config['headers'] = {
       Authorization: `Bearer ${checkedRefTokenObject.body.accessToken}`

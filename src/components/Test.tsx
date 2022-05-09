@@ -1,14 +1,10 @@
 import React, { useEffect, MouseEvent, useState } from 'react';
 import fetchInstance from '../utils/fetchInstance';
-// import  { Redirect } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
-import { IFetchInstance } from '../types/fetchInstance';
+import { IFetchData, IFetchInstance } from '../types/fetchInstance';
+import inMemoryJwt from '../utils/inMemoryJwt';
 
-// type fetchInstance = {
-//   response: Response;
-//   data: any;
-//   type?: string
-// }
+import jwt_decode, { JwtPayload } from "jwt-decode";
 
 function Test() {
   function Redirect({ to }: { to: any }) {
@@ -19,11 +15,11 @@ function Test() {
     return null;
   }
   // this.setState({ diaryRes:  });
-  const [diaryRes, setDiarRes] = useState({} as IFetchInstance)
+  const [diaryRes, setDiarRes] = useState({} as IFetchData)
   const [isRedirect, setRedirect] = useState(false)
   // useEffect(() => {
   //   const fetchData = async () => {
-  //     const diaryRes = await fetchInstance("/api/v1/diary/test")
+  //     const diaryRes = await fetchInstance("/api/diary/test")
   //     console.log(
   //       diaryRes.response, diaryRes.data
   //     )
@@ -34,19 +30,18 @@ function Test() {
   // const shoot = (event: MouseEventHandler<HTMLButtonElement>) => {
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
     const fetchData = async (name: string) => {
-      const { fetchObject: diaryObject }: IFetchInstance = await fetchInstance(`/api/v1/diary/${name}`)
+      const { fetchObject: diaryObject }: IFetchInstance = await fetchInstance(`/api/diary/${name}`)
       console.log(
         diaryObject.response.statusText, diaryObject.response, diaryObject.body, diaryObject
       )
-      // return <Redirect to='/login' />
       if ([401, 403].includes(diaryObject.response.status)) {
-        console.log('fefefefefef')
         setRedirect(true)
       }
-      setDiarRes(diaryRes)
+      setDiarRes(diaryObject)
     }
     fetchData(event.currentTarget.name)
   }
+
 
   return (
     <div className="testContainer">
@@ -54,12 +49,19 @@ function Test() {
       <button name="test" onClick={shoot} >Test</button>
       <button name="test1" onClick={shoot} >Test1</button>
       {isRedirect && <Redirect to='/login' />}
-      {/* {Object.keys(diaryRes).length != 0 &&
+      {diaryRes.response && diaryRes.response.ok &&
         <div className="diary-res">
           <p>{diaryRes.response.status}</p>
-          <p>{diaryRes.data}</p>
+          <p>{diaryRes.body.message}</p>
+          {/* <p>{new Date().getTime() - new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime()}</p> */}
+          {/* <p>{Math.floor(new Date().getTime() / 1000) - new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime()}</p> */}
+          <p>{
+            new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime() - Math.floor(new Date().getTime() / 1000)
+          } second and byeee ... </p>
+          <p>{Math.floor(new Date().getTime() / 1000)}</p>
+          <p>{new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime()}</p>
         </div>
-      } */}
+      }
     </div>
   );
 }
