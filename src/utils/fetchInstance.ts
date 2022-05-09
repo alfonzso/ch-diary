@@ -1,23 +1,7 @@
-// import { tokenToString } from "typescript";
-import exp from "constants";
 import { IFetchData, IFetchInstance } from "../types/fetchInstance";
 import inMemoryJWTManager from "./inMemoryJwt"
 
 let baseURL = 'http://localhost:2602'
-
-// type fetchData = {
-//   response: Response;
-//   data: any;
-//   type?: string
-// }
-
-// type fetchInstance = {
-//   fetchObject: {
-//     response: Response;
-//     body: any;
-//     type?: string
-//   }
-// }
 
 let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<IFetchInstance> => {
   url = `${baseURL}${url}`
@@ -29,15 +13,14 @@ let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promis
 let refreshToken = async () => {
   let response = await fetch(`${baseURL}/api/v1/auth/refreshToken`, { method: 'GET', credentials: 'include', })
   let body = await response.json()
-  return { fetchObject: { response, body, type: body.error.type! } } as IFetchInstance
+  return { response, body } as IFetchData
 }
 
-function checkTokenIsExpired(refTokenObject: IFetchData, fetchObject: IFetchData) {
-  if (refTokenObject.type === 'TokenExpiredError') {
-    // fetchObject.type = 'TokenExpiredError'
-    return { expired: true, fetchObject: refTokenObject }
+function checkTokenIsExpired(refTokenObject: IFetchData) {
+  if (refTokenObject.body.error && refTokenObject.body.error.message === 'TokenExpiredError') {
+    return [true, refTokenObject] as const
   }
-  return { expired: true, fetchObject }
+  return [false, refTokenObject] as const
 }
 
 let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchInstance> => {
@@ -49,17 +32,17 @@ let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchIn
 
   let { fetchObject }: IFetchInstance = await originalRequest(url, config)
 
-  if (fetchObject.response.statusText === 'Unauthorized') {
-    let { fetchObject: refTokenObject } = await refreshToken()
-    let { expired, fetchObject: checkedRefTokenObject } = checkTokenIsExpired(refTokenObject, fetchObject)
+  if ([401, 403].includes(fetchObject.response.status)) {
+    const [expired, checkedRefTokenObject] = checkTokenIsExpired(await refreshToken())
     if (expired) return { fetchObject: checkedRefTokenObject }
 
     inMemoryJWTManager.setToken(checkedRefTokenObject.body.accessToken)
 
-    let originalReqAgain = await originalRequest(
-      url, {
-      headers: { Authorization: `Bearer ${checkedRefTokenObject.body.accessToken}` }
-    })
+    config['headers'] = {
+      Authorization: `Bearer ${checkedRefTokenObject.body.accessToken}`
+    }
+
+    let originalReqAgain = await originalRequest(url, config)
 
     fetchObject = originalReqAgain.fetchObject
   }
