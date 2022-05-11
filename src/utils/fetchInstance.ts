@@ -1,7 +1,6 @@
+import { baseURL } from "../App";
 import { IFetchData, IFetchInstance } from "../types/fetchInstance";
 import inMemoryJwt from "./inMemoryJwt";
-
-let baseURL = 'http://localhost:2602'
 
 let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<IFetchInstance> => {
   url = `${baseURL}${url}`

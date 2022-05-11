@@ -2,6 +2,7 @@ import React from 'react';
 // import jwt_decode from 'jwt-decode';
 import fetchInstance from '../utils/fetchInstance';
 import inMemoryJWTManager from "../utils/inMemoryJwt"
+import { baseURL } from "../App";
 
 interface LoginProps {
 
@@ -47,7 +48,7 @@ class Login extends React.Component<LoginProps, LoginState> {
       event.preventDefault();
       console.log(this.state.inputs);
 
-      fetch('http://localhost:2602/api/auth/login', {
+      fetch(`${baseURL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',

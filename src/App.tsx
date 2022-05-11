@@ -10,6 +10,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Test from "./components/Test";
 
+export const baseURL = 'http://localhost:7282'
+
 function App() {
   return (
     <div className="App">
