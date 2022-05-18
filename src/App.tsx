@@ -9,18 +9,22 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Register from './components/Register';
 import Test from "./components/Test";
+import { useAppSelector, useAppDispatch } from "./redux/hooks";
 
 export const baseURL = 'http://localhost:7282'
 
 function App() {
+  const userData = useAppSelector(state => state.user.userData)
+  const dispatch = useAppDispatch()
+
   return (
     <div className="App">
 
       <Routes>
-        <Route path="/" element={<Navbar />}>
+        <Route path="/" element={<Navbar userData={userData}/>}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={<Login dispatch={dispatch} userData={userData} />} />
           <Route path="register" element={<Register />} />
           <Route path="test" element={<Test />} />
 
@@ -28,20 +32,6 @@ function App() {
         </Route>
       </Routes>
 
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
     </div>
   );
 }

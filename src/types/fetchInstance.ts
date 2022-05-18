@@ -1,14 +1,13 @@
-type IFetchInstance = {
+interface IFetchInstance {
   fetchObject: IFetchData
-  // redirect: boolean
 }
 
-type IFetchData = {
+interface IFetchData {
   response: Response;
   body: any;
-  // type?: string
 }
 
 export type {
-  IFetchInstance, IFetchData
+  IFetchInstance,
+  IFetchData,
 }

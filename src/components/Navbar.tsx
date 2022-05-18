@@ -3,21 +3,23 @@ import "./navbar.css"
 import { Link, Outlet } from "react-router-dom";
 
 interface NavbarProps {
-
+  // userData: userData
 }
 
 interface NavbarState {
 
 }
 
-class Navbar extends React.Component<NavbarProps, NavbarState> {
+class Navbar extends React.Component<any, NavbarState> {
   // state = { :  }
+
   render() {
+    const { userData } = this.props;
     return (
       <div>
         <nav className="navigation">
           <a href="/" className="brand-name">
-            Ch Diary
+            Ch Diary ={">"} {userData.nickname}
           </a>
           <button className="hamburger">
             {/* icon from heroicons.com */}
