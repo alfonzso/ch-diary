@@ -6,9 +6,14 @@ import { baseURL } from "../App";
 // import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { add } from '../redux/user';
 import { UserData } from '../types';
+import { connect } from 'react-redux';
+import { Dispatch } from "redux";
+import { RootState } from '../redux/store';
+
 
 interface LoginProps {
-
+  dispatch: Dispatch;
+  user: UserData;
 }
 
 interface LoginState {
@@ -18,7 +23,7 @@ interface LoginState {
 
 // class Login extends React.Component<{}, { inputs: Iinputs }> {
 // class Login extends React.Component {
-class Login extends React.Component<any, LoginState> {
+class Login extends React.Component<LoginProps, LoginState> {
   // userData: UserData;
   // dispatch: any;
   constructor(props: LoginProps) {
@@ -59,13 +64,14 @@ class Login extends React.Component<any, LoginState> {
           "================>", this.props
         )
         const { fetchObject } = await fetchInstance("/api/user/getUser")
-        const { dispatch, userData } = this.props;
-        dispatch(add(fetchObject.body as UserData))
+        // const { dispatch, userData } = this.props;
+        // dispatch(add(fetchObject.body as UserData))
+        this.props.dispatch(add(fetchObject.body as UserData))
 
         // this.dispatch(add(fetchObject.body as UserData))
-        console.log(
-          userData, fetchObject
-        )
+        // console.log(
+        //   userData, fetchObject
+        // )
         // console.log(
         //   diaryObject.response.statusText, diaryObject.response, diaryObject.body, diaryObject
         // )
@@ -73,7 +79,7 @@ class Login extends React.Component<any, LoginState> {
   }
 
   render() {
-    const { userData } = this.props;
+    // const { userData } = this.props;
 
     // const [inputs, setInputs] = useState<Iinputs>({ email: '', pass: '' });
 
@@ -97,7 +103,7 @@ class Login extends React.Component<any, LoginState> {
 
     return (
       <div className="loginContainer">
-        <p>FAFA {userData.email}</p>
+        <p>FAFA {this.props.user.email}</p>
         <form onSubmit={this.handleSubmit}>
           <label>Enter your email:<br />
             <input
@@ -124,4 +130,11 @@ class Login extends React.Component<any, LoginState> {
   }
 }
 
-export default Login;
+
+const mapStateToProps = (state: RootState) => ({
+  user: state.user.data
+});
+
+export default connect(mapStateToProps)(Login);
+
+// export default Login;

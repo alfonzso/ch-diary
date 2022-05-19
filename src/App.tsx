@@ -14,17 +14,17 @@ import { useAppSelector, useAppDispatch } from "./redux/hooks";
 export const baseURL = 'http://localhost:7282'
 
 function App() {
-  const userData = useAppSelector(state => state.user.userData)
+  const userData = useAppSelector(state => state.user.data)
   const dispatch = useAppDispatch()
 
   return (
     <div className="App">
 
       <Routes>
-        <Route path="/" element={<Navbar userData={userData}/>}>
+        <Route path="/" element={<Navbar />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
-          <Route path="login" element={<Login dispatch={dispatch} userData={userData} />} />
+          <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="test" element={<Test />} />
 

@@ -5,12 +5,12 @@ import { RootState } from "./store";
 
 // Define a type for the slice state
 interface UserState {
-  userData: UserData
+  data: UserData
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
-  userData: {
+  data: {
     id: "",
     nickname: "",
     email: ""
@@ -32,17 +32,17 @@ export const userSlice = createSlice({
     // }
     add: (state, action: PayloadAction<UserData>) => {
       console.log(
-        "add func", action, state.userData
+        "add func", action, state.data
       )
       const user: UserData = action.payload
-      state.userData = {
+      state.data = {
         id: user.id,
         nickname: user.nickname,
         email: user.email
       }
 
       console.log(
-        "add func", action, state.userData
+        "add func", action, state.data
       )
 
     }
@@ -57,6 +57,6 @@ export const userSlice = createSlice({
 export const { add } = userSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.user.userData
+export const selectCount = (state: RootState) => state.user.data
 
 export default userSlice.reducer

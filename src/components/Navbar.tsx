@@ -1,25 +1,31 @@
 import React from "react";
 import "./navbar.css"
 import { Link, Outlet } from "react-router-dom";
+import { UserData } from '../types';
+import { connect } from 'react-redux';
+import { Dispatch } from "redux";
+import { RootState } from '../redux/store';
 
 interface NavbarProps {
   // userData: userData
+  dispatch: Dispatch;
+  user: UserData;
 }
 
 interface NavbarState {
 
 }
 
-class Navbar extends React.Component<any, NavbarState> {
+class Navbar extends React.Component<NavbarProps, NavbarState> {
   // state = { :  }
 
   render() {
-    const { userData } = this.props;
+    // const { userData } = this.props;
     return (
       <div>
         <nav className="navigation">
           <a href="/" className="brand-name">
-            Ch Diary ={">"} {userData.nickname}
+            Ch Diary ={">"} {this.props.user.nickname}
           </a>
           <button className="hamburger">
             {/* icon from heroicons.com */}
@@ -64,4 +70,10 @@ class Navbar extends React.Component<any, NavbarState> {
   }
 }
 
-export default Navbar;
+// export default Navbar;
+
+const mapStateToProps = (state: RootState) => ({
+  user: state.user.data
+});
+
+export default connect(mapStateToProps)(Navbar);
