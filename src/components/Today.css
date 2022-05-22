@@ -1,0 +1,71 @@
+/* DivTable.com */
+.todayContainer {
+  display: flex;
+}
+
+.spacer {
+  flex: 1
+}
+
+.food {
+  background-color: blue;
+  color: white;
+}
+
+.popup {
+  height: 1000px;
+  width: 500px;
+  margin: 0 auto;
+  flex: 2
+}
+
+.divTable {
+  /* margin: 15px; */
+  /* background-color: red; */
+  /* zoom: 0.5;
+  -moz-transform: scale(0.5); */
+  /* transform-origin: 0 0; */
+  /* transform: scale(0.5); */
+  /* transform: scaleX(0.5); */
+}
+
+/* .some-page-wrapper { */
+/* margin: 15px; */
+/* background-color: red; */
+/* } */
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  /* border: 0.5px solid */
+}
+
+.columnLeft {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+  border: 0.5px solid
+}
+
+.columnRight {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 8;
+  border: 0.5px solid
+}
+
+.blue-column {
+  /* background-color: blue; */
+  /* height: 100px; */
+  /* flex: 2 */
+}
+
+.green-column {
+  /* background-color: green; */
+  /* height: 100px; */
+  /* flex: 4 */
+}

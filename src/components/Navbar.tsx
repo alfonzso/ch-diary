@@ -49,6 +49,9 @@ class Navbar extends React.Component<NavbarProps, NavbarState> {
                 <Link to="/">Home</Link>
               </li>
               <li>
+                <Link to="/today">Today</Link>
+              </li>
+              <li>
                 <Link to="/about">About</Link>
               </li>
               <li>
