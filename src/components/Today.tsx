@@ -1,5 +1,5 @@
 // import React from 'react';
-import React, { DragEvent } from 'react';
+import React, { DragEvent, useEffect, useState } from 'react';
 
 import "./Today.css"
 
@@ -9,100 +9,230 @@ interface RowProps {
   date: number
 }
 
-interface RowState {
+// interface RowState {
+//   fireOnce: boolean
+// }
 
-}
+const Row = (props: RowProps) => {
+  const [data, setData] = useState([]);
 
-class Row extends React.Component<RowProps, RowState> {
-  constructor(props: RowProps) {
-    super(props);
-    // this.state = { :  };
+  // class Row extends React.Component<RowProps, RowState> {
+  // handleLoad: any;
+  // constructor(props: RowProps) {
+  //   super(props);
+  //   this.state = { fireOnce: true };
+  //   this.handleLoad = this.handleLoad.bind(this);
+  // }
+
+
+  // getOffset(el: HTMLDivElement) {
+  //   const rect = el.getBoundingClientRect();
+  //   return {
+  //     left: rect.left + window.scrollX,
+  //     top: rect.top + window.scrollY
+  //   };
+  // }
+
+  useEffect(() => {
+    // fetch('exemple.com')
+    //   .then((response) => response.json())
+    //   .then((json) => setData(json.result)) // set returned values into the data state
+    //   .catch((error) => console.error(error))
+    console.log("useEffectuseEffectuseEffectuseEffectuseEffect");
+    // followMe()
+    const food = document.querySelector('.food') as HTMLDivElement
+    const follower = document.querySelector('.follower') as HTMLDivElement
+    follower.style.left = food.offsetLeft + 'px';
+    follower.style.top = (food.offsetTop - follower.offsetHeight) + 'px';
+  }, []);
+
+  const getCoords = (elem: any) => {
+    let box = elem.getBoundingClientRect();
+    return box
+    // return {
+    //   top: box.top + window.pageYOffset,
+    //   right: box.right + window.pageXOffset,
+    //   bottom: box.bottom + window.pageYOffset,
+    //   left: box.left + window.pageXOffset
+    // };
   }
-  render() {
 
-    const test = (offset: number) => {
-      let theDay = new Date(this.props.date)
-      // let theDay = new Date()
-      theDay.setHours(0)
-      theDay.setMinutes(offset)
-      theDay.setSeconds(0)
-      // theDay.setTime(offset)
-      // console.log(
-      //   offset
-      // )
-      return theDay
+  // getOffset(el: any) {
+  const getOffset = (el: any) => {
+
+    var _x = 0;
+    var _y = 0;
+    while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+      _x += el.offsetLeft - el.scrollLeft;
+      _y += el.offsetTop - el.scrollTop;
+      el = el!.offsetParent!;
     }
+    return { top: _y, left: _x };
+  }
 
-    function allowDrop(ev: any) {
-      ev.preventDefault();
+  // componentDidMount() {
+  //   console.log("componentDidMount");
+
+  //   window.addEventListener('load', this.handleLoad);
+  // }
+
+  // componentWillUnmount() {
+  //   window.removeEventListener('load', this.handleLoad)
+  //   console.log("componentWillUnmount");
+  // }
+
+  // componentDidUpdate() {
+  //   console.log("componentDidUpdate");
+  //   // const food = document.querySelector('.food') as HTMLDivElement
+  //   // const follower = document.querySelector('.follower') as HTMLDivElement
+  //   // console.log(
+  //   //   // this.getOffset(food).left + 'px',
+  //   //   // this.getOffset(food).top + 'px',
+  //   //   // this.getCoords(food).left, this.getCoords(food).top,
+  //   //   // food.offsetLeft, food.offsetTop
+  //   //   this.getCoords(follower)
+  //   // )
+  //   // // follower.style.left = this.getCoords(food).left + 'px';
+  //   // // follower.style.top = this.getCoords(food).top + 'px';
+  //   // follower.style.left = food.offsetLeft + 'px';
+  //   // follower.style.top = (food.offsetTop - follower.offsetHeight) + 'px';
+  // }
+
+  // handleLoad() {
+  //   console.log("handleLoad");
+  //   if (this.state.fireOnce) {
+  //     // const food = document.querySelector('.food') as HTMLDivElement
+  //     // const follower = document.querySelector('.follower') as HTMLDivElement
+  //     // console.log(
+  //     //   // this.getOffset(food).left + 'px',
+  //     //   // this.getOffset(food).top + 'px',
+  //     //   // this.getCoords(food).left, this.getCoords(food).top,
+  //     //   // food.offsetLeft, food.offsetTop
+  //     //   this.getCoords(follower)
+  //     // )
+  //     // // follower.style.left = this.getCoords(food).left + 'px';
+  //     // // follower.style.top = this.getCoords(food).top + 'px';
+  //     // follower.style.left = food.offsetLeft + 'px';
+  //     // follower.style.top = (food.offsetTop - follower.offsetHeight) + 'px';
+  //     this.setState({ fireOnce: false })
+  //   }
+  //   // this.state.fireOnce = false
+  // }
+  const test = (offset: number) => {
+    let theDay = new Date(props.date)
+    theDay.setHours(0)
+    theDay.setMinutes(offset)
+    theDay.setSeconds(0)
+    return theDay
+  }
+
+  const followMe = () => {
+    const food = document.querySelector('.food') as HTMLDivElement
+    const follower = document.querySelector('.follower') as HTMLDivElement
+    // console.log(
+    //   // this.getOffset(food).left + 'px',
+    //   // this.getOffset(food).top + 'px',
+    //   // this.getCoords(food).left, this.getCoords(food).top,
+    //   // food.offsetLeft, food.offsetTop
+    //   getCoords(follower)
+    // )
+    // follower.style.left = this.getCoords(food).left + 'px';
+    // follower.style.top = this.getCoords(food).top + 'px';
+    // follower.style.left = food.offsetLeft + 'px';
+    // follower.style.top = (food.offsetTop - follower.offsetHeight) + 'px';
+    // return true
+    myLoop(follower, food)
+  }
+
+  function myLoop(follower: HTMLDivElement, food: HTMLDivElement) {
+    let i: number = 0
+    let step = 10
+
+    console.log(
+      "foodsss --> ", food.offsetLeft, food.offsetTop, (follower.offsetTop - (food.offsetTop - follower.offsetHeight))
+    )
+
+    let foodLeftPartials = food.offsetLeft / step
+    let foodTopPartials = (follower.offsetTop - (food.offsetTop - follower.offsetHeight)) / step
+    const looper = (left: number, top: number) => {
+      setTimeout(function () {
+        // console.log("-->", left, "-->", top)
+        // 500 --> 600  : 500- 600 = -100 * -1 = 100
+        // follower.style.left = left + foodLeftPartials + 'px';
+        console.log(top, foodTopPartials)
+        follower.style.top = top - foodTopPartials + 'px';
+        // div.style.top = i + 1 + 'px'
+        // div.style.left = i + 1 + 'px'
+        i++;
+        if (i < step) {
+          // console.log(i, left + foodLeftPartials, top + foodTopPartials)
+          looper(left + foodLeftPartials, top - foodTopPartials);
+        }
+      }, 24)
     }
+    looper(0, follower.offsetTop)
+  }
 
-    function drag(ev: DragEvent<HTMLDivElement>) {
-      // ev.querySelector('.emptyRowFiller').hidden = false;
-      // let faf = ev.target.querySelector('.emptyRowFiller')
-      // let faf = ev.
-      const dropZone = ev.target as HTMLDivElement;
-      // console.log(
-      //   (dropZone as HTMLElement), (dropZone.closest('.columnRight')!.querySelector('.emptyRowFiller') as HTMLDivElement).hidden
-      // )
-      // (dropZone.closest('.columnRight')!.querySelector('.emptyRowFiller') as HTMLDivElement).hidden = false
-      // (dropZone.closest('.columnRight')!.querySelector('.emptyRowFiller') as HTMLDivElement).hidden = false
-      // dropZone.closest('.columnRight')!.querySelector('.emptyRowFiller')!.hidden = true
-      // if ((dropZone as HTMLElement).closest('.completed-task-list')) {
-      // document.querySelector('.completed-task-list')?.classList.add('active');
-      // }
-      // dropZone.
-      ev.dataTransfer.setData("text", dropZone.id);
-      // ev.target.querySelector('.emptyRowFiller').style.visibility = "visible";
-    }
+  function onPageLoad(ev: any) {
+    // ev.preventDefault();
 
-    function drop(ev: any) {
-      ev.preventDefault();
-      var data = ev.dataTransfer.getData("text");
-      // ev.target.querySelector('.emptyRowFiller').style.display = '';
-      [...document.querySelectorAll('.emptyRowFiller')].map((row) => (row as HTMLDivElement).hidden = false)
-      ev.target.querySelector('.emptyRowFiller').hidden = true;
-      ev.target.appendChild(document.getElementById(data));
-      // ev.target.removeChild()
-      // ev.target.innerHTML = ''
-      // ev.target.append(document.getElementById(data));
-      // ev.target.innerHTML = document.getElementById(data)!.innerHTML
-    }
+    // ev.currentTarget
+    ev.currentTarget.style.left = 10 + 'px';
+    ev.currentTarget.style.top = 20 + 'px';
+  }
 
-    return (
-      // <div className="divTableRow">
-      //   <div className="divTableCell">{this.props.idx} - {this.props.data}</div>
-      //   <div className="divTableCell">{this.props.idx} - {this.props.data}</div>
-      // </div>
-      // <div className="divTableRow">
-      //   <div className="divTableCell">{this.props.idx} - {this.props.data}</div>
-      //   <div className="divTableCell">{this.props.idx} - {this.props.data}</div>
-      // </div>
-      <div className='row'>
-        <div className='columnLeft'>
-          <div className='blue-column' data-time={(this.props.idx * 30).toString()}>
-            {
-              // test(this.props.idx * 5).toLocaleTimeString()
-              test(this.props.idx * 30).toLocaleTimeString()
-            }
-          </div>
-        </div>
-        <div className='columnRight' onDrop={drop} onDragOver={allowDrop}>
-          <div className='green-column' >
-            {
-              this.props.idx * 30 == 720 ? (
-                <><div id="food" className="food" draggable="true" onDragStart={drag}> FOOD </div>
-                  <p className='emptyRowFiller' hidden> </p></>
-              ) : (
-                <p className='emptyRowFiller'> </p>
-              )
+  function allowDrop(ev: DragEvent<HTMLDivElement>) {
+    ev.preventDefault();
+  }
 
-            }
-          </div>
+  function drag(ev: DragEvent<HTMLDivElement>) {
+    ev.dataTransfer.setData("text", ev.currentTarget.id);
+  }
+
+  function drop(ev: DragEvent<HTMLDivElement>) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    [...document.querySelectorAll('.emptyRowFiller')].forEach((row) => (row as HTMLDivElement).hidden = false);
+    (ev.currentTarget.querySelector('.emptyRowFiller') as HTMLDivElement)!.hidden = true;
+    ev.currentTarget.appendChild(document.getElementById(data)!);
+    // followMe()
+    setTimeout(followMe, 100);
+  }
+
+  return (
+    // return (
+    <div className='row'>
+      <div className='columnLeft'>
+        <div className='blue-column' data-time={(props.idx * 30).toString()}>
+          {
+            test(props.idx * 30).toLocaleTimeString()
+          }
         </div>
       </div>
-    );
-  }
+      <div className='columnRight' onDrop={drop} onDragOver={allowDrop}>
+        <div className='green-column' >
+          {
+
+            props.idx * 30 == 720 ? (
+              <><div id="food" className="food" draggable="true" onDragStart={drag}>
+                FOOD
+                <div className="follower" onLoad={onPageLoad} >
+                  <p>  D01 </p>
+                  <p>  Nagyon finom kaja </p>
+                  <p>  600 Kcal | 60 g Ch </p>
+                </div>
+              </div>
+                <p className='emptyRowFiller' hidden> </p></>
+            ) : (
+              <p className='emptyRowFiller'> </p>
+            )
+
+          }
+        </div>
+      </div>
+    </div>
+  );
+  // }
 }
 
 // export default Row;

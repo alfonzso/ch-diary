@@ -1,6 +1,7 @@
 /* DivTable.com */
 .todayContainer {
   display: flex;
+  position: relative;
 }
 
 .spacer {
@@ -10,6 +11,22 @@
 .food {
   background-color: blue;
   color: white;
+}
+
+.follower p {
+  padding: 0;
+  margin: 0;
+  /* display: inline; */
+}
+
+.follower {
+  float: left;
+  position: absolute;
+  /* left: 0px; */
+  /* top: 0px; */
+  background-color: grey;
+  margin: 10px;
+  padding: 10px;
 }
 
 .popup {
