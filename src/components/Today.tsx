@@ -1,33 +1,50 @@
 // import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/store';
-import { importToggle } from '../redux/importInterFood';
+import { getTodayFoods, importToggle } from '../redux/importInterFood';
 import { getYYYYMMDD } from '../utils/util';
 import { EmptyRow } from './DiaryCommon/EmptyRow';
 import { Food, foodInnerProps } from './DiaryCommon/Food';
 import { ImportForm } from './DiaryCommon/ImportForm';
 import { Row } from './DiaryCommon/Row';
 import "./Today.css";
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { useAppSelector } from '../redux/hooks';
 
 const Today = () => {
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
+
+  const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+
+  // const [foodData, setFoodData] = useState([] as foodInnerProps[])
+
+  // const diaryFood = useSelector((state: RootState) => state.importIF.diaryFood)
+  const diaryFood = useAppSelector(state => state.importIF.diaryFood)
+
 
   const everyHalfHour: number = 24 * 2
 
-  const dummyData: foodInnerProps[] = [
-    { id: "1", name: "Nagyon de nagyon finom kaja", type: "D001", props: " 600 Kcal | 60 g Ch ", dateTime: "12" },
-    { id: "2", name: "FEFEFE", type: "D123", props: " 123 Kcal | 123 g Ch ", dateTime: "16" },
-    { id: "3", name: "Mátrai Borzzzasss", type: "D999", props: " 999 Kcal | 999 g Ch ", dateTime: "20" },
-  ]
+  // const dummyData: foodInnerProps[] = [
+  //   { id: "1", name: "Nagyon de nagyon finom kaja", type: "D001", props: " 600 Kcal | 60 g Ch ", dateTime: "10" },
+  //   { id: "2", name: "FEFEFE", type: "D123", props: " 123 Kcal | 123 g Ch ", dateTime: "16" },
+  //   { id: "3", name: "Mátrai Borzzzasss", type: "D999", props: " 999 Kcal | 999 g Ch ", dateTime: "20" },
+  // ]
 
   // const faf = () => {
   //   dummyData.filter(data => data.dateTime === "12")
   // }
 
   useEffect(() => {
-    console.log("Today");
+    console.log("Today", getYYYYMMDD().toLocaleDateString("en-ca"), diaryFood);
+
+    dispatch(
+      getTodayFoods(
+        { user: "alfonzso", date: getYYYYMMDD().toLocaleDateString("en-ca") }
+      )
+    );
+
     // const food = document.querySelector('.food') as HTMLDivElement
     // if (food) {
     //   const follower = document.querySelector('.follower') as HTMLDivElement
@@ -46,7 +63,7 @@ const Today = () => {
     let rows = [];
     for (let i = 0; i < everyHalfHour; i++) {
 
-      const food = dummyData.filter(data => data.dateTime === (i * 1 / 2).toString())[0]
+      const food = diaryFood.filter(data => data.dateTime === (i * 1 / 2).toString())[0]
       if (food) {
         rows.push(
           <Row key={i} idx={i} date={now.getTime()} comp={

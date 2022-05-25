@@ -25,7 +25,10 @@ function checkTokenIsExpired(refTokenObject: IFetchData) {
 let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchInstance> => {
   let accessToken = inMemoryJwt.getToken()
 
+
+  // config.headers
   config['headers'] = {
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${accessToken}`
   }
 
@@ -38,6 +41,7 @@ let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchIn
     inMemoryJwt.setToken(checkedRefTokenObject.body.accessToken)
 
     config['headers'] = {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${checkedRefTokenObject.body.accessToken}`
     }
 

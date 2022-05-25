@@ -44,6 +44,7 @@
 .food {
   background-color: blue;
   color: white;
+  height: 100%;
 }
 
 .follower p {
