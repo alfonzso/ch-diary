@@ -1,5 +1,8 @@
 // import React from 'react';
 import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
+import { importToggle } from '../redux/importInterFood';
 import { getYYYYMMDD } from '../utils/util';
 import { EmptyRow } from './DiaryCommon/EmptyRow';
 import { Food, foodInnerProps } from './DiaryCommon/Food';
@@ -8,6 +11,9 @@ import { Row } from './DiaryCommon/Row';
 import "./Today.css";
 
 const Today = () => {
+
+  const dispatch = useDispatch()
+
   const everyHalfHour: number = 24 * 2
 
   const dummyData: foodInnerProps[] = [
@@ -66,9 +72,7 @@ const Today = () => {
         <div className="spacer">FFF</div>
         <div className="spacer importInterFoodContainer">
           <div className="spacer"> RIGHT</div>
-          <button className="importInterFood" onClick={() => {
-            (document.getElementById('importForm') as HTMLDivElement).hidden = false
-          }} >Import</button>
+          <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} >Import</button>
           <ImportForm />
 
         </div>
