@@ -1,135 +1,60 @@
 // import React from 'react';
-import React, { DragEvent, useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { getYYYYMMDD } from '../utils/util';
+import { EmptyRow } from './DiaryCommon/EmptyRow';
+import { Food, foodInnerProps } from './DiaryCommon/Food';
+import { ImportForm } from './DiaryCommon/ImportForm';
+import { Row } from './DiaryCommon/Row';
 import "./Today.css";
 
+const Today = () => {
+  const everyHalfHour: number = 24 * 2
 
-interface RowProps {
-  idx: number
-  data: number
-  date: number
-}
+  const dummyData: foodInnerProps[] = [
+    { id: "1", name: "Nagyon de nagyon finom kaja", type: "D001", props: " 600 Kcal | 60 g Ch ", dateTime: "12" },
+    { id: "2", name: "FEFEFE", type: "D123", props: " 123 Kcal | 123 g Ch ", dateTime: "16" },
+    { id: "3", name: "Mátrai Borzzzasss", type: "D999", props: " 999 Kcal | 999 g Ch ", dateTime: "20" },
+  ]
 
-// interface RowState {
-//   fireOnce: boolean
-// }
+  // const faf = () => {
+  //   dummyData.filter(data => data.dateTime === "12")
+  // }
 
-const Row = (props: RowProps) => {
-  // const [data, setData] = useState([]);
- 
   useEffect(() => {
-    console.log("useEffectuseEffectuseEffectuseEffectuseEffect");
-    const food = document.querySelector('.food') as HTMLDivElement
-    const follower = document.querySelector('.follower') as HTMLDivElement
-    follower.style.left = food.offsetLeft + 'px';
-    follower.style.top = (food.offsetTop - follower.offsetHeight) + 'px';
+    console.log("Today");
+    // const food = document.querySelector('.food') as HTMLDivElement
+    // if (food) {
+    //   const follower = document.querySelector('.follower') as HTMLDivElement
+    //   follower.style.left = food.offsetLeft + 'px';
+    //   follower.style.top = (food.offsetTop - follower.offsetHeight) + 'px';
+    // }
+    ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
+      const food = follower.closest(".food") as HTMLDivElement
+      follower.style.left = food.offsetLeft + 'px';
+      follower.style.top = (food.offsetTop - follower.offsetHeight) + 'px';
+    })
   }, []);
-
-
-  const generateTimeHHMMSS = (offset: number) => {
-    let theDay = new Date(props.date)
-    theDay.setHours(0)
-    theDay.setMinutes(offset)
-    theDay.setSeconds(0)
-    return theDay
-  }
-
-  const followMe = () => {
-    const food = document.querySelector('.food') as HTMLDivElement
-    const follower = document.querySelector('.follower') as HTMLDivElement
-    myLoop(follower, food)
-  }
-
-  function myLoop(follower: HTMLDivElement, food: HTMLDivElement) {
-    let i: number = 0
-    let step = 10
-
-    let foodLeftPartials = food.offsetLeft / step
-    let foodTopPartials = (follower.offsetTop - (food.offsetTop - follower.offsetHeight)) / step
-    const looper = (left: number, top: number) => {
-      setTimeout(function () {
-        follower.style.top = top - foodTopPartials + 'px';
-        i++;
-        if (i < step) {
-          looper(left + foodLeftPartials, top - foodTopPartials);
-        }
-      }, 24)
-    }
-    looper(0, follower.offsetTop)
-  }
-
-  function allowDrop(ev: DragEvent<HTMLDivElement>) {
-    ev.preventDefault();
-  }
-
-  function drag(ev: DragEvent<HTMLDivElement>) {
-    ev.dataTransfer.setData("text", ev.currentTarget.id);
-  }
-
-  function drop(ev: DragEvent<HTMLDivElement>) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    [...document.querySelectorAll('.emptyRowFiller')].forEach((row) => (row as HTMLDivElement).hidden = false);
-    (ev.currentTarget.querySelector('.emptyRowFiller') as HTMLDivElement)!.hidden = true;
-    ev.currentTarget.appendChild(document.getElementById(data)!);
-    setTimeout(followMe, 100);
-  }
-
-  const foodOrEmpty = () => {
-    let foodOrEmptyDivList = []
-    if (props.idx * 30 == 720) {
-      foodOrEmptyDivList.push(
-        <div className='foodColumn' key={props.idx} >
-          <div id="food" className="food" draggable="true" onDragStart={drag}>
-            FOOD
-            <div className="follower">
-              <p>  D01 </p>
-              <p>  Nagyon finom kaja </p>
-              <p>  600 Kcal | 60 g Ch </p>
-            </div>
-          </div><p className='emptyRowFiller' hidden> </p>
-        </div>
-      )
-    } else {
-      foodOrEmptyDivList.push(
-        <div className='foodColumn' key={props.idx}  >
-          <p className='emptyRowFiller'> </p>
-        </div>
-      )
-    }
-    return foodOrEmptyDivList
-  }
-
-  return (
-    <div className='row'>
-      <div className='columnLeft'>
-        <div className='dateColumn' data-time={(props.idx * 30).toString()}>
-          {
-            generateTimeHHMMSS(props.idx * 30).toLocaleTimeString()
-          }
-        </div>
-      </div>
-      <div className='columnRight' onDrop={drop} onDragOver={allowDrop}>{
-        foodOrEmpty()
-      }
-      </div>
-    </div>
-  );
-}
-
-function Today() {
-  const rowNumber: number = 24 * (60 / 30)
-
-  const getYYYYMMDD = () => {
-    return new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} 00:00:00`)
-  }
 
   const render = () => {
     const now = getYYYYMMDD()
     let rows = [];
-    for (let i = 0; i < rowNumber; i++) {
-      rows.push(
-        <Row key={i} idx={i} date={now.getTime()} data={Math.random()} />
-      )
+    for (let i = 0; i < everyHalfHour; i++) {
+
+      const food = dummyData.filter(data => data.dateTime === (i * 1 / 2).toString())[0]
+      if (food) {
+        rows.push(
+          <Row key={i} idx={i} date={now.getTime()} comp={
+            [<Food food={food} />, <EmptyRow />]
+          } />
+        )
+      } else {
+        rows.push(
+          <Row key={i} idx={i} date={now.getTime()} comp={
+            [<EmptyRow />]
+          } />
+        )
+      }
+
     }
     return rows
   }
@@ -137,9 +62,16 @@ function Today() {
   return (
     <div className="todayContainer">
       <div className="information">
-        <div className="spacer"></div>
+        <div className="spacer">LEFT</div>
         <div className="spacer">FFF</div>
-        <div className="spacer"></div>
+        <div className="spacer importInterFoodContainer">
+          <div className="spacer"> RIGHT</div>
+          <button className="importInterFood" onClick={() => {
+            (document.getElementById('importForm') as HTMLDivElement).hidden = false
+          }} >Import</button>
+          <ImportForm />
+
+        </div>
       </div>
       <div className="tableContent">
         <div className="spacer"></div>
