@@ -1,17 +1,21 @@
-function floatAnimation(follower: HTMLDivElement, food: HTMLDivElement) {
+function floatAnimation(follower: HTMLDivElement, food: HTMLDivElement, popup: HTMLDivElement) {
   let i: number = 0
   let step = 10
 
-  let foodLeftPartials = food.offsetLeft / step
-  let foodTopPartials = (follower.offsetTop - (food.offsetTop - follower.offsetHeight)) / step
+  // let foodLeftPartials = food.offsetLeft / step
+  // let foodTopPartials = (follower.offsetTop - (food.offsetTop - follower.offsetHeight)) / step
+
+  let foodTopPartials = (follower.offsetTop - (food.offsetTop - popup!.scrollTop - follower.offsetHeight)) / step
+  // let foodLeftPartials = food.offsetLeft - popup!.scrollLeft / step
+  // let foodTopPartials = (food.offsetTop - popup!.scrollTop - follower.offsetHeight) / step
   const looper = (left: number, top: number) => {
-    setTimeout(function () {
+    // setTimeout(function () {
       follower.style.top = top - foodTopPartials + 'px';
       i++;
       if (i < step) {
-        looper(left + foodLeftPartials, top - foodTopPartials);
+        looper(0, top - foodTopPartials);
       }
-    }, 24)
+    // }, 24)
   }
   looper(0, follower.offsetTop)
 }

@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserData } from "../types";
 import { RootState } from "./store";
 
-
 // Define a type for the slice state
 interface UserState {
   data: UserData
@@ -21,15 +20,6 @@ export const userSlice = createSlice({
   name: "userData",
   initialState,
   reducers: {
-    // increment: (state) => {
-    //   state.count += 1;
-    // },
-    // decrement: (state) => {
-    //   state.count -= 1;
-    // },
-    // incrementByAmount: (state, action) => {
-    //   state.count += action.payload;
-    // }
     add: (state, action: PayloadAction<UserData>) => {
       console.log(
         "add func", action, state.data
@@ -49,14 +39,6 @@ export const userSlice = createSlice({
   }
 });
 
-// Action creators are generated for each case reducer function
-// export const { add } = userSlice.actions;
-
-// export default userSlice.reducer;
-
 export const { add } = userSlice.actions;
-
-// Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.user.data
-
 export default userSlice.reducer

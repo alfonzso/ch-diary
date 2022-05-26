@@ -1,0 +1,8 @@
+version: '3'
+services:
+  web:
+    image: ch-diary-frontend
+    # volumes:
+    #   - .env.prod:/home/node/app/.env
+    ports:
+      - "8082:80"

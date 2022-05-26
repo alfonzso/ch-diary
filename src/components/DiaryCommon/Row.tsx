@@ -6,6 +6,7 @@ import { generateTimeHHMMSS } from '../../utils/util';
 interface RowProps {
   idx: number
   // data: number
+  hidden: boolean
   date: number
   comp: ReactElement[]
 }
@@ -15,9 +16,9 @@ const Row = (props: RowProps) => {
   //   console.log("useEffectuseEffectuseEffectuseEffectuseEffect");
   // }, []);
 
-
-  return (
-    <div className='row'>
+  return (<>{
+    !props.hidden &&
+    <div className='row' >
       <div className='columnLeft'>
         <div className='dateColumn' data-time={(props.idx * 1 / 2).toString()}>
           {
@@ -33,9 +34,9 @@ const Row = (props: RowProps) => {
             </React.Fragment>
           ))
         }
-
       </div>
     </div >
+  }</>
   );
 }
 

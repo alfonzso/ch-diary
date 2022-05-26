@@ -1,15 +1,14 @@
-import { useEffect, MouseEvent, useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import { DataGrid } from '@mui/x-data-grid';
 import jwt_decode, { JwtPayload } from "jwt-decode";
-
+import { MouseEvent, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { chDiarySchema } from '../data/tableSchema';
+import { diaryData, IFetchData, IFetchInstance, simpleDiaryData } from '../types';
 import fetchInstance from '../utils/fetchInstance';
 import inMemoryJwt from '../utils/inMemoryJwt';
-import { chDiarySchema } from '../data/tableSchema';
+import './Test.css';
 
-import { diaryData, IFetchData, IFetchInstance, simpleDiaryData } from '../types';
-import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import './Test.css'
+
 
 function Test() {
   // const { count } = useSelector((state) => state.counter);
@@ -41,7 +40,7 @@ function Test() {
         if ([401, 403].includes(diaryObject.response.status)) {
           setRedirect(true)
         }
-        if (400 == diaryObject.response.status) {
+        if (400 === diaryObject.response.status) {
           console.log(diaryObject.body.error.message)
           throw new Error(diaryObject.response.statusText, { cause: { name: "", message: diaryObject.body.error.message } })
         }
@@ -113,7 +112,7 @@ function Test() {
        <div className="header">
         <div className="item">z</div>
         <div className="item dataTable" style={{ height: 400, width: '100%' }}>
-          {foodRes.length != 0 &&
+          {foodRes.length !== 0 &&
             < DataGrid
               rows={foodRes}
               columns={chDiarySchema}
