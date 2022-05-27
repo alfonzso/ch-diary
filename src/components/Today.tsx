@@ -31,11 +31,11 @@ const Today = () => {
   useEffect(() => {
     console.log("Today", getYYYYMMDD().toLocaleDateString("en-ca"), diaryFood);
 
-    // dispatch(
-    //   getTodayFoods(
-    //     { user: "alfonzso", date: getYYYYMMDD().toLocaleDateString("en-ca") }
-    //   )
-    // );
+    dispatch(
+      getTodayFoods(
+        { user: "alfonzso", date: getYYYYMMDD().toLocaleDateString("en-ca") }
+      )
+    );
 
     ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
       const food = follower.closest(".food") as HTMLDivElement

@@ -55,10 +55,10 @@ type diaryFood = {
 
 const foodProps = {
   "gramm": 100,
-  "kcal": 140.22,
-  "portein": 10.07,
-  "fat": 5.38,
-  "ch": 15.69
+  "kcal": 111,
+  "portein": 222,
+  "fat": 333,
+  "ch": 444
 }
 
 export interface ImportState {
@@ -69,7 +69,7 @@ export interface ImportState {
 const initialState: ImportState = {
   value: false,
   diaryFood: [
-    { id: "1", name: "Nagyon de nagyon finom kaja", portion: 450, type: "D001", props: foodProps, dateTime: "10" },
+    { id: "1", name: "Nagyon de nagyon finom kaja", portion: 450, type: "D123", props: foodProps, dateTime: "10" },
   ]
 }
 
@@ -106,7 +106,8 @@ export const importIFSlice = createSlice({
       })
 
       console.log("convertedFoodData: ", convertedFoodData, state, state.diaryFood);
-      state.diaryFood = convertedFoodData
+      // state.diaryFood = convertedFoodData
+      state.diaryFood = [...state.diaryFood, ...convertedFoodData]
 
     })
     builder.addCase(getTodayFoods.rejected, (state, { payload }) => {
