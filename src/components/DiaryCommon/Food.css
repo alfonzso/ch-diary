@@ -1,0 +1,19 @@
+.food {
+  background-color: blue;
+  color: white;
+  height: 100%;
+}
+
+.follower p {
+  padding: 0;
+  margin: 0;
+  /* display: inline; */
+}
+
+.follower {
+  float: left;
+  position: absolute;
+  background-color: grey;
+  margin: 10px;
+  padding: 10px;
+}

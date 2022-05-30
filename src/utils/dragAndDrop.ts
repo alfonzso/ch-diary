@@ -19,9 +19,9 @@ function drop(ev: DragEvent<HTMLDivElement>) {
   const food = document.getElementById(data)! as HTMLDivElement
   ev.currentTarget.appendChild(food);
   // setTimeout(() => { followMe(food) }, 100);
-  const popup =  document.querySelector('.popup') as HTMLDivElement;
+  const chDiaryMain = document.querySelector('.chDiaryMain') as HTMLDivElement;
   const follower = food.querySelector('.follower') as HTMLDivElement;
-  setTimeout(() => { floatAnimation(follower, food, popup) }, 100);
+  setTimeout(() => { floatAnimation(follower, food, chDiaryMain) }, 100);
 }
 
 export {

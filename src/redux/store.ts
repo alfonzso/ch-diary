@@ -1,33 +1,28 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userDataReducer from "./user"
 import importIFReducer from "./importInterFood"
+import todayReducer from "./today"
 import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
-
+import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
 
 
 const reducers = combineReducers({
-  //...
-  //  reducer: persistedReducer,
   user: userDataReducer,
-  importIF: importIFReducer
+  importIF: importIFReducer,
+  today: todayReducer
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['importIF']
+  blacklist: ['importIF','today']
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  // {
-  //   ,
-  //   importIF: importIFReducer
-  // },
   middleware: [thunk]
 });
 

@@ -1,0 +1,28 @@
+.importForm {
+  display: flex;
+  flex-flow: column;
+  float: left;
+  position: absolute;
+  background-color: grey;
+  margin: 10px;
+  padding: 10px;
+}
+
+.importInterFoodContainer {
+  display: flex;
+}
+
+.sendImportInterFood,
+.importInterFood {
+  margin: 5px;
+  padding: 7px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(47, 139, 47);
+  color: whitesmoke;
+}
+
+.closeImportInterFood {
+  margin-left: auto;
+}

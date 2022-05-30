@@ -1,9 +1,7 @@
 import React from 'react';
-// import jwt_decode from 'jwt-decode';
 import fetchInstance from '../utils/fetchInstance';
 import inMemoryJWTManager from "../utils/inMemoryJwt"
 import { baseURL } from "../App";
-// import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { add } from '../redux/user';
 import { UserData } from '../types';
 import { connect } from 'react-redux';
@@ -21,18 +19,9 @@ interface LoginState {
 }
 
 
-// class Login extends React.Component<{}, { inputs: Iinputs }> {
-// class Login extends React.Component {
 class Login extends React.Component<LoginProps, LoginState> {
-  // userData: UserData;
-  // dispatch: any;
   constructor(props: LoginProps) {
-
     super(props);
-
-    // this.userData = useAppSelector(state => state.user.userData)
-    // this.dispatch = useAppDispatch()
-
     this.state = {
       inputs: { email: '', password: '' }
     };
@@ -42,7 +31,6 @@ class Login extends React.Component<LoginProps, LoginState> {
     console.log(this.state);
   }
 
-  // handleSubmit(event: React.FormEvent) {
   handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log(this.state.inputs);
@@ -59,47 +47,21 @@ class Login extends React.Component<LoginProps, LoginState> {
       .then(async (res) => {
         console.log('--->', res)
         inMemoryJWTManager.setToken(res.accessToken)
-        // const { fetchObject: diaryObject } = await fetchInstance("/api/diary/test")
-        console.log(
-          "================>", this.props
-        )
         const { fetchObject } = await fetchInstance("/api/user/getUser")
-        // const { dispatch, userData } = this.props;
-        // dispatch(add(fetchObject.body as UserData))
         this.props.dispatch(add(fetchObject.body as UserData))
-
-        // this.dispatch(add(fetchObject.body as UserData))
-        // console.log(
-        //   userData, fetchObject
-        // )
-        // console.log(
-        //   diaryObject.response.statusText, diaryObject.response, diaryObject.body, diaryObject
-        // )
       });
   }
 
   render() {
-    // const { userData } = this.props;
-
-    // const [inputs, setInputs] = useState<Iinputs>({ email: '', pass: '' });
-
-    // const userData = useAppSelector(state => state.user.userData)
-    // const dispatch = useAppDispatch()
-
     const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
       const { name, value } = event.currentTarget
-      // console.log("fef", name, value)
-      // this.setState(values => ({ ...values, inputs: { [name]: value } }))
       this.setState({
         inputs: {
           ...this.state.inputs,
           [name]: value
         }
       })
-      // console.log(this.state);
     }
-
-
 
     return (
       <div className="loginContainer">
@@ -136,5 +98,3 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 export default connect(mapStateToProps)(Login);
-
-// export default Login;

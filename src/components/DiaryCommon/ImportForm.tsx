@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { importToggle, sendImportedData } from "../../redux/importInterFood";
 import { RootState } from "../../redux/store";
-
+import './ImportFrom.css'
 
 const ImportForm = () => {
 
   const [isDown, setIsDown] = useState(false)
   const [offset, setOffset] = useState([] as number[])
-  const [importData, setImportData] = useState([] as string[])
+  const [importData, setImportData] = useState('')
   const [mousePosition, setMousePosition] = useState({} as { x: number, y: number })
 
   const toggle = useSelector((state: RootState) => state.importIF.value)
@@ -47,8 +47,9 @@ const ImportForm = () => {
   }
 
   const sendImportInterFood = (ev: MouseEvent<HTMLButtonElement>) => {
-    console.log("textarea VAL: ", importData);
-    dispatch(sendImportedData(importData))
+    let trimmedImpData = importData.replace('\r\n', '\n').trim().split('\n').map(row => { return row.trim() })
+    console.log("textarea VAL: ", trimmedImpData);
+    dispatch(sendImportedData(trimmedImpData))
   }
 
   return (
@@ -62,11 +63,9 @@ const ImportForm = () => {
         >
           <button className="closeImportInterFood" onClick={() => { dispatch(importToggle()) }} >X</button>
           <textarea name="importFoodTextArea" id="importFoodTextArea"
-            cols={60} rows={20}
+            cols={80} rows={8}
             value={importData} onChange={(e) => {
-              e.target.value.trim().split('\n').forEach(row => {
-                setImportData(oldRow => [...oldRow, row.trim()]);
-              })
+              setImportData(e.target.value)
             }}
           />
 

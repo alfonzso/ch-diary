@@ -11,9 +11,6 @@ import './Test.css';
 
 
 function Test() {
-  // const { count } = useSelector((state) => state.counter);
-  // const User = useAppSelector(state => state.user.userData)
-  // const dispatch = useAppDispatch()
 
   function Redirect({ to }: { to: any }) {
     let navigate = useNavigate();
@@ -23,20 +20,12 @@ function Test() {
     return null;
   }
   const fetchData = async (url: string, callback: ((diaryObject: IFetchData) => void)) => {
-    // let { fetchObject: diaryObject }: IFetchInstance
-    // try {
     fetchInstance(url)
       .then((resp: IFetchInstance) => {
         const diaryObject: IFetchData = resp.fetchObject
-        // } catch (error) {
-
-        // }
         console.log(
           "---->", diaryObject.response.status
         )
-        // console.log(
-        //   diaryObject.response.statusText, diaryObject.response, diaryObject.body, diaryObject
-        // )
         if ([401, 403].includes(diaryObject.response.status)) {
           setRedirect(true)
         }
@@ -44,14 +33,12 @@ function Test() {
           console.log(diaryObject.body.error.message)
           throw new Error(diaryObject.response.statusText, { cause: { name: "", message: diaryObject.body.error.message } })
         }
-        // setDiarRes(diaryObject)
         callback(diaryObject)
 
       }).catch(err => {
         console.log(err)
       })
   }
-  // this.setState({ diaryRes:  });
   const [diaryRes, setDiarRes] = useState({} as IFetchData)
   const [foodRes, setFoodRes] = useState([] as simpleDiaryData[])
   const [isRedirect, setRedirect] = useState(false)
@@ -63,45 +50,19 @@ function Test() {
         return {
           id: chDiary.id,
           date: chDiary.createdAt,
-          // userId: 1,
           nickname: chDiary.User.nickname,
-          // foodId: 1,
           foodName: chDiary.Food.name,
           foodType: chDiary.Food.Interfood.InterfoodType.name,
           portion: chDiary.Food.portion,
           ...chDiary.Food.FoodProperite
-          // portion: 450,
-          // gramm: 100,
-          // kcal: 140,
-          // portein: 47 / 4.5,
-          // fat: 22 / 4.5,
-          // ch: 54 / 4.5
         }
       })
       setFoodRes(newListOfDiary)
-      // console.log(
-      //   "-------> ", newListOfDiary, foodRes
-      // )
-      // setDiarRes(diaryObject)
-
     })
   }, []);
 
-
-  useEffect(() => {
-    console.log(
-      "-------> ", foodRes
-    )
-    // setDiarRes(diaryObject)
-  }, [foodRes]);
-
-  // const shoot = (event: MouseEventHandler<HTMLButtonElement>) => {
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
-
-    // fetchData(event.currentTarget.name)
     fetchData(`/api/diary/${event.currentTarget.name}`, (diaryObject) => { setDiarRes(diaryObject) })
-    // fetchData(`/api/diary/getEntry/nickname/alfonzso`, (diaryObject) => { setFoodRes(diaryObject) })
-
   }
 
   return (

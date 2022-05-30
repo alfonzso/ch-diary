@@ -1,5 +1,5 @@
 import { drag } from "../../utils/dragAndDrop"
-
+import './Food.css'
 
 type FoodProperite = {
   gramm: number;
@@ -16,6 +16,7 @@ interface foodInnerProps {
   props: FoodProperite
   name: string
   dateTime: string
+  date: string
 }
 
 interface foodProps {
@@ -27,7 +28,7 @@ const Food = ({ food }: foodProps) => {
   const calcFullProp = (props: FoodProperite, portion: number) => {
     const num: number = portion / props.gramm
     const res = Object.entries(props).map(([key, val]: [key: string, val: number]) => {
-      return [key, val * num].join(": ")
+      return [key, Number((val * num).toFixed(2))].join(": ")
     }).join(' | ')
     console.log(res)
     return res

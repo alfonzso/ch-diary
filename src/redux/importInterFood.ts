@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { foodInnerProps } from '../components/DiaryCommon/Food'
 import customFetcher from '../utils/fetchInstance'
+import { removeDuplicatedElementsById } from '../utils/util'
 
 export const sendImportedData = createAsyncThunk(
   'import/InterFood',
@@ -69,7 +70,7 @@ export interface ImportState {
 const initialState: ImportState = {
   value: false,
   diaryFood: [
-    { id: "1", name: "Nagyon de nagyon finom kaja", portion: 450, type: "D123", props: foodProps, dateTime: "10" },
+    // { id: "1", name: "Nagyon de nagyon finom kaja", portion: 450, type: "D123", props: foodProps, dateTime: "10" },
   ]
 }
 
@@ -98,6 +99,8 @@ export const importIFSlice = createSlice({
         return {
           id: diaryFood.id,
           name: diaryFood.Food.name,
+          // date: diaryFood.createdAt.toLocaleDateString("en-ca"),
+          date: new Date(diaryFood.createdAt).toLocaleDateString("en-ca"),
           dateTime: hourMinuteToDateTime(new Date(diaryFood.createdAt)),
           type: diaryFood.Food.Interfood.InterfoodType.name,
           portion: diaryFood.Food.portion,
@@ -105,9 +108,7 @@ export const importIFSlice = createSlice({
         }
       })
 
-      console.log("convertedFoodData: ", convertedFoodData, state, state.diaryFood);
-      // state.diaryFood = convertedFoodData
-      state.diaryFood = [...state.diaryFood, ...convertedFoodData]
+      state.diaryFood = removeDuplicatedElementsById([...state.diaryFood, ...convertedFoodData])
 
     })
     builder.addCase(getTodayFoods.rejected, (state, { payload }) => {

@@ -9,12 +9,8 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Register from './components/Register';
 import Test from "./components/Test";
-// import { useAppSelector, useAppDispatch } from "./redux/hooks";
 import Today from "./components/Today";
 
-// export const baseURL = 'http://icellnoti:8081'
-// export const baseURL = ${process.env.REACT_APP_BE_URL}
-// export const baseURL = ${process.env["NODE_ENV"];}
 export const baseURL = process.env.REACT_APP_BE_URL
 
 function App() {

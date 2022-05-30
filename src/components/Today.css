@@ -1,4 +1,6 @@
-/* chDiaryTable.com */
+* {
+  box-sizing: border-box
+}
 
 
 .tableContent {
@@ -21,67 +23,25 @@
   border: 0.5px solid
 }
 
-.importInterFoodContainer {
-  display: flex;
-}
-
-.importInterFood {
-  margin: 5px;
-  padding: 7px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: rgb(47, 139, 47);
-  color: whitesmoke;
-}
-
 .spacer {
   margin: 5px;
   flex: 1
 }
 
-.food {
-  background-color: blue;
-  color: white;
-  height: 100%;
-}
-
-.follower p {
-  padding: 0;
-  margin: 0;
-  /* display: inline; */
-}
-
-.follower {
-  float: left;
-  position: absolute;
-  background-color: grey;
-  margin: 10px;
-  padding: 10px;
-}
-
-.importForm {
+.dateChanger {
+  margin: 5px;
   display: flex;
-  flex-flow: column;
-  float: left;
-  position: absolute;
-  background-color: grey;
-  margin: 10px;
-  padding: 10px;
 }
 
-.closeImportInterFood {
-  /* width: 15%; */
-  margin-left: auto;
+.dateChanger>*>button {
+  height: 100%;
+  background-color: white;
 }
 
-.popup {
-  /* height: 1000px; */
+.chDiaryMain {
   width: 500px;
   margin: 0 auto;
   flex: 2;
-  /* overflow: scroll;
-  height: 800px; */
 }
 
 .row {
@@ -111,14 +71,3 @@
   margin: 0;
   padding: 0;
 }
-
-/* .blue-column {
-  background-color: blue;
-  height: 100px;
-  flex: 2
-}
-.green-column {
-  background-color: green;
-  height: 100px;
-  flex: 4
-} */
