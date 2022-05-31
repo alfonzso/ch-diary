@@ -1,5 +1,6 @@
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../redux/hooks';
 import { getTodayFoods, importToggle } from '../redux/importInterFood';
@@ -27,30 +28,68 @@ const Today = () => {
   const userData = useAppSelector(state => state.user.data)
   const diaryFood = useAppSelector(state => state.importIF.diaryFood)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+  // const [rowsRenderDone, setRowsRenderDone] = useState(false)
+  const [rowsElement, setRowsElement] = useState([] as React.ReactElement[])
+
   // const everyHalfHour: number = 24 * 2
   // const sumCh = diaryFood.
   const todayFoods = diaryFood.filter(data => data.date === todayDateAsString)
 
   useEffect(() => {
     dispatch(getToDay())
-  }, [dispatch,]);
+    console.log("dispatch(getToDay())");
+  }, [dispatch]);
+
+  const renderRows = () => {
+    const now = getYYYYMMDD()
+    let _rows = [];
+    for (let i = 0; i < everyHalfHour; i++) {
+
+      const hours = (i * 1 / 2)
+
+      const food = todayFoods.filter(data => data.dateTime === hours.toString())[0]
+      if (food) {
+        _rows.push(
+          <Row key={i} idx={i} date={now.getTime()} comp={
+            [<Food food={food} />, <EmptyRow />]
+          } hidden={false} />
+        )
+      } else {
+        _rows.push(
+          <Row key={i} idx={i} date={now.getTime()} comp={
+            [<EmptyRow />]
+          } hidden={hours < 7 || 22 < hours} />
+        )
+      }
+
+    }
+    setRowsElement(_rows)
+  }
 
   useEffect(() => {
-    // dispatch(getToDay())
+    console.log("diaryFood: ", diaryFood);
+    if (diaryFood.length > 0) {
+      renderRows()
+    }
+
+  }, [diaryFood]);
+
+  useEffect(() => {
+    console.log("rowsElement: ", rowsElement);
+    if (rowsElement.length > 0) {
+      initFollowerToFood()
+    }
+  }, [rowsElement]);
+
+  useEffect(() => {
     if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
       console.log("Today", diaryFood.length, todayDate, todayDateAsString, diaryFood, everyHalfHour, userData);
-
-      // if(userData.nickname){
-      //   // error
-      // }
       dispatch(
         getTodayFoods(
-          // { user: "alfonzso", date: getYYYYMMDD().toLocaleDateString("en-ca") }
           { user: userData.nickname, date: todayDateAsString }
         )
       );
 
-      initFollowerToFood()
     } else {
       console.warn("Something is empty: ", todayDateAsString, userData.nickname);
     }
@@ -64,7 +103,10 @@ const Today = () => {
     ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
       const food = follower.closest(".food") as HTMLDivElement
       follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 'px';
-      follower.style.top = (food.offsetTop - document.querySelector('.chDiaryMain')!.scrollTop - follower.offsetHeight) + 'px';
+      follower.style.top = food.offsetTop - document.querySelector('.chDiaryMain')!.scrollTop - follower.offsetHeight + 'px';
+      // console.log(
+      //   follower.offsetTop, food.offsetTop, document.querySelector('.chDiaryMain')!.scrollTop, follower.offsetHeight
+      // )
     })
   }
 
@@ -76,37 +118,37 @@ const Today = () => {
     })
   }
 
-  const render = () => {
-    const now = getYYYYMMDD()
-    let rows = [];
-    for (let i = 0; i < everyHalfHour; i++) {
+  // const render = () => {
+  //   if (rowsRenderDone) return
+  //   const now = getYYYYMMDD()
+  //   let _rows = [];
+  //   for (let i = 0; i < everyHalfHour; i++) {
 
-      const hours = (i * 1 / 2)
+  //     const hours = (i * 1 / 2)
 
-      // const food = diaryFood.filter(data =>
-      //   data.date === todayDateAsString &&
-      //   data.dateTime === hours.toString()
-      // )[0]
-      const food = todayFoods.filter(data => data.dateTime === hours.toString())[0]
-      // console.log("diaryFood-->diaryFood-->", diaryFood);
+  //     const food = todayFoods.filter(data => data.dateTime === hours.toString())[0]
+  //     if (food) {
+  //       _rows.push(
+  //         <Row key={i} idx={i} date={now.getTime()} comp={
+  //           [<Food food={food} />, <EmptyRow />]
+  //         } hidden={false} />
+  //       )
+  //     } else {
+  //       _rows.push(
+  //         <Row key={i} idx={i} date={now.getTime()} comp={
+  //           [<EmptyRow />]
+  //         } hidden={hours < 7 || 22 < hours} />
+  //       )
+  //     }
 
-      if (food) {
-        rows.push(
-          <Row key={i} idx={i} date={now.getTime()} comp={
-            [<Food food={food} />, <EmptyRow />]
-          } hidden={false} />
-        )
-      } else {
-        rows.push(
-          <Row key={i} idx={i} date={now.getTime()} comp={
-            [<EmptyRow />]
-          } hidden={hours < 7 || 22 < hours} />
-        )
-      }
+  //   }
+  //   // setRows(_rows)
+  //   // return rows
+  //   // setRowsRenderDone(true)
+  //   console.log("donedonedoen");
 
-    }
-    return rows
-  }
+  //   return _rows
+  // }
 
   return (
     <div className="todayContainer">
@@ -137,7 +179,8 @@ const Today = () => {
           floatAnimationOnScrollEvent()
         }}>
           <div className="chDiaryTable"> {
-            render()
+            // render()
+            rowsElement
           }
           </div>
         </div>
