@@ -5,16 +5,12 @@ import { generateTimeHHMMSS } from '../../utils/util';
 
 interface RowProps {
   idx: number
-  // data: number
   hidden: boolean
   date: number
   comp: ReactElement[]
 }
 
 const Row = (props: RowProps) => {
-  // useEffect(() => {
-  //   console.log("useEffectuseEffectuseEffectuseEffectuseEffect");
-  // }, []);
 
   return (<>{
     !props.hidden &&

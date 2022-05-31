@@ -55,16 +55,6 @@ const Food = ({ food }: foodProps) => {
 
   const [hide, setHide] = useState(true)
 
-  // const calcFullProp = (props: FoodProperite, portion: number) => {
-  //   const num: number = portion / props.gramm
-  //   const res = Object.entries(props).map(([key, val]: [key: string, val: number]) => {
-  //     return [key,
-  //       Number(val * num).toFixed(2)
-  //     ].join(": ")
-  //   }).join(' | ')
-  //   return res
-  // }
-
   return (
     <div id={"food_" + food.id} data-id={food.id} className="food" draggable="true" onDragStart={drag} >
       <p className="foodInfoText" > {food.type} {food.portion} g {food.name} </p>

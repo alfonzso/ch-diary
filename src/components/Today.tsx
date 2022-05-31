@@ -22,17 +22,12 @@ function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) 
 
 const Today = () => {
 
-  // const everyHalfHour = useAppSelector(state => state.today.everyHalfHour)
-  // const everyHalfHour = useAppSelector(state => state.today.everyHalfHour)
   const { everyHalfHour, todayDateAsString, todayDate } = useAppSelector(state => state.today)
   const userData = useAppSelector(state => state.user.data)
   const diaryFood = useAppSelector(state => state.importIF.diaryFood)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
-  // const [rowsRenderDone, setRowsRenderDone] = useState(false)
   const [rowsElement, setRowsElement] = useState([] as React.ReactElement[])
 
-  // const everyHalfHour: number = 24 * 2
-  // const sumCh = diaryFood.
   const todayFoods = diaryFood.filter(data => data.date === todayDateAsString)
 
   useEffect(() => {
@@ -96,17 +91,11 @@ const Today = () => {
 
   }, [todayDateAsString]);
 
-
-
-
   const initFollowerToFood = () => {
     ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
       const food = follower.closest(".food") as HTMLDivElement
       follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 'px';
       follower.style.top = food.offsetTop - document.querySelector('.chDiaryMain')!.scrollTop - follower.offsetHeight + 'px';
-      // console.log(
-      //   follower.offsetTop, food.offsetTop, document.querySelector('.chDiaryMain')!.scrollTop, follower.offsetHeight
-      // )
     })
   }
 
@@ -117,38 +106,6 @@ const Today = () => {
       setTimeout(() => { floatAnimation(follower, food as HTMLDivElement, chDiaryMain) }, 100);
     })
   }
-
-  // const render = () => {
-  //   if (rowsRenderDone) return
-  //   const now = getYYYYMMDD()
-  //   let _rows = [];
-  //   for (let i = 0; i < everyHalfHour; i++) {
-
-  //     const hours = (i * 1 / 2)
-
-  //     const food = todayFoods.filter(data => data.dateTime === hours.toString())[0]
-  //     if (food) {
-  //       _rows.push(
-  //         <Row key={i} idx={i} date={now.getTime()} comp={
-  //           [<Food food={food} />, <EmptyRow />]
-  //         } hidden={false} />
-  //       )
-  //     } else {
-  //       _rows.push(
-  //         <Row key={i} idx={i} date={now.getTime()} comp={
-  //           [<EmptyRow />]
-  //         } hidden={hours < 7 || 22 < hours} />
-  //       )
-  //     }
-
-  //   }
-  //   // setRows(_rows)
-  //   // return rows
-  //   // setRowsRenderDone(true)
-  //   console.log("donedonedoen");
-
-  //   return _rows
-  // }
 
   return (
     <div className="todayContainer">
@@ -179,7 +136,6 @@ const Today = () => {
           floatAnimationOnScrollEvent()
         }}>
           <div className="chDiaryTable"> {
-            // render()
             rowsElement
           }
           </div>
