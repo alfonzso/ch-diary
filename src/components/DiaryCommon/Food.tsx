@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { drag } from "../../utils/dragAndDrop"
 import './Food.css'
 
-type FoodProperite = {
+export type FoodProperite = {
   gramm: number;
   kcal: number;
   portein: number;
@@ -23,24 +24,57 @@ interface foodProps {
   food: foodInnerProps
 }
 
-const Food = ({ food }: foodProps) => {
+interface foodProperiteComponentProps {
+  foodProps: FoodProperite
+  portion: number
+}
 
-  const calcFullProp = (props: FoodProperite, portion: number) => {
-    const num: number = portion / props.gramm
-    const res = Object.entries(props).map(([key, val]: [key: string, val: number]) => {
-      return [key, Number((val * num).toFixed(2))].join(": ")
-    }).join(' | ')
-    console.log(res)
-    return res
+const FoodProperiteComponent = (
+  { foodProps, portion }: foodProperiteComponentProps
+) => {
+  const num: number = portion / foodProps.gramm
+
+  const render = () => {
+    return Object.entries(foodProps).map(([key, val]: [key: string, val: number]) => {
+      return (
+        <div className="foodPropRow" key={key}>
+          <div> {key} </div> <div>{Number(val * num).toFixed(2)}</div>
+        </div>
+      )
+    })
   }
 
   return (
+    <div className="foodPropsContainer">
+      {render()}
+    </div>
+  )
+}
+
+const Food = ({ food }: foodProps) => {
+
+  const [hide, setHide] = useState(true)
+
+  // const calcFullProp = (props: FoodProperite, portion: number) => {
+  //   const num: number = portion / props.gramm
+  //   const res = Object.entries(props).map(([key, val]: [key: string, val: number]) => {
+  //     return [key,
+  //       Number(val * num).toFixed(2)
+  //     ].join(": ")
+  //   }).join(' | ')
+  //   return res
+  // }
+
+  return (
     <div id={"food_" + food.id} data-id={food.id} className="food" draggable="true" onDragStart={drag} >
-      <p> </p>
+      <p className="foodInfoText" > {food.type} {food.portion} g {food.name} </p>
       < div className="follower" >
-        <p>  {food.type} | {food.portion} | {food.name}  </p>
-        <p>  {Object.entries(food.props).map(prop => prop.join(": ")).join(' | ')} </p>
-        <p>  {calcFullProp(food.props, food.portion)} </p>
+        <div className="followerMenuBar">
+          <p className="followerFoodText" > {food.name} </p>
+          <div className="toggleVisibility" onClick={() => { setHide(!hide) }}> P </div>
+        </div>
+        {!hide && <p> {Object.entries(food.props).map(prop => prop.join(": ")).join(' | ')} </p>}
+        <FoodProperiteComponent foodProps={food.props} portion={food.portion} />
       </div >
     </div >
   )

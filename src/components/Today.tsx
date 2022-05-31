@@ -7,10 +7,17 @@ import { RootState } from '../redux/store';
 import { previousDay, todayDay, nextDay, getToDay } from '../redux/today';
 import { floatAnimation, getYYYYMMDD } from '../utils/util';
 import { EmptyRow } from './DiaryCommon/EmptyRow';
-import { Food } from './DiaryCommon/Food';
+import { Food, FoodProperite } from './DiaryCommon/Food';
 import { ImportForm } from './DiaryCommon/ImportForm';
 import { Row } from './DiaryCommon/Row';
 import "./Today.css";
+
+function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
+  return items.reduce(function (a, b) {
+    const num: number = b.portion / b.props.gramm
+    return a + (b.props.ch * num);
+  }, 0);
+}
 
 const Today = () => {
 
@@ -21,6 +28,8 @@ const Today = () => {
   const diaryFood = useAppSelector(state => state.importIF.diaryFood)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   // const everyHalfHour: number = 24 * 2
+  // const sumCh = diaryFood.
+  const todayFoods = diaryFood.filter(data => data.date === todayDateAsString)
 
   useEffect(() => {
     dispatch(getToDay())
@@ -50,6 +59,7 @@ const Today = () => {
 
 
 
+
   const initFollowerToFood = () => {
     ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
       const food = follower.closest(".food") as HTMLDivElement
@@ -73,10 +83,11 @@ const Today = () => {
 
       const hours = (i * 1 / 2)
 
-      const food = diaryFood.filter(data =>
-        data.date === todayDateAsString &&
-        data.dateTime === hours.toString()
-      )[0]
+      // const food = diaryFood.filter(data =>
+      //   data.date === todayDateAsString &&
+      //   data.dateTime === hours.toString()
+      // )[0]
+      const food = todayFoods.filter(data => data.dateTime === hours.toString())[0]
       // console.log("diaryFood-->diaryFood-->", diaryFood);
 
       if (food) {
@@ -101,10 +112,16 @@ const Today = () => {
     <div className="todayContainer">
       <div className="information">
         <div className="spacer">LEFT</div>
-        <div className='dateChanger'>
-          <div className="previousDay"> <button onClick={() => { dispatch(previousDay()) }} > &lt; </button></div>
-          <div className="todayDay"> <button onClick={() => { dispatch(todayDay()) }} > {todayDateAsString} </button></div>
-          <div className="nextDay"> <button onClick={() => { dispatch(nextDay()) }} > &gt; </button></div>
+        <div className="centerColumn">
+          <div className='dateChanger'>
+            <div className="previousDay"> <button onClick={() => { dispatch(previousDay()) }} > &lt; </button></div>
+            <div className="todayDay"> <button onClick={() => { dispatch(todayDay()) }} > {todayDateAsString} </button></div>
+            <div className="nextDay"> <button onClick={() => { dispatch(nextDay()) }} > &gt; </button></div>
+          </div>
+          <div className="chInformation">
+            <div className="sumCh">Sum ch: {Number(sumCh(todayFoods)).toFixed(2)}</div>
+            <div className="leftCh">Left ch: {Number(180 - sumCh(todayFoods)).toFixed(2)}</div>
+          </div>
         </div>
         <div className="spacer importInterFoodContainer">
           <div className="spacer"> RIGHT</div>

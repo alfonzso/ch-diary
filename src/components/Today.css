@@ -19,8 +19,21 @@
   display: flex;
 }
 
+/* .chInformation {
+  display: flex;
+}
+
+.chInformation>div {
+  flex: 1
+} */
+
 .information>* {
   border: 0.5px solid
+}
+
+.centerColumn {
+  display: flex;
+  flex-flow: column;
 }
 
 .spacer {
