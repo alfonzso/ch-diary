@@ -63,9 +63,9 @@ const Today = () => {
 
   useEffect(() => {
     console.log("diaryFood: ", diaryFood);
-    if (diaryFood.length > 0) {
+    // if (diaryFood.length > 0) {
       renderRows()
-    }
+    // }
 
   }, [diaryFood]);
 
