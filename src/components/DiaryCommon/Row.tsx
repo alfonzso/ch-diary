@@ -2,6 +2,7 @@ import React from 'react';
 import { ReactElement } from 'react';
 import { drop, allowDrop } from '../../utils/dragAndDrop';
 import { generateTimeHHMMSS } from '../../utils/util';
+import "./Row.scss"
 
 interface RowProps {
   idx: number
@@ -14,7 +15,7 @@ const Row = (props: RowProps) => {
 
   return (<>{
     !props.hidden &&
-    <div className='row' >
+    <div className='chDiaryTableRow' >
       <div className='columnLeft'>
         <div className='dateColumn' data-time={(props.idx * 1 / 2).toString()}>
           {

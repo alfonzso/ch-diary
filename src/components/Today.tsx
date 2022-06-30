@@ -1,17 +1,16 @@
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../redux/hooks';
 import { getTodayFoods, importToggle } from '../redux/importInterFood';
 import { RootState } from '../redux/store';
-import { previousDay, todayDay, nextDay, getToDay } from '../redux/today';
+import { getToDay, nextDay, previousDay, todayDay } from '../redux/today';
 import { floatAnimation, getYYYYMMDD } from '../utils/util';
 import { EmptyRow } from './DiaryCommon/EmptyRow';
 import { Food, FoodProperite } from './DiaryCommon/Food';
 import { ImportForm } from './DiaryCommon/ImportForm';
 import { Row } from './DiaryCommon/Row';
-import "./Today.css";
+import "./Today.scss";
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
   return items.reduce(function (a, b) {
@@ -64,7 +63,7 @@ const Today = () => {
   useEffect(() => {
     console.log("diaryFood: ", diaryFood);
     // if (diaryFood.length > 0) {
-      renderRows()
+    renderRows()
     // }
 
   }, [diaryFood]);
@@ -92,10 +91,11 @@ const Today = () => {
   }, [todayDateAsString]);
 
   const initFollowerToFood = () => {
+    const moveToTopABit: number = -15;
     ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
       const food = follower.closest(".food") as HTMLDivElement
       follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 'px';
-      follower.style.top = food.offsetTop - document.querySelector('.chDiaryMain')!.scrollTop - follower.offsetHeight + 'px';
+      follower.style.top = food.offsetTop - document.querySelector('.chDiaryMain')!.scrollTop - follower.offsetHeight + moveToTopABit + 'px';
     })
   }
 
@@ -109,28 +109,30 @@ const Today = () => {
 
   return (
     <div className="todayContainer">
+
+      <div className="importInterFoodContainer">
+        <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} > Import </button>
+        <ImportForm />
+      </div>
+
       <div className="information">
-        <div className="spacer">LEFT</div>
         <div className="centerColumn">
+
           <div className='dateChanger'>
             <div className="previousDay"> <button onClick={() => { dispatch(previousDay()) }} > &lt; </button></div>
             <div className="todayDay"> <button onClick={() => { dispatch(todayDay()) }} > {todayDateAsString} </button></div>
             <div className="nextDay"> <button onClick={() => { dispatch(nextDay()) }} > &gt; </button></div>
           </div>
+
           <div className="chInformation">
             <div className="sumCh">Sum ch: {Number(sumCh(todayFoods)).toFixed(2)}</div>
             <div className="leftCh">Left ch: {Number(180 - sumCh(todayFoods)).toFixed(2)}</div>
           </div>
-        </div>
-        <div className="spacer importInterFoodContainer">
-          <div className="spacer"> RIGHT</div>
-          <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} >Import</button>
-          <ImportForm />
 
         </div>
       </div>
       <div className="tableContent">
-        <div className="spacer"></div>
+        {/* <div className="spacer"></div> */}
         <div className="chDiaryMain" onScroll={(ev) => {
           ev.preventDefault();
           floatAnimationOnScrollEvent()
@@ -140,7 +142,7 @@ const Today = () => {
           }
           </div>
         </div>
-        <div className="spacer"></div>
+        {/* <div className="spacer"></div> */}
       </div>
 
     </div >

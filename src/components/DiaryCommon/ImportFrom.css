@@ -10,6 +10,11 @@
 
 .importInterFoodContainer {
   display: flex;
+  margin-left: auto;
+  width: 100px;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .sendImportInterFood,

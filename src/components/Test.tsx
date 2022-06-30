@@ -1,24 +1,15 @@
 import { DataGrid } from '@mui/x-data-grid';
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import { chDiarySchema } from '../data/tableSchema';
 import { diaryData, IFetchData, IFetchInstance, simpleDiaryData } from '../types';
 import fetchInstance from '../utils/fetchInstance';
 import inMemoryJwt from '../utils/inMemoryJwt';
+import { Redirect } from '../utils/Redirect';
 import './Test.css';
-
-
 
 function Test() {
 
-  function Redirect({ to }: { to: any }) {
-    let navigate = useNavigate();
-    useEffect(() => {
-      navigate(to);
-    });
-    return null;
-  }
   const fetchData = async (url: string, callback: ((diaryObject: IFetchData) => void)) => {
     fetchInstance(url)
       .then((resp: IFetchInstance) => {

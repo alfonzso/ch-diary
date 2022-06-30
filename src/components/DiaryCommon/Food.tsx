@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { drag } from "../../utils/dragAndDrop"
-import './Food.css'
+import './Food.scss'
 
 export type FoodProperite = {
   gramm: number;
@@ -57,7 +57,7 @@ const Food = ({ food }: foodProps) => {
 
   return (
     <div id={"food_" + food.id} data-id={food.id} className="food" draggable="true" onDragStart={drag} >
-      <p className="foodInfoText" > {food.type} {food.portion} g {food.name} </p>
+      <p className="foodInfoText" > {food.portion} g {food.name} {food.type} </p>
       < div className="follower" >
         <div className="followerMenuBar">
           <p className="followerFoodText" > {food.name} </p>
