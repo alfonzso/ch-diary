@@ -11,7 +11,7 @@ import Register from './components/Register';
 import Test from "./components/Test";
 import Today from "./components/Today";
 
-export const baseURL = process.env.REACT_APP_BE_URL
+export const baseURL = (window as any)._env_.REACT_APP_BE_URL as string || 'http://localhost:8080'
 
 function App() {
 
