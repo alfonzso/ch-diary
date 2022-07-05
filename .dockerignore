@@ -1,8 +1,8 @@
-node_modules
-npm-debug.log
-.tmp
-.vscode
-coverage
-test
-.env
-Dockerfile
+# Ignore everything
+**
+# Allow files/folders
+!nginx
+!package*.json
+!public
+!src
+!tsconfig.json
