@@ -1,7 +1,8 @@
 version: '3'
 services:
   web:
-    image: ch-diary-frontend
+    # image: ch-diary-frontend
+    image: ch-diary-frontend:1.0.1
     # volumes:
     #   - .env.prod:/home/node/app/.env
     ports:
