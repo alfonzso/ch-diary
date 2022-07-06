@@ -8,7 +8,7 @@ RUN npm ci --silent
 COPY . ./
 # RUN mv .env.prod .env
 RUN npm run build
-RUN echo "" > public/env.config.js
+RUN echo "window._env_ = {}" > build/env.config.js
 
 # production environment
 FROM nginx:stable-alpine
