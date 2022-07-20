@@ -1,5 +1,6 @@
-import { diaryData, simpleDiaryData } from "./diary";
+import { apiDiaryGetEntryNickname, diaryData, simpleDiaryData } from "./diary";
 import { IFetchInstance, IFetchData } from "./fetchInstance";
+import { userInfoFromToken } from "./token";
 import { UserData } from "./user";
 
 export type {
@@ -7,5 +8,7 @@ export type {
   IFetchData,
   UserData,
   diaryData,
-  simpleDiaryData
+  simpleDiaryData,
+  apiDiaryGetEntryNickname,
+  userInfoFromToken
 }

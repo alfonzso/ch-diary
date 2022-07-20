@@ -1,16 +1,16 @@
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../redux/hooks';
-import { getTodayFoods, importToggle } from '../redux/importInterFood';
-import { RootState } from '../redux/store';
-import { getToDay, nextDay, previousDay, todayDay } from '../redux/today';
-import { floatAnimation, getYYYYMMDD } from '../utils/util';
-import { EmptyRow } from './DiaryCommon/EmptyRow';
-import { Food, FoodProperite } from './DiaryCommon/Food';
-import { ImportForm } from './DiaryCommon/ImportForm';
-import { Row } from './DiaryCommon/Row';
-import "./Today.scss";
+import { useAppSelector } from '../../redux/hooks';
+import { getTodayFoods, importToggle } from '../../redux/importInterFood';
+import { RootState } from '../../redux/store';
+import { getToDay, nextDay, previousDay, todayDay } from '../../redux/today';
+import { floatAnimation, getYYYYMMDD } from '../../utils/util';
+import { EmptyRow } from '../DiaryCommon/EmptyRow';
+import { Food, FoodProperite } from '../DiaryCommon/Food';
+import { ImportForm } from '../DiaryCommon/ImportForm';
+import { Row } from '../DiaryCommon/Row';
+import "./index.scss";
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
   return items.reduce(function (a, b) {
@@ -132,7 +132,6 @@ const Today = () => {
         </div>
       </div>
       <div className="tableContent">
-        {/* <div className="spacer"></div> */}
         <div className="chDiaryMain" onScroll={(ev) => {
           ev.preventDefault();
           floatAnimationOnScrollEvent()
@@ -142,7 +141,6 @@ const Today = () => {
           }
           </div>
         </div>
-        {/* <div className="spacer"></div> */}
       </div>
 
     </div >

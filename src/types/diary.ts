@@ -1,3 +1,9 @@
+
+interface apiDiaryGetEntryNickname {
+  status: boolean
+  data: diaryData[]
+}
+
 type diaryData = {
   id: string;
   Food: {
@@ -38,6 +44,7 @@ type simpleDiaryData = {
 }
 
 export type {
+  apiDiaryGetEntryNickname,
   diaryData,
   simpleDiaryData
 }

@@ -3,13 +3,9 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-
+import { Home, Login, Navbar, Register, Test, Today } from "..";
 import './App.css';
-import Navbar from './components/Navbar';
-import Login from './components/Login';
-import Register from './components/Register';
-import Test from "./components/Test";
-import Today from "./components/Today";
+
 
 export const baseURL = (window as any)._env_.REACT_APP_BE_URL as string || 'http://localhost:8080'
 
@@ -36,13 +32,13 @@ function App() {
 
 export default App;
 
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
+// function Home() {
+//   return (
+//     <div>
+//       <h2>Home</h2>
+//     </div>
+//   );
+// }
 
 function About() {
   return (

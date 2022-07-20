@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserData } from "../types";
+import { UserData, userInfoFromToken } from "../types";
+import jwt_decode, { JwtPayload } from "jwt-decode";
 
 // Define a type for the slice state
 interface UserState {
@@ -11,7 +12,8 @@ const initialState: UserState = {
   data: {
     id: "",
     nickname: "",
-    email: ""
+    email: "",
+    accesToken: ""
   }
 }
 
@@ -19,15 +21,17 @@ export const userSlice = createSlice({
   name: "userData",
   initialState,
   reducers: {
-    add: (state, action: PayloadAction<UserData>) => {
+    addUser: (state, action: PayloadAction<string>) => {
       console.log(
         "add func", action, state.data
       )
-      const user: UserData = action.payload
+
+      const user = jwt_decode<JwtPayload>(action.payload) as userInfoFromToken
       state.data = {
-        id: user.id,
-        nickname: user.nickname,
-        email: user.email
+        id: user.userId,
+        nickname: user.userNickName,
+        email: user.userEmail,
+        accesToken: action.payload
       }
 
       console.log(
@@ -38,5 +42,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { add } = userSlice.actions;
+export const { addUser } = userSlice.actions;
 export default userSlice.reducer

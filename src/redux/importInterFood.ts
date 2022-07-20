@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { foodInnerProps } from '../components/DiaryCommon/Food'
+import { foodInnerProps } from '../Components/DiaryCommon/Food'
+import { useFetch } from '../Hooks'
+import { apiDiaryGetEntryNickname } from '../types'
 import customFetcher from '../utils/fetchInstance'
 import { removeDuplicatedElementsById } from '../utils/util'
 
@@ -23,6 +25,8 @@ export const sendImportedData = createAsyncThunk(
 export const getTodayFoods = createAsyncThunk(
   'today/getFood',
   async ({ user, date }: { user: string, date: string }) => {
+    const chEntry = useFetch<apiDiaryGetEntryNickname>(`/api/diary/getEntry/nickname/alfonzso`);
+    console.log("chEntry ", chEntry);
     const response = await customFetcher(
       `/api/diary/getEntry/nickname/${user}/date/${date}`
     )

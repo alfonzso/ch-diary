@@ -1,5 +1,8 @@
-import { baseURL } from "../App";
+import { baseURL } from "../Components/App";
+// import { useAppSelector } from "../redux/hooks";
 import { IFetchData, IFetchInstance } from "../types/fetchInstance";
+// import { useDispatch } from 'react-redux';
+import { addUser } from "../redux/user";
 import inMemoryJwt from "./inMemoryJwt";
 
 let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<IFetchInstance> => {
@@ -23,8 +26,13 @@ function checkTokenIsExpired(refTokenObject: IFetchData) {
 }
 
 let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchInstance> => {
-  let accessToken = inMemoryJwt.getToken()
+  // const userData = useAppSelector(state => state.user.data)
+  // const dispatch = useDispatch();
 
+  // const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+
+  // let accessToken = userData.accesToken
+  let accessToken = inMemoryJwt.getToken()
 
   // config.headers
   config['headers'] = {
@@ -39,6 +47,7 @@ let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchIn
     if (expired) return { fetchObject: checkedRefTokenObject }
 
     inMemoryJwt.setToken(checkedRefTokenObject.body.accessToken)
+    // dispatch(addUser(checkedRefTokenObject.body.accessToken as string))
 
     config['headers'] = {
       'Content-Type': 'application/json',

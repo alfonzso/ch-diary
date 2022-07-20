@@ -1,13 +1,12 @@
 import React from 'react';
-import fetchInstance from '../utils/fetchInstance';
-import inMemoryJWTManager from "../utils/inMemoryJwt"
-import { baseURL } from "../App";
-import { add } from '../redux/user';
-import { UserData } from '../types';
+import fetchInstance from '../../utils/fetchInstance';
+import inMemoryJWTManager from "../../utils/inMemoryJwt"
+import { baseURL } from '../App';
+import { addUser } from '../../redux/user';
+import { UserData, userInfoFromToken } from '../../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { RootState } from '../redux/store';
-
+import { RootState } from '../../redux/store';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -17,7 +16,6 @@ interface LoginProps {
 interface LoginState {
   inputs: { [x: string]: string }
 }
-
 
 class Login extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
@@ -47,8 +45,8 @@ class Login extends React.Component<LoginProps, LoginState> {
       .then(async (res) => {
         console.log('--->', res)
         inMemoryJWTManager.setToken(res.accessToken)
-        const { fetchObject } = await fetchInstance("/api/user/getUser")
-        this.props.dispatch(add(fetchObject.body as UserData))
+        // const { fetchObject } = await fetchInstance("/api/user/getUser")
+        this.props.dispatch(addUser(res.accessToken as string))
       });
   }
 

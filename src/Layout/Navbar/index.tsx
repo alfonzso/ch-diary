@@ -2,12 +2,11 @@ import { useState } from "react";
 import { connect } from 'react-redux';
 import { Link, Outlet } from "react-router-dom";
 import { Dispatch } from "redux";
-import { RootState } from '../redux/store';
-import { UserData } from '../types';
-import "./navbar.scss";
+import { RootState } from '../../redux/store';
+import { UserData } from '../../types';
+import "./index.scss";
 
 interface NavbarProps {
-  // userData: userData
   dispatch: Dispatch;
   user: UserData;
 }
@@ -16,14 +15,9 @@ interface NavbarState {
 
 }
 
-// class Navbar extends React.Component<NavbarProps, NavbarState> {
-// state = { :  }
 const Navbar = ({ user }: NavbarProps) => {
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-  // render() {
-  // return (
-  // const { userData } = this.props;
 
   return (
     <div>
