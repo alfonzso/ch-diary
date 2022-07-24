@@ -3,6 +3,7 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
 import { chDiarySchema } from '../data/tableSchema';
 import { useFetch } from '../Hooks';
+import { fetchWrapper } from '../Hooks/useFetch';
 import { apiDiaryGetEntryNickName, apiDiaryGetEntryNickNameDate, diaryData, IFetchData, IFetchInstance, simpleDiaryData } from '../types';
 import fetchInstance from '../utils/fetchInstance';
 import inMemoryJwt from '../utils/inMemoryJwt';
@@ -36,11 +37,11 @@ function Test() {
   const [foodRes, setFoodRes] = useState([] as simpleDiaryData[])
   const [isRedirect, setRedirect] = useState(false)
   // const [data] = useFetch<{ id: number, title: string }[]>("https://jsonplaceholder.typicode.com/todos");
-  const data = useFetch<{ id: number, title: string }[]>("https://jsonplaceholder.typicode.com/todos");
+  // const data = useFetch<{ id: number, title: string }[]>("https://jsonplaceholder.typicode.com/todos");
   // const data: { id?: string, title?: string }[] = useFetch("https://jsonplaceholder.typicode.com/todos");
 
   // const [chEntry] = useFetch<apiDiaryGetEntryNickname>(`${baseURL}/api/diary/getEntry/nickname/alfonzso`);
-  const chEntry = useFetch<apiDiaryGetEntryNickName>(`/api/diary/getEntry/nickname/alfonzso`);
+  // const chEntry = useFetch<apiDiaryGetEntryNickName>(`/api/diary/getEntry/nickname/alfonzso`);
   // const today = useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/getEntry/nickname/alfonzso/date/2022-07-21`);
   const { data: testData } = useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`);
 
@@ -69,15 +70,38 @@ function Test() {
   //   console.log("---->", chEntry.data[0].User.nickname)
   // }
   useEffect(() => {
-    console.log(testData);
+    console.log("---> ", testData);
 
 
     // }, [data, chEntry]);
   }, [testData]);
 
+  interface TokenError {
+    error: {
+      message: string,
+      reason: string, expiredAt: Date
+    }
+  }
+
+  interface TokenData {
+    accessToken: string
+    refreshToken: string
+  }
+
+  type TokenResponse = TokenError & TokenData
+
+
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
-    fetchData(`/api/diary/${event.currentTarget.name}`, (diaryObject) => { setDiarRes(diaryObject) })
+    // fetchData(`/api/diary/${event.currentTarget.name}`, (diaryObject) => { setDiarRes(diaryObject) })
     // const test = useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`)
+    // const resolve = (refreshTokenResponse: TokenResponse) => {
+    //   if (refreshTokenResponse.error) throw new Error(JSON.stringify(refreshTokenResponse.error))
+    //   inMemoryJwt.setToken(refreshTokenResponse.accessToken)
+    // }
+    // const reject = (err: Error) => {
+    //   console.log(err)
+    // }
+    // fetchWrapper("/api/diary/test", resolve, reject)
   }
 
   return (
