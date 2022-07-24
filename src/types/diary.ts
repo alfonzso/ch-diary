@@ -1,5 +1,10 @@
 
-interface apiDiaryGetEntryNickname {
+interface apiDiaryGetEntryNickNameDate {
+  status: boolean
+  data: diaryData
+}
+
+interface apiDiaryGetEntryNickName {
   status: boolean
   data: diaryData[]
 }
@@ -44,7 +49,8 @@ type simpleDiaryData = {
 }
 
 export type {
-  apiDiaryGetEntryNickname,
+  apiDiaryGetEntryNickName ,
+  apiDiaryGetEntryNickNameDate,
   diaryData,
   simpleDiaryData
 }
