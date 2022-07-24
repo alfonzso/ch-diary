@@ -61,4 +61,79 @@ let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchIn
 
   return { fetchObject }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+interface TokenData {
+  accessToken: string
+  refreshToken: string
+}
+
+type TokenResponse = ResponseErrorHandler & TokenData
+
+export interface ResponseErrorHandler {
+  error: {
+    message: string,
+    reason: string, expiredAt: Date
+  }
+}
+
+export const fetchWrapper = (
+  urlPath: string,
+  resolve: (res: any) => any,
+  reject?: (error: Error) => any,
+  init?: RequestInit
+) => {
+  const url = `${baseURL}${urlPath}`
+  const defaultReject = (err: Error) => { console.log("defaultReject ", err) }
+  return fetch(url, init)
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject !== undefined ? defaultReject : reject)
+}
+
+const retryFetchWithNewToken = () => {
+  return fetchWrapper("/api/auth/refreshToken",
+    (refreshTokenResponse: TokenResponse) => {
+      if (refreshTokenResponse.error) throw new Error(JSON.stringify(refreshTokenResponse.error))
+      inMemoryJwt.setToken(refreshTokenResponse.accessToken)
+    },
+    undefined, { method: 'GET', credentials: 'include', })
+}
+
+export const newFetch =
+  <T extends ResponseErrorHandler>(
+    url: string,
+    newFetchResolve: (res: T) => T | void,
+    reject?: () => any,
+    config?: RequestInit) => {
+
+    const firstFetchResolve = async (response: T) => {
+      // console.log("firstFetchResolve response.ok: ", response, response.error ? 1 : 2)
+      if (response.error) {
+        await retryFetchWithNewToken()
+        fetchWrapper(url, newFetchResolve, undefined, setConfigHeader(config, inMemoryJwt.getToken()))
+      } else {
+        // console.log('resolve(response)');
+        return newFetchResolve(response)
+      }
+    }
+    fetchWrapper(url, firstFetchResolve, undefined, setConfigHeader(config, inMemoryJwt.getToken()))
+
+  }
+
+function setConfigHeader(config: RequestInit = {}, accessToken: string | null) {
+  console.log("accessToken ---> ", accessToken);
+
+  config['headers'] = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${accessToken}`
+  }
+  return config
+}
+
+
 export default customFetcher;

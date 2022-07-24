@@ -3,9 +3,9 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
 import { chDiarySchema } from '../data/tableSchema';
 import { useFetch } from '../Hooks';
-import { fetchWrapper } from '../Hooks/useFetch';
+// import { fetchWrapper, newFetch, ResponseErrorHandler } from '../Hooks/useFetch';
 import { apiDiaryGetEntryNickName, apiDiaryGetEntryNickNameDate, diaryData, IFetchData, IFetchInstance, simpleDiaryData } from '../types';
-import fetchInstance from '../utils/fetchInstance';
+import fetchInstance, { newFetch, ResponseErrorHandler } from '../utils/fetchInstance';
 import inMemoryJwt from '../utils/inMemoryJwt';
 import { Redirect } from '../utils/Redirect';
 import { baseURL } from './App';
@@ -69,10 +69,9 @@ function Test() {
   // if (chEntry.data) {
   //   console.log("---->", chEntry.data[0].User.nickname)
   // }
+
   useEffect(() => {
     console.log("---> ", testData);
-
-
     // }, [data, chEntry]);
   }, [testData]);
 
@@ -111,7 +110,12 @@ function Test() {
       <button name="test1" onClick={shoot} >Test1</button>
       <button name="fafa" onClick={() => {
         // useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`)
-      }} >Test1</button>
+        newFetch<apiDiaryGetEntryNickName & ResponseErrorHandler>(`/api/diary/getEntry/nickname/alfonzso`,
+          (response) => {
+            console.log("apiDiaryGetEntryNickName(response) ", response.data[0])
+          }
+        )
+      }} >fafa</button>
       <div className="header">
         <div className="item">z</div>
         <div className="item dataTable" style={{ height: 400, width: '100%' }}>
@@ -158,4 +162,3 @@ function Test() {
 }
 
 export default Test;
-
