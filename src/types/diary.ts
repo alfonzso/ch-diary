@@ -1,13 +1,17 @@
+import { ResponseErrorHandler } from "../utils/fetchInstance"
 
 interface apiDiaryGetEntryNickNameDate {
   status: boolean
   data: diaryData
 }
 
-interface apiDiaryGetEntryNickName {
+interface apiDiaryGetEntryNickNameData {
   status: boolean
   data: diaryData[]
 }
+
+type diaryGetEntryNickNameResponse = apiDiaryGetEntryNickNameData & ResponseErrorHandler
+type diaryGetEntryNickNameDateResponse = apiDiaryGetEntryNickNameDate & ResponseErrorHandler
 
 type diaryData = {
   id: string;
@@ -49,7 +53,8 @@ type simpleDiaryData = {
 }
 
 export type {
-  apiDiaryGetEntryNickName ,
+  diaryGetEntryNickNameDateResponse,
+  diaryGetEntryNickNameResponse ,
   apiDiaryGetEntryNickNameDate,
   diaryData,
   simpleDiaryData

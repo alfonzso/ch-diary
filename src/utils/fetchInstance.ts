@@ -1,8 +1,5 @@
 import { baseURL } from "../Components/App";
-// import { useAppSelector } from "../redux/hooks";
 import { IFetchData, IFetchInstance } from "../types/fetchInstance";
-// import { useDispatch } from 'react-redux';
-import { addUser } from "../redux/user";
 import inMemoryJwt from "./inMemoryJwt";
 
 let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<IFetchInstance> => {
@@ -108,7 +105,7 @@ export const newFetch =
   <T extends ResponseErrorHandler>(
     url: string,
     newFetchResolve: (res: T) => T | void,
-    reject?: () => any,
+    _reject?: () => any,
     config?: RequestInit) => {
 
     const firstFetchResolve = async (response: T) => {
