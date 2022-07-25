@@ -61,8 +61,9 @@ jobs:
         tags: alfonzso/chdiary-fe:${{ github.event.inputs.tag }}.${{ github.run_number }}
         cache-from: type=registry,ref=alfonzso/chdiary-fe:buildcache
         cache-to: type=registry,ref=alfonzso/chdiary-fe:buildcache,mode=max
+        # REACT_APP_GIT_VERSION: $GIT_VERSION
         build-args: |
-          REACT_APP_GIT_VERSION: $GIT_VERSION
+          REACT_APP_GIT_VERSION: ${{ env.GIT_VERSION }}
 
     # - name: Build
     #   uses: docker/build-push-action@v2
