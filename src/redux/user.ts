@@ -38,9 +38,13 @@ export const userSlice = createSlice({
         "add func", action, state.data
       )
 
+    },
+    updateUserToken: (state, action: PayloadAction<string>) => {
+      console.log("###################### Token stored in user");
+      state.data.accesToken = action.payload
     }
   }
 });
 
-export const { addUser } = userSlice.actions;
+export const { addUser, updateUserToken } = userSlice.actions;
 export default userSlice.reducer

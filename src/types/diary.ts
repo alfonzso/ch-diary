@@ -50,7 +50,6 @@ type simpleDiaryData = {
 export type {
   diaryGetEntryNickNameDateResponse,
   diaryGetEntryNickNameResponse,
-  apiDiaryGetEntryNickNameDateData as apiDiaryGetEntryNickNameDate,
   diaryData,
   simpleDiaryData
 }

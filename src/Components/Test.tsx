@@ -1,34 +1,34 @@
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
 import { useFetch } from '../Hooks';
-import { diaryGetEntryNickNameResponse, IFetchData, IFetchInstance, simpleDiaryData, diaryGetEntryNickNameDateResponse } from '../types';
-import fetchInstance, { newFetchWithAuth } from '../utils/fetchInstance';
+import { diaryGetEntryNickNameResponse, IFetchData, IFetchInstance, simpleDiaryData, diaryGetEntryNickNameDateResponse, DiaryTestResponse } from '../types';
+import fetchInstance, { getUserDataFromStore, newFetchWithAuth } from '../utils/fetchInstance';
 import inMemoryJwt from '../utils/inMemoryJwt';
 import './Test.css';
 
 function Test() {
 
-  const fetchData = async (url: string, callback: ((diaryObject: IFetchData) => void)) => {
-    fetchInstance(url)
-      .then((resp: IFetchInstance) => {
-        const diaryObject: IFetchData = resp.fetchObject
-        console.log(
-          "---->", diaryObject.response.status
-        )
-        if ([401, 403].includes(diaryObject.response.status)) {
-          setRedirect(true)
-        }
-        if (400 === diaryObject.response.status) {
-          console.log(diaryObject.body.error.message)
-          throw new Error(diaryObject.response.statusText, { cause: { name: "", message: diaryObject.body.error.message } })
-        }
-        callback(diaryObject)
+  // const fetchData = async (url: string, callback: ((diaryObject: IFetchData) => void)) => {
+  //   fetchInstance(url)
+  //     .then((resp: IFetchInstance) => {
+  //       const diaryObject: IFetchData = resp.fetchObject
+  //       console.log(
+  //         "---->", diaryObject.response.status
+  //       )
+  //       if ([401, 403].includes(diaryObject.response.status)) {
+  //         setRedirect(true)
+  //       }
+  //       if (400 === diaryObject.response.status) {
+  //         console.log(diaryObject.body.error.message)
+  //         throw new Error(diaryObject.response.statusText, { cause: { name: "", message: diaryObject.body.error.message } })
+  //       }
+  //       callback(diaryObject)
 
-      }).catch(err => {
-        console.log(err)
-      })
-  }
-  const [diaryRes, setDiarRes] = useState({} as IFetchData)
+  //     }).catch(err => {
+  //       console.log(err)
+  //     })
+  // }
+  const [diaryRes, setDiarRes] = useState({} as DiaryTestResponse)
   const [foodRes, setFoodRes] = useState([] as simpleDiaryData[])
   const [isRedirect, setRedirect] = useState(false)
   // const [data] = useFetch<{ id: number, title: string }[]>("https://jsonplaceholder.typicode.com/todos");
@@ -80,7 +80,14 @@ function Test() {
     // const reject = (err: Error) => {
     //   console.log(err)
     // }
-    // fetchWrapper("/api/diary/test", resolve, reject)
+    // newFetchWithAuth("/api/diary/test", resolve, reject)
+    // DiaryTestResponse
+    newFetchWithAuth<DiaryTestResponse>("/api/diary/test",
+      (response) => {
+        console.log("newFetchWithAuth<DiaryTestResponse> ", response.data)
+        setDiarRes(response)
+      }
+    )
   }
 
   return (
@@ -114,15 +121,25 @@ function Test() {
       </div>
 
       {/* {isRedirect && <Redirect to='/login' />} */}
-      {diaryRes.response && diaryRes.response.ok &&
+      {/* {diaryRes.response && diaryRes.response.ok && */}
+      {diaryRes && diaryRes.data &&
         <div className="diary-res">
-          <p>{diaryRes.response.status}</p>
-          <p>{diaryRes.body.message}</p>
+          <p>{diaryRes.message}</p>
+          <p>{diaryRes.data.userNickName}</p>
           <p>{
-            new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime() - Math.floor(new Date().getTime() / 1000)
+            // new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime() - Math.floor(new Date().getTime() / 1000)
+            new Date(
+              jwt_decode<JwtPayload>(
+                getUserDataFromStore().accesToken).exp!
+            ).getTime() - Math.floor(new Date().getTime() / 1000)
           } second and byeee ... </p>
           <p>{Math.floor(new Date().getTime() / 1000)}</p>
-          <p>{new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime()}</p>
+          <p>{
+            new Date(
+              jwt_decode<JwtPayload>(
+                getUserDataFromStore().accesToken).exp!
+            ).getTime()
+          }</p>
         </div>
       }
 

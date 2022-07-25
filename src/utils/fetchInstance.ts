@@ -1,4 +1,8 @@
 import { baseURL } from "../Components/App";
+import { useAppSelector } from "../redux/hooks";
+import { store } from "../redux/store";
+import { updateUserToken } from "../redux/user";
+
 import { TokenResponse } from "../types";
 import { IFetchData, IFetchInstance } from "../types/fetchInstance";
 import inMemoryJwt from "./inMemoryJwt";
@@ -72,7 +76,14 @@ export interface ResponseErrorHandler {
   }
 }
 
-export const fetchWrapper = (
+export const getUserDataFromStore = () => {
+  return store.getState().user.data
+}
+const updateToken = (token: string) => {
+  store.dispatch(updateUserToken(token))
+}
+
+const fetchWrapper = (
   urlPath: string,
   resolve: (res: any) => any,
   reject?: (error: Error) => any,
@@ -91,6 +102,7 @@ const retryFetchWithNewToken = () => {
     (refreshTokenResponse: TokenResponse) => {
       if (refreshTokenResponse.error) throw new Error(JSON.stringify(refreshTokenResponse.error))
       inMemoryJwt.setToken(refreshTokenResponse.accessToken)
+      updateToken(refreshTokenResponse.accessToken)
     },
     undefined, { method: 'GET', credentials: 'include', })
 }
@@ -136,7 +148,7 @@ export const newFetch =
 function setTokenInHeader(config: RequestInit = {}) {
   config['headers'] = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${inMemoryJwt.getToken()}`
+    Authorization: `Bearer ${getUserDataFromStore().accesToken}`
   }
   return config
 }

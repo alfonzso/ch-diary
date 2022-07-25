@@ -6,7 +6,7 @@ import {
 import { Home, Login, Navbar, Register, Test, Today } from "..";
 import './App.css';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const baseURL = (window as any)._env_.REACT_APP_BE_URL as string || 'http://localhost:8080'
@@ -33,14 +33,6 @@ function App() {
 }
 
 export default App;
-
-// function Home() {
-//   return (
-//     <div>
-//       <h2>Home</h2>
-//     </div>
-//   );
-// }
 
 function About() {
   return (

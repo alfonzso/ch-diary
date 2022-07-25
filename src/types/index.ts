@@ -1,16 +1,17 @@
 import {
-  diaryGetEntryNickNameResponse, apiDiaryGetEntryNickNameDate,
+  diaryGetEntryNickNameResponse,
   diaryData, simpleDiaryData,
   diaryGetEntryNickNameDateResponse
 } from "./diary";
 import { IFetchInstance, IFetchData } from "./fetchInstance";
 import { InterfoodImportResponse } from "./interfood";
 import { LoginResponse, TokenResponse, userInfoFromToken } from "./token";
-import { UserData } from "./user";
+import { DiaryTestResponse, UserData } from "./user";
 
 export type {
   IFetchInstance,
   IFetchData,
+  DiaryTestResponse,
   InterfoodImportResponse,
   TokenResponse,
   LoginResponse,
@@ -19,6 +20,5 @@ export type {
   simpleDiaryData,
   diaryGetEntryNickNameDateResponse,
   diaryGetEntryNickNameResponse,
-  apiDiaryGetEntryNickNameDate,
   userInfoFromToken
 }
