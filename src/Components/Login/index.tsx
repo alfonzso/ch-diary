@@ -1,9 +1,7 @@
 import React from 'react';
-import fetchInstance, { newFetch, newFetchWithAuth } from '../../utils/fetchInstance';
-import inMemoryJWTManager from "../../utils/inMemoryJwt"
-import { baseURL } from '../App';
+import { newFetch } from '../../utils/fetchInstance';
 import { addUser } from '../../redux/user';
-import { LoginResponse, TokenResponse, UserData, userInfoFromToken } from '../../types';
+import { LoginResponse, UserData } from '../../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { RootState } from '../../redux/store';
@@ -33,14 +31,12 @@ class Login extends React.Component<LoginProps, LoginState> {
     event.preventDefault();
     console.log(this.state.inputs);
 
-    newFetch<LoginResponse>(
-      `/api/auth/login`,
-      (response) => {
-        inMemoryJWTManager.setToken(response.accessToken)
+    newFetch<LoginResponse>({
+      url: `/api/auth/login`,
+      newFetchResolve: (response) => {
         this.props.dispatch(addUser(response.accessToken))
       },
-      undefined,
-      {
+      config: {
         method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',
@@ -49,23 +45,8 @@ class Login extends React.Component<LoginProps, LoginState> {
         credentials: 'include',
         body: JSON.stringify(this.state.inputs)
       }
-    )
+    })
 
-    // fetch(`${baseURL}/api/auth/login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json, text/plain, */*',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   credentials: 'include',
-    //   body: JSON.stringify(this.state.inputs)
-    // }).then(res => res.json())
-    //   .then(async (res) => {
-    //     console.log('--->', res)
-    //     inMemoryJWTManager.setToken(res.accessToken)
-    //     // const { fetchObject } = await fetchInstance("/api/user/getUser")
-    //     this.props.dispatch(addUser(res.accessToken as string))
-    //   });
   }
 
   render() {

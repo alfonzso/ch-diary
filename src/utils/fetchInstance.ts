@@ -1,5 +1,4 @@
 import { baseURL } from "../Components/App";
-import { useAppSelector } from "../redux/hooks";
 import { store } from "../redux/store";
 import { updateUserToken } from "../redux/user";
 
@@ -85,8 +84,8 @@ const updateToken = (token: string) => {
 
 const fetchWrapper = (
   urlPath: string,
-  resolve: (res: any) => any,
-  reject?: (error: Error) => any,
+  resolve?: (res: any) => any,
+  reject?: ((error: Error) => any) | null,
   init?: RequestInit
 ) => {
   const url = `${baseURL}${urlPath}`
@@ -94,45 +93,61 @@ const fetchWrapper = (
   return fetch(url, init)
     .then((response) => response.json())
     .then(resolve)
-    .catch(reject !== undefined ? defaultReject : reject)
+    .catch(reject !== null ? reject : defaultReject)
 }
 
-const retryFetchWithNewToken = () => {
-  return fetchWrapper("/api/auth/refreshToken",
+const retryFetchWithNewToken = (
+  tokenReject: ((error: Error) => any) | null = null,
+) => {
+  return fetchWrapper(
+    "/api/auth/refreshToken",
     (refreshTokenResponse: TokenResponse) => {
       if (refreshTokenResponse.error) throw new Error(JSON.stringify(refreshTokenResponse.error))
       inMemoryJwt.setToken(refreshTokenResponse.accessToken)
       updateToken(refreshTokenResponse.accessToken)
     },
-    undefined, { method: 'GET', credentials: 'include', })
+    tokenReject,
+    { method: 'GET', credentials: 'include', }
+  )
+}
+
+type newFetchWithAuthParams<T> = {
+  url: string
+  config?: RequestInit
+  newFetchResolve?: (res: T) => T | void
+  newFetchReject?: ((error: Error) => any) | null
+  tokenReject?: ((error: Error) => any) | null
 }
 
 export const newFetchWithAuth =
-  <T extends ResponseErrorHandler>(
-    url: string,
-    newFetchResolve: (res: T) => T | void,
-    _reject?: () => any,
-    config?: RequestInit
+  <T extends ResponseErrorHandler>({
+      url,
+      config,
+      newFetchResolve = () => { },
+      newFetchReject = () => { },
+      tokenReject = () => { },
+    }: newFetchWithAuthParams<T>
   ) => {
 
     const firstFetchResolve = async (response: T) => {
       if (response.error) {
-        await retryFetchWithNewToken()
-        return fetchWrapper(url, newFetchResolve, undefined, setTokenInHeader(config))
+        await retryFetchWithNewToken(tokenReject)
+        return fetchWrapper(url, newFetchResolve, newFetchReject, setTokenInHeader(config))
       } else {
         return newFetchResolve(response)
       }
     }
 
-    return fetchWrapper(url, firstFetchResolve, undefined, setTokenInHeader(config))
+    return fetchWrapper(url, firstFetchResolve, newFetchReject, setTokenInHeader(config))
   }
 
 export const newFetch =
-  <T extends ResponseErrorHandler>(
-    url: string,
-    newFetchResolve: (res: T) => T | void,
-    _reject?: () => any,
-    config?: RequestInit
+  <T extends ResponseErrorHandler>({
+      url,
+      config,
+      newFetchResolve = () => { },
+      newFetchReject = () => { },
+    }: newFetchWithAuthParams<T>
   ) => {
 
     return fetchWrapper(
@@ -141,7 +156,8 @@ export const newFetch =
         if (response.error) throw new Error(JSON.stringify(response.error))
         return newFetchResolve(response)
       },
-      undefined, config
+      newFetchReject,
+      config
     )
   }
 

@@ -2,27 +2,28 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import { foodInnerProps } from '../Components/DiaryCommon/Food'
 import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
-import customFetcher, { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
+import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById } from '../utils/util'
 
 export const sendImportedData = createAsyncThunk(
   'import/InterFood',
   async (importData: string[]) => {
 
-    return newFetchWithAuth<InterfoodImportResponse>(
-      `/api/interfood/import`,
-      (response) => {
-        if (response.error) {
-          throw new Error(response.error.message);
-        }
-        return response
-      },
-      undefined,
+    return newFetchWithAuth<InterfoodImportResponse>({
+      url: `/api/interfood/import`,
+      newFetchResolve:
+        (response) => {
+          if (response.error) {
+            throw new Error(response.error.message);
+          }
+          return response
+        },
+      config:
       {
         method: "POST",
         body: JSON.stringify({ data: importData }),
       }
-    )
+    })
 
   }
 )
@@ -30,12 +31,12 @@ export const sendImportedData = createAsyncThunk(
 export const getTodayFoods = createAsyncThunk(
   'today/getFood',
   async ({ user, date }: { user: string, date: string }) => {
-    return newFetch<diaryGetEntryNickNameDateResponse>(
-      `/api/diary/getEntry/nickname/${user}/date/${date}`,
-      (response) => {
+    return newFetch<diaryGetEntryNickNameDateResponse>({
+      url: `/api/diary/getEntry/nickname/${user}/date/${date}`,
+      newFetchResolve: (response) => {
         return response
       },
-    )
+    })
   }
 )
 

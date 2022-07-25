@@ -1,33 +1,14 @@
+import { DataGrid } from "@mui/x-data-grid";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
-import { useFetch } from '../Hooks';
-import { diaryGetEntryNickNameResponse, IFetchData, IFetchInstance, simpleDiaryData, diaryGetEntryNickNameDateResponse, DiaryTestResponse } from '../types';
-import fetchInstance, { getUserDataFromStore, newFetchWithAuth } from '../utils/fetchInstance';
-import inMemoryJwt from '../utils/inMemoryJwt';
+import { chDiarySchema } from "../data/tableSchema";
+import { diaryGetEntryNickNameResponse, simpleDiaryData, DiaryTestResponse } from '../types';
+import { getUserDataFromStore, newFetchWithAuth } from '../utils/fetchInstance';
+import { Redirect } from "../utils/Redirect";
 import './Test.css';
 
 function Test() {
 
-  // const fetchData = async (url: string, callback: ((diaryObject: IFetchData) => void)) => {
-  //   fetchInstance(url)
-  //     .then((resp: IFetchInstance) => {
-  //       const diaryObject: IFetchData = resp.fetchObject
-  //       console.log(
-  //         "---->", diaryObject.response.status
-  //       )
-  //       if ([401, 403].includes(diaryObject.response.status)) {
-  //         setRedirect(true)
-  //       }
-  //       if (400 === diaryObject.response.status) {
-  //         console.log(diaryObject.body.error.message)
-  //         throw new Error(diaryObject.response.statusText, { cause: { name: "", message: diaryObject.body.error.message } })
-  //       }
-  //       callback(diaryObject)
-
-  //     }).catch(err => {
-  //       console.log(err)
-  //     })
-  // }
   const [diaryRes, setDiarRes] = useState({} as DiaryTestResponse)
   const [foodRes, setFoodRes] = useState([] as simpleDiaryData[])
   const [isRedirect, setRedirect] = useState(false)
@@ -35,59 +16,50 @@ function Test() {
   // const data = useFetch<{ id: number, title: string }[]>("https://jsonplaceholder.typicode.com/todos");
   // const data: { id?: string, title?: string }[] = useFetch("https://jsonplaceholder.typicode.com/todos");
 
-  // const [chEntry] = useFetch<apiDiaryGetEntryNickname>(`${baseURL}/api/diary/getEntry/nickname/alfonzso`);
-  // const chEntry = useFetch<apiDiaryGetEntryNickName>(`/api/diary/getEntry/nickname/alfonzso`);
-  // const today = useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/getEntry/nickname/alfonzso/date/2022-07-21`);
-  const { data: testData } = useFetch<diaryGetEntryNickNameDateResponse>(`/api/diary/test`);
-
-
-  // useEffect(() => {
-  // fetchData(`/api/diary/getEntry/nickname/alfonzso`, (diaryObject) => {
-  //   console.log(diaryObject)
-  //   const diarys: diaryData[] = diaryObject.body.data
-  //   const newListOfDiary: simpleDiaryData[] = diarys.map(chDiary => {
-  //     return {
-  //       id: chDiary.id,
-  //       date: chDiary.createdAt,
-  //       nickname: chDiary.User.nickname,
-  //       foodName: chDiary.Food.name,
-  //       foodType: chDiary.Food.Interfood.InterfoodType.name,
-  //       portion: chDiary.Food.portion,
-  //       ...chDiary.Food.FoodProperite
-  //     }
-  //   })
-  //   setFoodRes(newListOfDiary)
-  // })
-  // if (data.length) {
-  //   console.log("---->", data[0].id)
-  // }
-  // if (chEntry.data) {
-  //   console.log("---->", chEntry.data[0].User.nickname)
-  // }
-
   useEffect(() => {
-    console.log("---> ", testData);
-    // }, [data, chEntry]);
-  }, [testData]);
+    console.log("---> ",);
+
+    newFetchWithAuth<diaryGetEntryNickNameResponse>({
+      url: `/api/diary/getEntry/nickname/alfonzso`,
+      newFetchResolve:
+        (diaryObject) => {
+          console.log("diaryGetEntryNickNameResponse ", diaryObject.data[0])
+          // console.log(diaryObject)
+          const newListOfDiary: simpleDiaryData[] = diaryObject.data.map(chDiary => {
+            return {
+              id: chDiary.id,
+              date: chDiary.createdAt,
+              nickname: chDiary.User.nickname,
+              foodName: chDiary.Food.name,
+              foodType: chDiary.Food.Interfood.InterfoodType.name,
+              portion: chDiary.Food.portion,
+              ...chDiary.Food.FoodProperite
+            }
+          })
+          setFoodRes(newListOfDiary)
+        }
+    })
+
+  }, []);
 
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
-    // fetchData(`/api/diary/${event.currentTarget.name}`, (diaryObject) => { setDiarRes(diaryObject) })
-    // const test = useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`)
-    // const resolve = (refreshTokenResponse: TokenResponse) => {
-    //   if (refreshTokenResponse.error) throw new Error(JSON.stringify(refreshTokenResponse.error))
-    //   inMemoryJwt.setToken(refreshTokenResponse.accessToken)
-    // }
-    // const reject = (err: Error) => {
-    //   console.log(err)
-    // }
-    // newFetchWithAuth("/api/diary/test", resolve, reject)
-    // DiaryTestResponse
-    newFetchWithAuth<DiaryTestResponse>("/api/diary/test",
-      (response) => {
-        console.log("newFetchWithAuth<DiaryTestResponse> ", response.data)
-        setDiarRes(response)
-      }
-    )
+    newFetchWithAuth<DiaryTestResponse>({
+      url: `/api/diary/${event.currentTarget.name}`,
+      newFetchResolve:
+        (response) => {
+          console.log("newFetchResolve: ", response.data)
+          setDiarRes(response)
+        },
+      newFetchReject:
+        (err) => {
+          console.log("newFetchReject error: ", err)
+        },
+      tokenReject:
+        (err) => {
+          console.log("tokenReject error: ", err)
+          setRedirect(true)
+        }
+    })
   }
 
   return (
@@ -97,16 +69,16 @@ function Test() {
       <button name="test1" onClick={shoot} >Test1</button>
       <button name="fafa" onClick={() => {
         // useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`)
-        newFetchWithAuth<diaryGetEntryNickNameResponse>(`/api/diary/getEntry/nickname/alfonzso`,
-          (response) => {
-            console.log("apiDiaryGetEntryNickName(response) ", response.data[0])
-          }
-        )
+        // newFetchWithAuth<diaryGetEntryNickNameResponse>(`/api/diary/getEntry/nickname/alfonzso`,
+        //   (response) => {
+        //     console.log("apiDiaryGetEntryNickName(response) ", response.data[0])
+        //   }
+        // )
       }} >fafa</button>
       <div className="header">
         <div className="item">z</div>
         <div className="item dataTable" style={{ height: 400, width: '100%' }}>
-          {/* {foodRes.length !== 0 &&
+          {foodRes.length !== 0 &&
             < DataGrid
               rows={foodRes}
               columns={chDiarySchema}
@@ -114,20 +86,18 @@ function Test() {
               rowsPerPageOptions={[5]}
               checkboxSelection
             />
-          } */}
+          }
         </div>
         <div className="item">z</div>
 
       </div>
 
-      {/* {isRedirect && <Redirect to='/login' />} */}
-      {/* {diaryRes.response && diaryRes.response.ok && */}
+      {isRedirect && <Redirect to='/login' />}
       {diaryRes && diaryRes.data &&
         <div className="diary-res">
           <p>{diaryRes.message}</p>
           <p>{diaryRes.data.userNickName}</p>
           <p>{
-            // new Date(jwt_decode<JwtPayload>(inMemoryJwt.getToken() as string).exp!).getTime() - Math.floor(new Date().getTime() / 1000)
             new Date(
               jwt_decode<JwtPayload>(
                 getUserDataFromStore().accesToken).exp!

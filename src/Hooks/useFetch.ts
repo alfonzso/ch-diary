@@ -18,12 +18,12 @@ const useFetch = <T>(url: string, config: RequestInit = {}) => {
   const [data, setData] = useState([] as unknown as TestResponse);
 
   useEffect(() => {
-    newFetchWithAuth<TestResponse>(url,
-      (data) => {
-        console.log("setData(data) ", data)
-        setData(data)
-      }
-    )
+    // newFetchWithAuth<TestResponse>(url,
+    //   (data) => {
+    //     console.log("setData(data) ", data)
+    //     setData(data)
+    //   }
+    // )
   }, []);
 
   return data;
