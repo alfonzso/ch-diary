@@ -46,18 +46,25 @@ jobs:
     # - name: Build the Docker image
     #  run: docker build . --file Dockerfile --tag alfonzso/py-xlate:release-1.0.${{ github.run_number }}
 
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        # platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
-        # tags: alfonzso/chdiary-fe:release-0.0.${{ github.run_number }}
-        tags: alfonzso/chdiary-fe:${{ github.event.inputs.tag }}.${{ github.run_number }}
-        cache-from: type=registry,ref=alfonzso/chdiary-fe:buildcache
-        cache-to: type=registry,ref=alfonzso/chdiary-fe:buildcache,mode=max
-        build-args: |
-          REACT_APP_GIT_VERSION: $(git rev-parse --short "$GITHUB_SHA")
+    - name: Set the value
+      # id: step_one
+      run: |
+        set -ex
+        echo $GITHUB_SHA
+        echo "GIT_VERSION=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+    # - name: Build and push
+    #   uses: docker/build-push-action@v2
+    #   with:
+    #     context: .
+    #     push: true
+    #     # platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+    #     # tags: alfonzso/chdiary-fe:release-0.0.${{ github.run_number }}
+    #     tags: alfonzso/chdiary-fe:${{ github.event.inputs.tag }}.${{ github.run_number }}
+    #     cache-from: type=registry,ref=alfonzso/chdiary-fe:buildcache
+    #     cache-to: type=registry,ref=alfonzso/chdiary-fe:buildcache,mode=max
+    #     build-args: |
+    #       REACT_APP_GIT_VERSION: $(git rev-parse --short "$GITHUB_SHA")
 
     # - name: Build
     #   uses: docker/build-push-action@v2
