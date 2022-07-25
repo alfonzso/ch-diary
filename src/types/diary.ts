@@ -11,7 +11,7 @@ interface apiDiaryGetEntryNickNameData {
   data: diaryData[]
 }
 
-type diaryGetEntryNickNameResponse = apiDiaryGetEntryNickNameData & ResponseErrorHandler
+type DiaryGetEntryNickNameResponse = apiDiaryGetEntryNickNameData & ResponseErrorHandler
 type diaryGetEntryNickNameDateResponse = apiDiaryGetEntryNickNameDateData & ResponseErrorHandler
 
 type diaryData = {
@@ -49,7 +49,7 @@ type simpleDiaryData = {
 
 export type {
   diaryGetEntryNickNameDateResponse,
-  diaryGetEntryNickNameResponse,
+  DiaryGetEntryNickNameResponse,
   diaryData,
   simpleDiaryData
 }

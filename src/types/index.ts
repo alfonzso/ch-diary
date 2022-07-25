@@ -1,5 +1,5 @@
 import {
-  diaryGetEntryNickNameResponse,
+  DiaryGetEntryNickNameResponse,
   diaryData, simpleDiaryData,
   diaryGetEntryNickNameDateResponse
 } from "./diary";
@@ -19,6 +19,6 @@ export type {
   diaryData,
   simpleDiaryData,
   diaryGetEntryNickNameDateResponse,
-  diaryGetEntryNickNameResponse,
+  DiaryGetEntryNickNameResponse,
   userInfoFromToken
 }

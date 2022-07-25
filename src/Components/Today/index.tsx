@@ -107,43 +107,51 @@ const Today = () => {
     })
   }
 
+  const htmlRender = () => {
+    return (
+      <div className="todayContainer">
+
+        <div className="importInterFoodContainer">
+          <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} > Import </button>
+          <ImportForm />
+        </div>
+
+        <div className="information">
+          <div className="centerColumn">
+
+            <div className='dateChanger'>
+              <div className="previousDay"> <button onClick={() => { dispatch(previousDay()) }} > &lt; </button></div>
+              <div className="todayDay"> <button onClick={() => { dispatch(todayDay()) }} > {todayDateAsString} </button></div>
+              <div className="nextDay"> <button onClick={() => { dispatch(nextDay()) }} > &gt; </button></div>
+            </div>
+
+            <div className="chInformation">
+              <div className="sumCh">Sum ch: {Number(sumCh(todayFoods)).toFixed(2)}</div>
+              <div className="leftCh">Left ch: {Number(180 - sumCh(todayFoods)).toFixed(2)}</div>
+            </div>
+
+          </div>
+        </div>
+        <div className="tableContent">
+          <div className="chDiaryMain" onScroll={(ev) => {
+            ev.preventDefault();
+            floatAnimationOnScrollEvent()
+          }}>
+            <div className="chDiaryTable"> {
+              rowsElement
+            }
+            </div>
+          </div>
+        </div>
+
+      </div >
+    );
+  }
+
   return (
-    <div className="todayContainer">
-
-      <div className="importInterFoodContainer">
-        <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} > Import </button>
-        <ImportForm />
-      </div>
-
-      <div className="information">
-        <div className="centerColumn">
-
-          <div className='dateChanger'>
-            <div className="previousDay"> <button onClick={() => { dispatch(previousDay()) }} > &lt; </button></div>
-            <div className="todayDay"> <button onClick={() => { dispatch(todayDay()) }} > {todayDateAsString} </button></div>
-            <div className="nextDay"> <button onClick={() => { dispatch(nextDay()) }} > &gt; </button></div>
-          </div>
-
-          <div className="chInformation">
-            <div className="sumCh">Sum ch: {Number(sumCh(todayFoods)).toFixed(2)}</div>
-            <div className="leftCh">Left ch: {Number(180 - sumCh(todayFoods)).toFixed(2)}</div>
-          </div>
-
-        </div>
-      </div>
-      <div className="tableContent">
-        <div className="chDiaryMain" onScroll={(ev) => {
-          ev.preventDefault();
-          floatAnimationOnScrollEvent()
-        }}>
-          <div className="chDiaryTable"> {
-            rowsElement
-          }
-          </div>
-        </div>
-      </div>
-
-    </div >
+    <>{
+      userData.nickname && htmlRender()
+    }</>
   );
 }
 

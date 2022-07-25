@@ -3,65 +3,64 @@ import { store } from "../redux/store";
 import { updateUserToken } from "../redux/user";
 
 import { TokenResponse } from "../types";
-import { IFetchData, IFetchInstance } from "../types/fetchInstance";
 import inMemoryJwt from "./inMemoryJwt";
 
-let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<IFetchInstance> => {
-  url = `${baseURL}${url}`
-  let response = await fetch(url, config)
-  let body = await response.json()
-  return { fetchObject: { response, body } }
-}
+// let originalRequest = async (url: RequestInfo, config: RequestInit = {}): Promise<IFetchInstance> => {
+//   url = `${baseURL}${url}`
+//   let response = await fetch(url, config)
+//   let body = await response.json()
+//   return { fetchObject: { response, body } }
+// }
 
-let refreshToken = async () => {
-  let response = await fetch(`${baseURL}/api/auth/refreshToken`, { method: 'GET', credentials: 'include', })
-  let body = await response.json()
-  return { response, body } as IFetchData
-}
+// let refreshToken = async () => {
+//   let response = await fetch(`${baseURL}/api/auth/refreshToken`, { method: 'GET', credentials: 'include', })
+//   let body = await response.json()
+//   return { response, body } as IFetchData
+// }
 
-function checkTokenIsExpired(refTokenObject: IFetchData) {
-  if (refTokenObject.body.error && refTokenObject.body.error.message === 'TokenExpiredError') {
-    return [true, refTokenObject] as const
-  }
-  return [false, refTokenObject] as const
-}
+// function checkTokenIsExpired(refTokenObject: IFetchData) {
+//   if (refTokenObject.body.error && refTokenObject.body.error.message === 'TokenExpiredError') {
+//     return [true, refTokenObject] as const
+//   }
+//   return [false, refTokenObject] as const
+// }
 
-let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchInstance> => {
-  // const userData = useAppSelector(state => state.user.data)
-  // const dispatch = useDispatch();
+// let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchInstance> => {
+//   // const userData = useAppSelector(state => state.user.data)
+//   // const dispatch = useDispatch();
 
-  // const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+//   // const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
-  // let accessToken = userData.accesToken
-  let accessToken = inMemoryJwt.getToken()
+//   // let accessToken = userData.accesToken
+//   let accessToken = inMemoryJwt.getToken()
 
-  // config.headers
-  config['headers'] = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken}`
-  }
+//   // config.headers
+//   config['headers'] = {
+//     'Content-Type': 'application/json',
+//     Authorization: `Bearer ${accessToken}`
+//   }
 
-  let { fetchObject }: IFetchInstance = await originalRequest(url, config)
+//   let { fetchObject }: IFetchInstance = await originalRequest(url, config)
 
-  if ([401, 403].includes(fetchObject.response.status)) {
-    const [expired, checkedRefTokenObject] = checkTokenIsExpired(await refreshToken())
-    if (expired) return { fetchObject: checkedRefTokenObject }
+//   if ([401, 403].includes(fetchObject.response.status)) {
+//     const [expired, checkedRefTokenObject] = checkTokenIsExpired(await refreshToken())
+//     if (expired) return { fetchObject: checkedRefTokenObject }
 
-    inMemoryJwt.setToken(checkedRefTokenObject.body.accessToken)
-    // dispatch(addUser(checkedRefTokenObject.body.accessToken as string))
+//     inMemoryJwt.setToken(checkedRefTokenObject.body.accessToken)
+//     // dispatch(addUser(checkedRefTokenObject.body.accessToken as string))
 
-    config['headers'] = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${checkedRefTokenObject.body.accessToken}`
-    }
+//     config['headers'] = {
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${checkedRefTokenObject.body.accessToken}`
+//     }
 
-    let originalReqAgain = await originalRequest(url, config)
+//     let originalReqAgain = await originalRequest(url, config)
 
-    fetchObject = originalReqAgain.fetchObject
-  }
+//     fetchObject = originalReqAgain.fetchObject
+//   }
 
-  return { fetchObject }
-}
+//   return { fetchObject }
+// }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +87,7 @@ const fetchWrapper = (
   reject?: ((error: Error) => any) | null,
   init?: RequestInit
 ) => {
-  const url = `${baseURL}${urlPath}`
+  const url = urlPath.includes("http") ? urlPath : `${baseURL}${urlPath}`
   const defaultReject = (err: Error) => { console.log("defaultReject ", err) }
   return fetch(url, init)
     .then((response) => response.json())
@@ -121,12 +120,12 @@ type newFetchWithAuthParams<T> = {
 
 export const newFetchWithAuth =
   <T extends ResponseErrorHandler>({
-      url,
-      config,
-      newFetchResolve = () => { },
-      newFetchReject = () => { },
-      tokenReject = () => { },
-    }: newFetchWithAuthParams<T>
+    url,
+    config,
+    newFetchResolve = () => { },
+    newFetchReject = () => { },
+    tokenReject = () => { },
+  }: newFetchWithAuthParams<T>
   ) => {
 
     const firstFetchResolve = async (response: T) => {
@@ -143,11 +142,11 @@ export const newFetchWithAuth =
 
 export const newFetch =
   <T extends ResponseErrorHandler>({
-      url,
-      config,
-      newFetchResolve = () => { },
-      newFetchReject = () => { },
-    }: newFetchWithAuthParams<T>
+    url,
+    config,
+    newFetchResolve = () => { },
+    newFetchReject = () => { },
+  }: newFetchWithAuthParams<T>
   ) => {
 
     return fetchWrapper(
@@ -170,4 +169,4 @@ function setTokenInHeader(config: RequestInit = {}) {
 }
 
 
-export default customFetcher;
+// export default customFetcher;

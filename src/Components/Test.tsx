@@ -1,44 +1,59 @@
 import { DataGrid } from "@mui/x-data-grid";
+import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
 import { chDiarySchema } from "../data/tableSchema";
-import { diaryGetEntryNickNameResponse, simpleDiaryData, DiaryTestResponse } from '../types';
-import { getUserDataFromStore, newFetchWithAuth } from '../utils/fetchInstance';
+import { useFetch } from "../Hooks";
+import { useAppSelector } from "../redux/hooks";
+import { RootState } from "../redux/store";
+import { DiaryGetEntryNickNameResponse, DiaryTestResponse, simpleDiaryData } from '../types';
+import { getUserDataFromStore, newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
 import { Redirect } from "../utils/Redirect";
 import './Test.css';
 
+
+interface jsonplaceholderData {
+  id?: number
+  title?: string
+}
+
+type jsonplaceholderTodosResponse = jsonplaceholderData[] & ResponseErrorHandler
 function Test() {
 
   const [diaryRes, setDiarRes] = useState({} as DiaryTestResponse)
   const [foodRes, setFoodRes] = useState([] as simpleDiaryData[])
   const [isRedirect, setRedirect] = useState(false)
-  // const [data] = useFetch<{ id: number, title: string }[]>("https://jsonplaceholder.typicode.com/todos");
-  // const data = useFetch<{ id: number, title: string }[]>("https://jsonplaceholder.typicode.com/todos");
-  // const data: { id?: string, title?: string }[] = useFetch("https://jsonplaceholder.typicode.com/todos");
+  const data = useFetch<jsonplaceholderTodosResponse>("https://jsonplaceholder.typicode.com/todos");
+  const userData = useAppSelector(state => state.user.data)
+  const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
   useEffect(() => {
-    console.log("---> ",);
+    console.log("-----", data)
+  }, [data]);
 
-    newFetchWithAuth<diaryGetEntryNickNameResponse>({
-      url: `/api/diary/getEntry/nickname/alfonzso`,
-      newFetchResolve:
-        (diaryObject) => {
-          console.log("diaryGetEntryNickNameResponse ", diaryObject.data[0])
-          // console.log(diaryObject)
-          const newListOfDiary: simpleDiaryData[] = diaryObject.data.map(chDiary => {
-            return {
-              id: chDiary.id,
-              date: chDiary.createdAt,
-              nickname: chDiary.User.nickname,
-              foodName: chDiary.Food.name,
-              foodType: chDiary.Food.Interfood.InterfoodType.name,
-              portion: chDiary.Food.portion,
-              ...chDiary.Food.FoodProperite
-            }
-          })
-          setFoodRes(newListOfDiary)
-        }
-    })
+  useEffect(() => {
+
+    if (userData.nickname) {
+      newFetchWithAuth<DiaryGetEntryNickNameResponse>({
+        url: `/api/diary/getEntry/nickname/alfonzso`,
+        newFetchResolve:
+          (diaryObject) => {
+            const newListOfDiary: simpleDiaryData[] = diaryObject.data.map(chDiary => {
+              return {
+                id: chDiary.id,
+                date: chDiary.createdAt,
+                nickname: chDiary.User.nickname,
+                foodName: chDiary.Food.name,
+                foodType: chDiary.Food.Interfood.InterfoodType.name,
+                portion: chDiary.Food.portion,
+                ...chDiary.Food.FoodProperite
+              }
+            })
+            setFoodRes(newListOfDiary)
+          }
+      })
+    }
 
   }, []);
 
@@ -62,69 +77,69 @@ function Test() {
     })
   }
 
-  return (
-    <div className="testContainer">
-      <p>FAFA</p>
-      <button name="test" onClick={shoot} >Test</button>
-      <button name="test1" onClick={shoot} >Test1</button>
-      <button name="fafa" onClick={() => {
-        // useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`)
-        // newFetchWithAuth<diaryGetEntryNickNameResponse>(`/api/diary/getEntry/nickname/alfonzso`,
-        //   (response) => {
-        //     console.log("apiDiaryGetEntryNickName(response) ", response.data[0])
-        //   }
-        // )
-      }} >fafa</button>
-      <div className="header">
-        <div className="item">z</div>
-        <div className="item dataTable" style={{ height: 400, width: '100%' }}>
-          {foodRes.length !== 0 &&
-            < DataGrid
-              rows={foodRes}
-              columns={chDiarySchema}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              checkboxSelection
-            />
+  const htmlRender = () => {
+    return (
+      <div className="testContainer">
+        <p>FAFA</p>
+        <button name="test" onClick={shoot} >Test</button>
+        <button name="test1" onClick={shoot} >Test1</button>
+        <button name="fafa" onClick={() => {
+          // FAFA
+        }} >fafa</button>
+        <div className="header">
+          <div className="item">z</div>
+          <div className="item dataTable" style={{ height: 400, width: '100%' }}>
+            {foodRes.length !== 0 &&
+              < DataGrid
+                rows={foodRes}
+                columns={chDiarySchema}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+                checkboxSelection
+              />
+            }
+          </div>
+          <div className="item">z</div>
+
+        </div>
+
+        {isRedirect && <Redirect to='/login' />}
+        {diaryRes && diaryRes.data &&
+          <div className="diary-res">
+            <p>{diaryRes.message}</p>
+            <p>{diaryRes.data.userNickName}</p>
+            <p>{
+              new Date(
+                jwt_decode<JwtPayload>(
+                  getUserDataFromStore().accesToken).exp!
+              ).getTime() - Math.floor(new Date().getTime() / 1000)
+            } second and byeee ... </p>
+            <p>{Math.floor(new Date().getTime() / 1000)}</p>
+            <p>{
+              new Date(
+                jwt_decode<JwtPayload>(
+                  getUserDataFromStore().accesToken).exp!
+              ).getTime()
+            }</p>
+          </div>
+        }
+
+        <div className="fafaTest">
+          {data &&
+            data.map((item, index) => {
+              return <p key={item.id || 1 - 1}>{item.id} - {item.title}</p>;
+            })
           }
         </div>
-        <div className="item">z</div>
 
       </div>
+    )
+  }
 
-      {isRedirect && <Redirect to='/login' />}
-      {diaryRes && diaryRes.data &&
-        <div className="diary-res">
-          <p>{diaryRes.message}</p>
-          <p>{diaryRes.data.userNickName}</p>
-          <p>{
-            new Date(
-              jwt_decode<JwtPayload>(
-                getUserDataFromStore().accesToken).exp!
-            ).getTime() - Math.floor(new Date().getTime() / 1000)
-          } second and byeee ... </p>
-          <p>{Math.floor(new Date().getTime() / 1000)}</p>
-          <p>{
-            new Date(
-              jwt_decode<JwtPayload>(
-                getUserDataFromStore().accesToken).exp!
-            ).getTime()
-          }</p>
-        </div>
-      }
-
-      <div className="fafaTest">
-        {/* {data &&
-          // <p  >{data[0].title}</p>
-          data.map((item, index) => {
-            return <p key={item.id - 1}>{item.id} - {item.title}</p>;
-          })
-        } */}
-      </div>
-
-
-
-    </div>
+  return (
+    <>{
+      userData.nickname && htmlRender()
+    }</>
   );
 }
 

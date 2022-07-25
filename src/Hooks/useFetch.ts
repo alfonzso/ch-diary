@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
-import { newFetchWithAuth, ResponseErrorHandler } from "../utils/fetchInstance";
+import { newFetch, newFetchWithAuth, ResponseErrorHandler } from "../utils/fetchInstance";
 
-type UserPayload = {
-  userId: string;
-  email: string;
-};
+// type UserPayload = {
+//   userId: string;
+//   email: string;
+// };
 
-interface TestData {
-  data: UserPayload | undefined;
-  success: boolean;
-  message: string;
-}
+// interface TestData {
+//   data: UserPayload | undefined;
+//   success: boolean;
+//   message: string;
+// }
 
-type TestResponse = ResponseErrorHandler & TestData
+// type TestResponse = ResponseErrorHandler & TestData
 
-const useFetch = <T>(url: string, config: RequestInit = {}) => {
-  const [data, setData] = useState([] as unknown as TestResponse);
+const useFetch = <T extends ResponseErrorHandler>(url: string, config: RequestInit = {}) => {
+  const [data, setData] = useState([] as unknown as T);
 
   useEffect(() => {
     // newFetchWithAuth<TestResponse>(url,
@@ -24,6 +24,13 @@ const useFetch = <T>(url: string, config: RequestInit = {}) => {
     //     setData(data)
     //   }
     // )
+    newFetch<T>({
+      url,
+      newFetchResolve: (response) => {
+        setData(response)
+      }
+    })
+
   }, []);
 
   return data;

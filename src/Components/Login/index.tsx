@@ -5,6 +5,7 @@ import { LoginResponse, UserData } from '../../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { RootState } from '../../redux/store';
+import { toast } from 'react-toastify';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -35,6 +36,26 @@ class Login extends React.Component<LoginProps, LoginState> {
       url: `/api/auth/login`,
       newFetchResolve: (response) => {
         this.props.dispatch(addUser(response.accessToken))
+        toast.success('Login Succeed ', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },
+      newFetchReject: (err) => {
+        toast.error(`Login Failed ${err} `, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       },
       config: {
         method: 'POST',

@@ -18,6 +18,11 @@ interface NavbarState {
 const Navbar = ({ user }: NavbarProps) => {
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
+  const [links, setLinks] = useState(new Map<string, string>([
+    ["/", "Home"], ["/today", "Today"], ["/about", "About"], ["/login", "Login"],
+    ["/register", "Register"], ["/test", "Test"],
+  ]));
+
 
   return (
     <div>
@@ -49,27 +54,15 @@ const Navbar = ({ user }: NavbarProps) => {
           }
         >
           <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/today">Today</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-            <li>
-              <Link to="/test">Test</Link>
-            </li>
+            {
+              [...links.entries()].map(([key, value], index) =>
+                <li key={index} >
+                  <Link to={key} onClick={() => { setIsNavExpanded(false) }} >{value}</Link>
+                </li>
+              )
+            }
           </ul>
         </div>
-
       </nav>
       <Outlet />
     </div>
