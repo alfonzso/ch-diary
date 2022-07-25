@@ -1,5 +1,6 @@
 # build environment
 FROM node:16-alpine as build
+ARG GIT_VERSION
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package*.json ./
@@ -8,7 +9,7 @@ RUN npm ci --silent
 COPY . ./
 # RUN mv .env.prod .env
 RUN npm run build
-RUN echo "window._env_ = {}" > build/env.config.js
+RUN echo "window._env_ = { REACT_APP_GIT_VERSION: $GIT_VERSION }" > build/env.config.js
 
 # production environment
 FROM nginx:stable-alpine

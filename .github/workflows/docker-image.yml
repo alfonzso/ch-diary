@@ -7,6 +7,10 @@ on:
         required: false
         description: "Test"
         default: "Manual push ?!"
+      tag:
+        required: false
+        description: "Tag of image"
+        default: "release-0.0"
   # push:
   #   branches: [ master ]
   # pull_request:
@@ -48,9 +52,12 @@ jobs:
         context: .
         push: true
         # platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
-        tags: alfonzso/chdiary-fe:release-0.0.${{ github.run_number }}
+        # tags: alfonzso/chdiary-fe:release-0.0.${{ github.run_number }}
+        tags: alfonzso/chdiary-fe:${{ github.event.inputs.tag }}.${{ github.run_number }}
         cache-from: type=registry,ref=alfonzso/chdiary-fe:buildcache
         cache-to: type=registry,ref=alfonzso/chdiary-fe:buildcache,mode=max
+        build-args: |
+          REACT_APP_GIT_VERSION: $(git rev-parse --short "$GITHUB_SHA")
 
     # - name: Build
     #   uses: docker/build-push-action@v2

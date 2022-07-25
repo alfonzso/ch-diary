@@ -6,16 +6,12 @@ import { RootState } from '../../redux/store';
 import { UserData } from '../../types';
 import "./index.scss";
 
-interface NavbarProps {
+interface HeaderProps {
   dispatch: Dispatch;
   user: UserData;
 }
 
-interface NavbarState {
-
-}
-
-const Navbar = ({ user }: NavbarProps) => {
+const Header = ({ user }: HeaderProps) => {
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const [links, setLinks] = useState(new Map<string, string>([
@@ -26,7 +22,7 @@ const Navbar = ({ user }: NavbarProps) => {
 
   return (
     <div>
-      <nav className="navigation">
+      <nav className="header">
         <a href="/" className="brand-name">
           Ch Diary ={">"} {user.nickname}
         </a>
@@ -50,7 +46,7 @@ const Navbar = ({ user }: NavbarProps) => {
         </button>
         <div
           className={
-            isNavExpanded ? "navigation-menu expanded" : "navigation-menu"
+            isNavExpanded ? "header-menu expanded" : "header-menu"
           }
         >
           <ul>
@@ -76,4 +72,4 @@ const mapStateToProps = (state: RootState) => ({
   user: state.user.data
 });
 
-export default connect(mapStateToProps)(Navbar);
+export default connect(mapStateToProps)(Header);

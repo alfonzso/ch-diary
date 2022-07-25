@@ -3,20 +3,22 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-import { Home, Login, Navbar, Register, Test, Today } from "..";
+import { Home, Login, Header, Register, Test, Today } from "..";
 import './App.css';
 
-import { ToastContainer  } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from "../../Layout/Footer";
 
 export const baseURL = (window as any)._env_.REACT_APP_BE_URL as string || 'http://localhost:8080'
+export const appVersion = (window as any)._env_.REACT_APP_GIT_VERSION as string || '(╯°□°）╯︵ ┻━┻ '
 
 function App() {
 
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Navbar />}>
+        <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
           <Route path="today" element={<Today />} />
           <Route path="about" element={<About />} />
@@ -27,6 +29,7 @@ function App() {
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
+      <Footer/>
       <ToastContainer />
     </div>
   );
