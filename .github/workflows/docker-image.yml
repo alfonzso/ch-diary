@@ -63,7 +63,7 @@ jobs:
         cache-to: type=registry,ref=alfonzso/chdiary-fe:buildcache,mode=max
         # REACT_APP_GIT_VERSION: $GIT_VERSION
         build-args: |
-          REACT_APP_GIT_VERSION: ${{ env.GIT_VERSION }}
+          GIT_VERSION=${{ env.GIT_VERSION }}
 
     # - name: Build
     #   uses: docker/build-push-action@v2
