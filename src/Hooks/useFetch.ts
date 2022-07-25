@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { newFetch, ResponseErrorHandler } from "../utils/fetchInstance";
+import { newFetchWithAuth, ResponseErrorHandler } from "../utils/fetchInstance";
 
 type UserPayload = {
   userId: string;
@@ -18,7 +18,7 @@ const useFetch = <T>(url: string, config: RequestInit = {}) => {
   const [data, setData] = useState([] as unknown as TestResponse);
 
   useEffect(() => {
-    newFetch<TestResponse>(url,
+    newFetchWithAuth<TestResponse>(url,
       (data) => {
         console.log("setData(data) ", data)
         setData(data)

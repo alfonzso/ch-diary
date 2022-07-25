@@ -2,7 +2,7 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
 import { useFetch } from '../Hooks';
 import { diaryGetEntryNickNameResponse, IFetchData, IFetchInstance, simpleDiaryData, diaryGetEntryNickNameDateResponse } from '../types';
-import fetchInstance, { newFetch } from '../utils/fetchInstance';
+import fetchInstance, { newFetchWithAuth } from '../utils/fetchInstance';
 import inMemoryJwt from '../utils/inMemoryJwt';
 import './Test.css';
 
@@ -70,21 +70,6 @@ function Test() {
     // }, [data, chEntry]);
   }, [testData]);
 
-  interface TokenError {
-    error: {
-      message: string,
-      reason: string, expiredAt: Date
-    }
-  }
-
-  interface TokenData {
-    accessToken: string
-    refreshToken: string
-  }
-
-  type TokenResponse = TokenError & TokenData
-
-
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
     // fetchData(`/api/diary/${event.currentTarget.name}`, (diaryObject) => { setDiarRes(diaryObject) })
     // const test = useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`)
@@ -105,7 +90,7 @@ function Test() {
       <button name="test1" onClick={shoot} >Test1</button>
       <button name="fafa" onClick={() => {
         // useFetch<apiDiaryGetEntryNickNameDate>(`/api/diary/test`)
-        newFetch<diaryGetEntryNickNameResponse>(`/api/diary/getEntry/nickname/alfonzso`,
+        newFetchWithAuth<diaryGetEntryNickNameResponse>(`/api/diary/getEntry/nickname/alfonzso`,
           (response) => {
             console.log("apiDiaryGetEntryNickName(response) ", response.data[0])
           }

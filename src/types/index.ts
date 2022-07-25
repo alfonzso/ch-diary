@@ -4,12 +4,16 @@ import {
   diaryGetEntryNickNameDateResponse
 } from "./diary";
 import { IFetchInstance, IFetchData } from "./fetchInstance";
-import { userInfoFromToken } from "./token";
+import { InterfoodImportResponse } from "./interfood";
+import { LoginResponse, TokenResponse, userInfoFromToken } from "./token";
 import { UserData } from "./user";
 
 export type {
   IFetchInstance,
   IFetchData,
+  InterfoodImportResponse,
+  TokenResponse,
+  LoginResponse,
   UserData,
   diaryData,
   simpleDiaryData,

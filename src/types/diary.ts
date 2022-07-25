@@ -1,8 +1,9 @@
 import { ResponseErrorHandler } from "../utils/fetchInstance"
+import { FoodProperite } from "./interfood"
 
-interface apiDiaryGetEntryNickNameDate {
+interface apiDiaryGetEntryNickNameDateData {
   status: boolean
-  data: diaryData
+  data: diaryData[]
 }
 
 interface apiDiaryGetEntryNickNameData {
@@ -11,7 +12,7 @@ interface apiDiaryGetEntryNickNameData {
 }
 
 type diaryGetEntryNickNameResponse = apiDiaryGetEntryNickNameData & ResponseErrorHandler
-type diaryGetEntryNickNameDateResponse = apiDiaryGetEntryNickNameDate & ResponseErrorHandler
+type diaryGetEntryNickNameDateResponse = apiDiaryGetEntryNickNameDateData & ResponseErrorHandler
 
 type diaryData = {
   id: string;
@@ -21,13 +22,7 @@ type diaryData = {
         name: string;
       };
     };
-    FoodProperite: {
-      gramm: number;
-      kcal: number;
-      portein: number;
-      fat: number;
-      ch: number;
-    };
+    FoodProperite: FoodProperite,
     name: string;
     portion: number;
   };
@@ -54,8 +49,8 @@ type simpleDiaryData = {
 
 export type {
   diaryGetEntryNickNameDateResponse,
-  diaryGetEntryNickNameResponse ,
-  apiDiaryGetEntryNickNameDate,
+  diaryGetEntryNickNameResponse,
+  apiDiaryGetEntryNickNameDateData as apiDiaryGetEntryNickNameDate,
   diaryData,
   simpleDiaryData
 }

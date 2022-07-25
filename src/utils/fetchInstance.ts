@@ -1,4 +1,5 @@
 import { baseURL } from "../Components/App";
+import { TokenResponse } from "../types";
 import { IFetchData, IFetchInstance } from "../types/fetchInstance";
 import inMemoryJwt from "./inMemoryJwt";
 
@@ -64,13 +65,6 @@ let customFetcher = async (url: any, config: RequestInit = {}): Promise<IFetchIn
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-interface TokenData {
-  accessToken: string
-  refreshToken: string
-}
-
-type TokenResponse = ResponseErrorHandler & TokenData
-
 export interface ResponseErrorHandler {
   error: {
     message: string,
@@ -101,33 +95,48 @@ const retryFetchWithNewToken = () => {
     undefined, { method: 'GET', credentials: 'include', })
 }
 
+export const newFetchWithAuth =
+  <T extends ResponseErrorHandler>(
+    url: string,
+    newFetchResolve: (res: T) => T | void,
+    _reject?: () => any,
+    config?: RequestInit
+  ) => {
+
+    const firstFetchResolve = async (response: T) => {
+      if (response.error) {
+        await retryFetchWithNewToken()
+        return fetchWrapper(url, newFetchResolve, undefined, setTokenInHeader(config))
+      } else {
+        return newFetchResolve(response)
+      }
+    }
+
+    return fetchWrapper(url, firstFetchResolve, undefined, setTokenInHeader(config))
+  }
+
 export const newFetch =
   <T extends ResponseErrorHandler>(
     url: string,
     newFetchResolve: (res: T) => T | void,
     _reject?: () => any,
-    config?: RequestInit) => {
+    config?: RequestInit
+  ) => {
 
-    const firstFetchResolve = async (response: T) => {
-      // console.log("firstFetchResolve response.ok: ", response, response.error ? 1 : 2)
-      if (response.error) {
-        await retryFetchWithNewToken()
-        fetchWrapper(url, newFetchResolve, undefined, setConfigHeader(config, inMemoryJwt.getToken()))
-      } else {
-        // console.log('resolve(response)');
+    return fetchWrapper(
+      url,
+      (response: T) => {
+        if (response.error) throw new Error(JSON.stringify(response.error))
         return newFetchResolve(response)
-      }
-    }
-    fetchWrapper(url, firstFetchResolve, undefined, setConfigHeader(config, inMemoryJwt.getToken()))
-
+      },
+      undefined, config
+    )
   }
 
-function setConfigHeader(config: RequestInit = {}, accessToken: string | null) {
-  console.log("accessToken ---> ", accessToken);
-
+function setTokenInHeader(config: RequestInit = {}) {
   config['headers'] = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken}`
+    Authorization: `Bearer ${inMemoryJwt.getToken()}`
   }
   return config
 }
