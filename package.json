@@ -27,7 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "predev": "cp .env.config.js public/env.config.js || echo '' > public/env.config.js ",
+    "predev": "cp .env.config.js public/localEnvs.js || echo 'const localEnvs = {}' > public/localEnvs.js ",
     "dev": " PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Footer from "../../Layout/Footer";
 
 export const baseURL = (window as any)._env_.REACT_APP_BE_URL as string || 'http://localhost:8080'
-export const appVersion = (window as any)._env_.REACT_APP_GIT_VERSION as string || '(╯°□°）╯︵ ┻━┻ '
+export const appVersion = (window as any)._env_.REACT_APP_GIT_VERSION as string || 'fafa'
 
 function App() {
 
