@@ -86,7 +86,7 @@ function Test() {
         <button name="fafa" onClick={() => {
           // FAFA
         }} >fafa</button>
-        <div className="header">
+        <div className="test-header">
           <div className="item">z</div>
           <div className="item dataTable" style={{ height: 400, width: '100%' }}>
             {foodRes.length !== 0 &&
@@ -124,10 +124,10 @@ function Test() {
           </div>
         }
 
-        <div className="fafaTest">
+        <div className="todo-container">
           {data &&
             data.map((item, index) => {
-              return <p key={item.id || 1 - 1}>{item.id} - {item.title}</p>;
+              return <span className="span-block" key={item.id || 1 - 1}>{item.id} - {item.title}</span>;
             })
           }
         </div>

@@ -11,7 +11,7 @@ COPY . ./
 RUN npm run build
 # RUN echo "window._env_ = { REACT_APP_GIT_VERSION: $GIT_VERSION }" > build/env.config.js
 # RUN echo "window._env_ = { };" > build/localEnvs.js
-RUN echo " const localEnvs = { REACT_APP_GIT_VERSION: $GIT_VERSION } " > build/localEnvs.js
+RUN echo " const localEnvs = { REACT_APP_GIT_VERSION: '$GIT_VERSION' } " > build/localEnvs.js
 
 # production environment
 FROM nginx:stable-alpine

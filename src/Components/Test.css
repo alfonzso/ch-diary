@@ -1,24 +1,21 @@
-.header {
+.test-header {
   display: flex;
 }
 
 .item {
-  /* flex-basis: 100%; */
-  /* flex-grow: 1; */
-  /* text-align: center; */
-  /* border: 1px solid black; */
-  flex: 1; /* additionally, equal width */
-
-  /* padding: 1em; */
-  /* border: solid; */
+  flex: 1;
+  /* additionally, equal width */
 }
 
-.dataTable{
-  /* flex-grow: 3; */
+.dataTable {
   flex: 2.5;
 }
 
-/* .MuiDataGrid-root .MuiDataGrid-cell {
-  text-overflow: initial;
-     overflow-x: auto;
-} */
+.todo-container {
+  overflow-y: scroll;
+  height: 300px;
+}
+
+.span-block{
+  display: block;
+}

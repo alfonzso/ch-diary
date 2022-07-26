@@ -21,7 +21,6 @@ const Header = ({ user }: HeaderProps) => {
 
 
   return (
-    <div>
       <nav className="header">
         <a href="/" className="brand-name">
           Ch Diary ={">"} {user.nickname}
@@ -60,13 +59,9 @@ const Header = ({ user }: HeaderProps) => {
           </ul>
         </div>
       </nav>
-      <Outlet />
-    </div>
   );
-  // )
 }
 
-// export default Navbar;
 
 const mapStateToProps = (state: RootState) => ({
   user: state.user.data

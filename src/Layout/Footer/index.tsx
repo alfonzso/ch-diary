@@ -1,4 +1,5 @@
 import { appVersion } from "../../Components/App";
+import './index.scss'
 
 function Footer() {
   return (
