@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
-import { foodInnerProps } from '../Components/DiaryCommon/Food'
+import { foodInnerProps } from '../Components/Table/Food'
 import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
 import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById } from '../utils/util'
+import { ImportState } from './ImportState'
 
 export const sendImportedData = createAsyncThunk(
   'import/InterFood',
@@ -40,15 +41,10 @@ export const getTodayFoods = createAsyncThunk(
   }
 )
 
-export interface ImportState {
-  value: boolean,
-  diaryFood: foodInnerProps[]
-}
-
 const initialState: ImportState = {
   value: false,
   diaryFood: []
-}
+};
 
 export const importIFSlice = createSlice({
   name: 'importIF',

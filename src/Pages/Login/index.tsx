@@ -1,10 +1,10 @@
 import React from 'react';
-import { newFetch } from '../../../utils/fetchInstance';
-import { addUser } from '../../../redux/user';
-import { LoginResponse, UserData } from '../../../types';
+import { newFetch } from '../../utils/fetchInstance';
+import { addUser } from '../../redux/user';
+import { LoginResponse, UserData } from '../../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../redux/store';
 import { toast } from 'react-toastify';
 
 interface LoginProps {

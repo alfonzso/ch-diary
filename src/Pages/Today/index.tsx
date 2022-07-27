@@ -1,15 +1,15 @@
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../redux/hooks';
-import { getTodayFoods, importToggle } from '../../../redux/importInterFood';
-import { RootState } from '../../../redux/store';
-import { getTodayDateAsString, nextDay, previousDay, todayDay } from '../../../redux/today';
-import { FoodProperite } from '../../../types/interfood';
-import { floatAnimationOnScrollEvent, initFollowerToFood } from '../../../utils/util';
-import { ImportForm } from '../../DiaryCommon/ImportForm';
-import Table from '../../Table';
-import { foodInnerProps } from '../../Table/Food';
+import { useAppSelector } from '../../redux/hooks';
+import { getTodayFoods, importToggle } from '../../redux/importInterFood';
+import { RootState } from '../../redux/store';
+import { getTodayDateAsString, nextDay, previousDay, todayDay } from '../../redux/today';
+import { FoodProperite } from '../../types/interfood';
+import { floatAnimationOnScrollEvent, initFollowerToFood } from '../../utils/util';
+import { ImportForm } from '../../Components/Form/Import';
+import Table from '../../Components/Table';
+import { foodInnerProps } from '../../Components/Table/Food';
 import "./index.scss";
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
