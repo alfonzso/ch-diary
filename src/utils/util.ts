@@ -58,12 +58,12 @@ const generateTimeHHMMSS = (offset: number, date: number) => {
   return theDay
 }
 
-const removeDuplicatedElementsById = <T extends { id?: string } >(arr: T[]) => {
+const removeDuplicatedElementsById = <T extends { id?: string }>(arr: T[]) => {
   return [...new Map(arr.map(v => [v.id, v])).values()]
 }
 
 export {
-  removeDuplicatedElementsById ,
+  removeDuplicatedElementsById,
   floatAnimation,
   getYYYYMMDD,
   generateTimeHHMMSS,

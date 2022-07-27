@@ -51,10 +51,7 @@ const Today = () => {
   }, [diaryFood]);
 
   useEffect(() => {
-    console.log("todayFoods: ", todayFoods);
-    if (todayFoods.length > 0) {
-      initFollowerToFood()
-    }
+    if (todayFoods.length > 0) console.log("todayFoods: ", todayFoods);
   }, [todayFoods]);
 
   const htmlRender = () => {

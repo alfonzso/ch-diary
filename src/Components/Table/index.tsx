@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { DOMElement, useEffect, useRef, useState } from "react";
+import { food } from "../../data/pocFoodDataSchema";
 import { useAppSelector } from "../../redux/hooks";
-import { getYYYYMMDD } from "../../utils/util";
+import { getYYYYMMDD, initFollowerToFood } from "../../utils/util";
 import { foodInnerProps } from "./Food";
 import { Row } from "./Row";
 
@@ -15,6 +16,7 @@ interface TableProps {
 }
 
 function Table({ foodList }: TableProps) {
+  const myRef = useRef<HTMLDivElement>(null);
   const { everyHalfHour } = useAppSelector(state => state.today);
   const [nowGetTime, setNowGetTime] = useState(0);
   const [rowAndFoods, setRowAndFoods] = useState([] as idxHiddenFood[]);
@@ -42,8 +44,13 @@ function Table({ foodList }: TableProps) {
     createHoursList()
   }, [foodList]);
 
+  useEffect(() => {
+    initFollowerToFood()
+  }, [rowAndFoods]);
+
+
   return (
-    <div className="chDiaryTable">
+    <div className="chDiaryTable" ref={myRef}>
       {
         rowAndFoods.map((v, i) => {
           return <Row key={i} idx={i} date={nowGetTime} food={v.food} hidden={v.hidden} />
