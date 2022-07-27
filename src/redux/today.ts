@@ -20,7 +20,7 @@ export const todaySlice = createSlice({
   name: "today",
   initialState,
   reducers: {
-    getToDay: (state) => {
+    getTodayDateAsString: (state) => {
       state.todayDateAsString = state.todayDate.toLocaleDateString("en-ca")
     },
     previousDay: (state) => {
@@ -38,5 +38,5 @@ export const todaySlice = createSlice({
   }
 });
 
-export const { getToDay, previousDay, todayDay, nextDay } = todaySlice.actions;
+export const { getTodayDateAsString, previousDay, todayDay, nextDay } = todaySlice.actions;
 export default todaySlice.reducer

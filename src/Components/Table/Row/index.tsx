@@ -1,5 +1,3 @@
-import React from 'react';
-import { ReactElement } from 'react';
 import { drop, allowDrop } from '../../../utils/dragAndDrop';
 import { generateTimeHHMMSS } from '../../../utils/util';
 import { Food, foodInnerProps } from '../Food';
