@@ -1,15 +1,17 @@
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../redux/hooks';
-import { getTodayFoods, importToggle } from '../../redux/importInterFood';
-import { RootState } from '../../redux/store';
-import { getToDay, nextDay, previousDay, todayDay } from '../../redux/today';
-import { floatAnimation, getYYYYMMDD } from '../../utils/util';
-import { EmptyRow } from '../DiaryCommon/EmptyRow';
-import { Food, FoodProperite } from '../DiaryCommon/Food';
-import { ImportForm } from '../DiaryCommon/ImportForm';
-import { Row } from '../DiaryCommon/Row';
+import { useAppSelector } from '../../../redux/hooks';
+import { getTodayFoods, importToggle } from '../../../redux/importInterFood';
+import { RootState } from '../../../redux/store';
+import { getToDay, nextDay, previousDay, todayDay } from '../../../redux/today';
+import { floatAnimation, getYYYYMMDD } from '../../../utils/util';
+import { EmptyRow } from '../../DiaryCommon/EmptyRow';
+import { Food, FoodProperite } from '../../DiaryCommon/Food';
+import { ImportForm } from '../../DiaryCommon/ImportForm';
+import { Row } from '../../DiaryCommon/Row';
+import Table from '../../Table';
+import { foodInnerProps } from '../../Table/Food';
 import "./index.scss";
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
@@ -24,56 +26,50 @@ const Today = () => {
   const { everyHalfHour, todayDateAsString, todayDate } = useAppSelector(state => state.today)
   const userData = useAppSelector(state => state.user.data)
   const diaryFood = useAppSelector(state => state.importIF.diaryFood)
+  const [todayFoods, setTodayFoods] = useState([] as foodInnerProps[]);
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
-  const [rowsElement, setRowsElement] = useState([] as React.ReactElement[])
-
-  const todayFoods = diaryFood.filter(data => data.date === todayDateAsString)
 
   useEffect(() => {
     dispatch(getToDay())
     console.log("dispatch(getToDay())");
   }, [dispatch]);
 
-  const renderRows = () => {
-    const now = getYYYYMMDD()
-    let _rows = [];
-    for (let i = 0; i < everyHalfHour; i++) {
+  // const renderRows = () => {
+  //   const now = getYYYYMMDD()
+  //   let _rows = [];
+  //   for (let i = 0; i < everyHalfHour; i++) {
 
-      const hours = (i * 1 / 2)
+  //     const hours = (i * 1 / 2)
 
-      const food = todayFoods.filter(data => data.dateTime === hours.toString())[0]
-      if (food) {
-        _rows.push(
-          <Row key={i} idx={i} date={now.getTime()} comp={
-            [<Food food={food} />, <EmptyRow />]
-          } hidden={false} />
-        )
-      } else {
-        _rows.push(
-          <Row key={i} idx={i} date={now.getTime()} comp={
-            [<EmptyRow />]
-          } hidden={hours < 7 || 22 < hours} />
-        )
-      }
+  //     const food = todayFoods.filter(data => data.dateTime === hours.toString())[0]
+  //     if (food) {
+  //       _rows.push(
+  //         <Row key={i} idx={i} date={now.getTime()} comp={
+  //           [<Food food={food} />, <EmptyRow />]
+  //         } hidden={false} />
+  //       )
+  //     } else {
+  //       _rows.push(
+  //         <Row key={i} idx={i} date={now.getTime()} comp={
+  //           [<EmptyRow />]
+  //         } hidden={hours < 7 || 22 < hours} />
+  //       )
+  //     }
 
-    }
-    setRowsElement(_rows)
-  }
+  //   }
+  //   setRowsElement(_rows)
+  // }
 
   useEffect(() => {
-    console.log("diaryFood: ", diaryFood);
-    // if (diaryFood.length > 0) {
-    renderRows()
-    // }
-
+    setTodayFoods(diaryFood.filter(data => data.date === todayDateAsString))
   }, [diaryFood]);
 
   useEffect(() => {
-    console.log("rowsElement: ", rowsElement);
-    if (rowsElement.length > 0) {
+    console.log("todayFoods: ", todayFoods);
+    if (todayFoods.length > 0) {
       initFollowerToFood()
     }
-  }, [rowsElement]);
+  }, [todayFoods]);
 
   useEffect(() => {
     if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
@@ -137,16 +133,24 @@ const Today = () => {
             ev.preventDefault();
             floatAnimationOnScrollEvent()
           }}>
-            <div className="chDiaryTable"> {
-              rowsElement
+            {
+              todayFoods.length > 0 && <Table foodList={todayFoods} />
             }
-            </div>
           </div>
         </div>
 
       </div >
     );
   }
+
+  // {
+  //   <Table foodList={todayFoods} />
+  // }
+  // {
+  //   todayFoods.map((v) => {
+  //     <div className="test-me"> {v.name} </div>
+  //   })
+  // }
 
   return (
     <>{

@@ -10,7 +10,7 @@ import { RootState } from "../redux/store";
 import { DiaryGetEntryNickNameResponse, DiaryTestResponse, simpleDiaryData } from '../types';
 import { getUserDataFromStore, newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
 import { Redirect } from "../utils/Redirect";
-import './Test.css';
+import './Test.scss';
 
 
 interface jsonplaceholderData {

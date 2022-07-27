@@ -1,9 +1,9 @@
 import Header from "../Layout/Header";
-import Login from './Login';
-import Register from './Register';
+import Home from "./Pages/Home";
+import Login from "./Pages/Login";
+import Register from "./Pages/Register";
+import Today from "./Pages/Today";
 import Test from "./Test";
-import Today from "./Today";
-import Home from "./Home";
 
 export {
   Header,
