@@ -1,5 +1,4 @@
-import { DOMElement, useEffect, useRef, useState } from "react";
-import { food } from "../../data/pocFoodDataSchema";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { getYYYYMMDD, initFollowerToFood } from "../../utils/util";
 import { foodInnerProps } from "./Food";
@@ -21,7 +20,8 @@ function Table({ foodList }: TableProps) {
   const [nowGetTime, setNowGetTime] = useState(0);
   const [rowAndFoods, setRowAndFoods] = useState([] as idxHiddenFood[]);
 
-  const createHoursList = () => {
+  // const createHoursList = () => {
+  const createHoursList = useCallback(() => {
     let flTemp: foodInnerProps[] = []
     let foodListAsDateTimeKey: idxHiddenFood[] = [];
 
@@ -37,12 +37,13 @@ function Table({ foodList }: TableProps) {
     })
 
     setRowAndFoods(foodListAsDateTimeKey)
-  }
+    // }
+  }, [everyHalfHour, foodList])
 
   useEffect(() => {
     setNowGetTime(getYYYYMMDD().getTime())
     createHoursList()
-  }, [foodList]);
+  }, [foodList, createHoursList]);
 
   useEffect(() => {
     initFollowerToFood()

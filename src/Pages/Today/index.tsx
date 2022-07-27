@@ -6,7 +6,7 @@ import { getTodayFoods, importToggle } from '../../redux/importInterFood';
 import { RootState } from '../../redux/store';
 import { getTodayDateAsString, nextDay, previousDay, todayDay } from '../../redux/today';
 import { FoodProperite } from '../../types/interfood';
-import { floatAnimationOnScrollEvent, initFollowerToFood } from '../../utils/util';
+import { floatAnimationOnScrollEvent } from '../../utils/util';
 import { ImportForm } from '../../Components/Form/Import';
 import Table from '../../Components/Table';
 import { foodInnerProps } from '../../Components/Table/Food';
@@ -33,7 +33,7 @@ const Today = () => {
 
   useEffect(() => {
     if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
-      console.log("Today", diaryFood.length, todayDate, todayDateAsString, diaryFood, everyHalfHour, userData);
+      console.log("Today", todayDate, todayDateAsString, everyHalfHour, userData);
       dispatch(
         getTodayFoods(
           { user: userData.nickname, date: todayDateAsString }
@@ -44,11 +44,11 @@ const Today = () => {
       console.warn("Something is empty: ", todayDateAsString, userData.nickname);
     }
 
-  }, [todayDateAsString]);
+  }, [todayDateAsString, everyHalfHour, todayDate, userData, dispatch]);
 
   useEffect(() => {
-    setTodayFoods(diaryFood.filter(data => data.date === todayDateAsString))
-  }, [diaryFood]);
+    if (diaryFood.length > 0) setTodayFoods(diaryFood.filter(data => data.date === todayDateAsString))
+  }, [diaryFood, todayDateAsString]);
 
   useEffect(() => {
     if (todayFoods.length > 0) console.log("todayFoods: ", todayFoods);

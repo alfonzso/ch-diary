@@ -1,18 +1,11 @@
-import {
-  Routes,
-  Route,
-  Link,
-} from "react-router-dom";
-import { Home, Login, Header, Register, Test, Today } from "..";
-import './App.css';
-
+import { useEffect } from "react";
+import { Link, Outlet, Route, Routes } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Header, Home, Login, Register, Test, Today } from "..";
+import { chAppconfig } from "../../config";
 import Footer from "../../Layout/Footer";
-import { Outlet } from 'react-router-dom'
-
-export const baseURL = (window as any)._env_.REACT_APP_BE_URL as string || 'http://localhost:8080'
-export const appVersion = (window as any)._env_.REACT_APP_GIT_VERSION as string || 'fafa'
+import './App.css';
 
 
 function Layout() {
@@ -29,6 +22,9 @@ function Layout() {
 }
 
 function App() {
+  useEffect(() => {
+    document.title = chAppconfig.title
+  }, []);
 
   return (
     <>

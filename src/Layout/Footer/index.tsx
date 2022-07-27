@@ -1,10 +1,10 @@
-import { appVersion } from "../../Components/App";
+import { chAppconfig } from '../../config';
 import './index.scss'
 
 function Footer() {
   return (
     <div className="footer">
-      <h4>Version: {appVersion}</h4>
+      <h4>Version: {chAppconfig.appVersion}</h4>
     </div>
   );
 }
