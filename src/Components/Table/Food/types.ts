@@ -17,7 +17,8 @@ interface foodInnerProps {
 }
 
 interface foodProps {
-  food?: foodInnerProps
+  food?: foodInnerProps,
+  setInitFollowers: any
 }
 
 interface foodProperiteComponentProps {

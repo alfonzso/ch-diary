@@ -13,7 +13,8 @@ const initialState: UserState = {
     id: "",
     nickname: "",
     email: "",
-    accesToken: ""
+    accesToken: "",
+    chInsulinRatio: 4
   }
 }
 
@@ -27,12 +28,16 @@ export const userSlice = createSlice({
       )
 
       const user = jwt_decode<JwtPayload>(action.payload) as userInfoFromToken
-      state.data = {
-        id: user.userId,
-        nickname: user.userNickName,
-        email: user.userEmail,
-        accesToken: action.payload
-      }
+      state.data.id = user.userId
+      state.data.nickname = user.userNickName
+      state.data.email = user.userEmail
+      state.data.accesToken = action.payload
+      // state.data = {
+      //   id: user.userId,
+      //   nickname: user.userNickName,
+      //   email: user.userEmail,
+      //   accesToken: action.payload
+      // }
 
       console.log(
         "add func", action, state.data

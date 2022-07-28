@@ -32,6 +32,27 @@
 
   }
 
+  #diabInfo {
+    background-color: rgb(34, 139, 165);
+    width: 135px;
+
+    p {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    .insulin-ratio-and-need {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+
+  #diabInfo:before {
+    border-left: 10px solid rgb(34, 139, 165);
+    border-top: 10px solid rgb(34, 139, 165);
+  }
+
   .follower:before {
     content: "";
     width: 0px;
@@ -43,6 +64,7 @@
     border-bottom: 10px solid transparent;
     left: 0px;
     bottom: -19px;
+
   }
 
 

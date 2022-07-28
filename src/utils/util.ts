@@ -24,7 +24,13 @@ export const initFollowerToFood = () => {
   const moveToTopABit: number = -15;
   ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
     const food = follower.closest(".food") as HTMLDivElement
-    follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 'px';
+
+    if (follower.id === "foodProp") {
+      follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 'px';
+    } else {
+      follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 200 + 'px';
+    }
+
     follower.style.top = food.offsetTop - document.querySelector('.chDiaryMain')!.scrollTop - follower.offsetHeight + moveToTopABit + 'px';
   })
 }

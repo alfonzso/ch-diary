@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { drop, allowDrop } from '../../../utils/dragAndDrop';
 import { generateTimeHHMMSS } from '../../../utils/util';
 import { Food, foodInnerProps } from '../Food';
@@ -7,7 +8,9 @@ interface RowProps {
   idx: number
   hidden: boolean
   date: number
-  food: foodInnerProps | null
+  // food: foodInnerProps | null
+  food: ReactElement
+  // setInitFollowers: any
 }
 
 export const EmptyRow = () => {
@@ -32,7 +35,7 @@ const Row = (props: RowProps) => {
         {
           <>
             {/* {props.food ? props.food : <></>} */}
-            {props.food && <Food food={props.food} />}
+            {props.food && props.food}
             <EmptyRow />
           </>
         }
