@@ -16,7 +16,7 @@ interface foodInnerProps {
   date: string
 }
 
-interface foodProps {
+interface FoodProps {
   food?: foodInnerProps,
   setInitFollowers: any
 }
@@ -29,6 +29,6 @@ interface foodProperiteComponentProps {
 export type {
   FoodProperite,
   foodInnerProps,
-  foodProps,
+  FoodProps,
   foodProperiteComponentProps,
 }

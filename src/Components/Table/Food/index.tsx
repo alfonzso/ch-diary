@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { drag } from "../../../utils/dragAndDrop";
-import { foodInnerProps, foodProperiteComponentProps, foodProps } from "./types";
+import { foodInnerProps, foodProperiteComponentProps, FoodProps } from "./types";
 import './index.scss'
 import { useAppSelector } from "../../../redux/hooks";
 
@@ -27,10 +27,11 @@ const FoodProperiteComponent = (
   )
 }
 
-const Food = ({ food, setInitFollowers }: foodProps) => {
+const Food = ({ food, setInitFollowers }: FoodProps) => {
 
-  const [hide, setHide] = useState(true)
+  const [hundredGrammToggle, setHundredGrammToggle] = useState(false)
   const [calculatedCh, setCalculatedCh] = useState(0.0)
+  const [hundredGrammValues, setHundredGrammValues] = useState("")
   const [insulinNeeded, setInsulinNeeded] = useState([] as {
     insulin: number;
     insulinRatio: number;
@@ -41,6 +42,9 @@ const Food = ({ food, setInitFollowers }: foodProps) => {
     if (food) {
       setCalculatedCh(
         (food.portion / food.props.gramm) * food.props.ch
+      )
+      setHundredGrammValues(
+        Object.entries(food.props).map(prop => prop.join(": ")).join(' | ')
       )
     }
   }, [food]);
@@ -71,9 +75,9 @@ const Food = ({ food, setInitFollowers }: foodProps) => {
         < div id="foodProp" className="follower" >
           <div className="followerMenuBar">
             <p className="followerFoodText" > {food.name} </p>
-            <div className="toggleVisibility" onClick={() => { setHide(!hide) }}> P </div>
+            <div className="toggleVisibility" onClick={() => { setHundredGrammToggle(!hundredGrammToggle) }}> P </div>
           </div>
-          {!hide && <p> {Object.entries(food.props).map(prop => prop.join(": ")).join(' | ')} </p>}
+          {hundredGrammToggle && <p> {hundredGrammValues} </p>}
           <FoodProperiteComponent foodProps={food.props} portion={food.portion} />
         </div >
         < div id="diabInfo" className="follower" >
@@ -89,7 +93,6 @@ const Food = ({ food, setInitFollowers }: foodProps) => {
                   <p className="p-left">  {v.insulinRatio} </p> <p className="p-right"> {v.insulin.toFixed(2)}</p>
                 </div>
               )
-
             })}
           </>
 
@@ -103,4 +106,4 @@ const Food = ({ food, setInitFollowers }: foodProps) => {
 export {
   Food
 }
-export type { foodProps, foodInnerProps }
+export type { FoodProps, foodInnerProps }

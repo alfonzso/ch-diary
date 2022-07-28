@@ -23,12 +23,14 @@
     background-color: grey;
     margin: 10px;
     padding: 10px;
-    width: 10%;
+    // width: 10%;
+    width: 170px;
+
     font-size: 75%;
 
-    @include mobile {
-      width: 50%;
-    }
+    // @include mobile {
+    //   width: 150px;
+    // }
 
   }
 
