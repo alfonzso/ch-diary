@@ -28,10 +28,6 @@ const Today = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
   useEffect(() => {
-    dispatch(getTodayDateAsString())
-  }, [dispatch]);
-
-  useEffect(() => {
     if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
       console.log("Today", todayDate, todayDateAsString, everyHalfHour, userData);
       dispatch(
@@ -39,8 +35,8 @@ const Today = () => {
           { user: userData.nickname, date: todayDateAsString }
         )
       );
-
     } else {
+      dispatch(getTodayDateAsString())
       console.warn("Something is empty: ", todayDateAsString, userData.nickname);
     }
 

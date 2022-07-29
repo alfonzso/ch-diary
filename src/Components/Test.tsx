@@ -1,12 +1,9 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { MouseEvent, useEffect, useState } from 'react';
-import { useDispatch } from "react-redux";
 import { chDiarySchema } from "../data/tableSchema";
 import { useFetch } from "../Hooks";
 import { useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
 import { DiaryGetEntryNickNameResponse, DiaryTestResponse, simpleDiaryData } from '../types';
 import { getUserDataFromStore, newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
 import { Redirect } from "../utils/Redirect";
@@ -26,7 +23,6 @@ function Test() {
   const [isRedirect, setRedirect] = useState(false)
   const data = useFetch<jsonplaceholderTodosResponse>("https://jsonplaceholder.typicode.com/todos");
   const userData = useAppSelector(state => state.user.data)
-  const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
   useEffect(() => {
     console.log("-----", data)
@@ -55,7 +51,7 @@ function Test() {
       })
     }
 
-  }, []);
+  }, [userData]);
 
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
     newFetchWithAuth<DiaryTestResponse>({

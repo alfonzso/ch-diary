@@ -1,16 +1,13 @@
 import { ReactElement } from 'react';
 import { drop, allowDrop } from '../../../utils/dragAndDrop';
 import { generateTimeHHMMSS } from '../../../utils/util';
-import { Food, foodInnerProps } from '../Food';
 import "./index.scss"
 
 interface RowProps {
   idx: number
   hidden: boolean
   date: number
-  // food: foodInnerProps | null
   food: ReactElement
-  // setInitFollowers: any
 }
 
 export const EmptyRow = () => {
@@ -34,7 +31,6 @@ const Row = (props: RowProps) => {
       <div className='columnRight foodColumn' onDrop={drop} onDragOver={allowDrop}>
         {
           <>
-            {/* {props.food ? props.food : <></>} */}
             {props.food && props.food}
             <EmptyRow />
           </>
