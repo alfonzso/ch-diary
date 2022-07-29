@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify'
 import { foodInnerProps } from '../Components/Table/Food'
 import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
 import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
-import { removeDuplicatedElementsById } from '../utils/util'
+import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/util'
 import { ImportState } from './ImportState'
 
 export const sendImportedData = createAsyncThunk(
@@ -52,26 +51,10 @@ export const importIFSlice = createSlice({
   extraReducers: (builder) => {
 
     builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
-      toast.success('Import Big Success!! ', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      ToastSucces('Import Big Success!! ')
     })
     builder.addCase(sendImportedData.rejected, (state, { payload }) => {
-      toast.error('Import Failed!! ', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      ToastError('Import Failed!! ')
     })
 
     builder.addCase(getTodayFoods.fulfilled, (state, { payload }: { payload: diaryGetEntryNickNameDateResponse }) => {
