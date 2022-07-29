@@ -11,7 +11,7 @@ interface HeaderProps {
   user: UserData;
 }
 
-const Header = ({ user }: HeaderProps) => {
+const Header = ({ user, dispatch }: HeaderProps) => {
   const logInOutToggle = {
     "Login": "Logout",
     "Logout": "Login"

@@ -6,7 +6,7 @@ import { useFetch } from "../Hooks";
 import { useAppSelector } from "../redux/hooks";
 import { DiaryGetEntryNickNameResponse, DiaryTestResponse, simpleDiaryData } from '../types';
 import { getUserDataFromStore, newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
-import { Redirect } from "../utils/Redirect";
+import { Redirect } from "./Redirect";
 import './Test.scss';
 
 

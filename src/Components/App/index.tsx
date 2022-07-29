@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Header, Home, Login, Register, Test, Today } from "..";
 import { chAppconfig } from "../../config";
 import Footer from "../../Layout/Footer";
+import Logout from "../../Pages/Logout";
 import './App.css';
 
 
@@ -35,7 +36,10 @@ function App() {
             <Route path="today" element={<Today />} />
             <Route path="about" element={<About />} />
             <Route path="login" element={<Login />} />
+            <Route path="logout" element={<Logout />} />
             <Route path="register" element={<Register />} />
+            <Route path="test" element={<Test />} />
+            <Route path="test" element={<Test />} />
             <Route path="test" element={<Test />} />
 
             <Route path="*" element={<NoMatch />} />

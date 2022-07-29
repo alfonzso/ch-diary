@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { addOneDay, getYYYYMMDD, removeOneDay } from "../utils/util";
 
 // Define a type for the slice state
-interface TodayState {
+export interface TodayState {
   everyHalfHour: number
   todayDateAsString: string
   todayDate: Date

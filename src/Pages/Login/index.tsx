@@ -1,11 +1,11 @@
 import React from 'react';
 import { newFetch } from '../../utils/fetchInstance';
-import { addUser } from '../../redux/user';
+import { logIn } from '../../redux/user';
 import { LoginResponse, UserData } from '../../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { RootState } from '../../redux/store';
-import { toast } from 'react-toastify';
+import { ToastError, ToastSucces } from '../../utils/util';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -35,27 +35,11 @@ class Login extends React.Component<LoginProps, LoginState> {
     newFetch<LoginResponse>({
       url: `/api/auth/login`,
       newFetchResolve: (response) => {
-        this.props.dispatch(addUser(response.accessToken))
-        toast.success('Login Succeed ', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        this.props.dispatch(logIn(response.accessToken))
+        ToastSucces('Login Succeed ')
       },
       newFetchReject: (err) => {
-        toast.error(`Login Failed ${err} `, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        ToastError(`Login Failed ${err.message} `)
       },
       config: {
         method: 'POST',

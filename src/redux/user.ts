@@ -3,7 +3,7 @@ import { UserData, userInfoFromToken } from "../types";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 
 // Define a type for the slice state
-interface UserState {
+export interface UserState {
   data: UserData
 }
 
@@ -18,11 +18,20 @@ const initialState: UserState = {
   }
 }
 
+export const UserActionTypes = {
+  LOGIN_SUCCESS: 'USERS_LOGIN_SUCCESS',
+  LOGOUT: 'USERS_LOGOUT',
+};
+
+export function logout() {
+  return { type: UserActionTypes.LOGOUT }
+}
+
 export const userSlice = createSlice({
   name: "userData",
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<string>) => {
+    logIn: (state, action: PayloadAction<string>) => {
       console.log(
         "add func", action, state.data
       )
@@ -51,5 +60,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { addUser, updateUserToken } = userSlice.actions;
+export const { logIn, updateUserToken } = userSlice.actions;
 export default userSlice.reducer
