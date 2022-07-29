@@ -1,0 +1,21 @@
+.test-header {
+  display: flex;
+}
+
+.item {
+  flex: 1;
+  /* additionally, equal width */
+}
+
+.dataTable {
+  flex: 2.5;
+}
+
+.todo-container {
+  overflow-y: scroll;
+  height: 300px;
+}
+
+.span-block{
+  display: block;
+}

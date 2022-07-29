@@ -2,32 +2,26 @@ import { useState } from "react";
 import { connect } from 'react-redux';
 import { Link, Outlet } from "react-router-dom";
 import { Dispatch } from "redux";
-import { RootState } from '../redux/store';
-import { UserData } from '../types';
-import "./navbar.scss";
+import { RootState } from '../../redux/store';
+import { UserData } from '../../types';
+import "./index.scss";
 
-interface NavbarProps {
-  // userData: userData
+interface HeaderProps {
   dispatch: Dispatch;
   user: UserData;
 }
 
-interface NavbarState {
-
-}
-
-// class Navbar extends React.Component<NavbarProps, NavbarState> {
-// state = { :  }
-const Navbar = ({ user }: NavbarProps) => {
+const Header = ({ user }: HeaderProps) => {
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-  // render() {
-  // return (
-  // const { userData } = this.props;
+  const [links, setLinks] = useState(new Map<string, string>([
+    ["/", "Home"], ["/today", "Today"], ["/about", "About"], ["/login", "Login"],
+    ["/register", "Register"], ["/test", "Test"],
+  ]));
+
 
   return (
-    <div>
-      <nav className="navigation">
+      <nav className="header">
         <a href="/" className="brand-name">
           Ch Diary ={">"} {user.nickname}
         </a>
@@ -51,42 +45,26 @@ const Navbar = ({ user }: NavbarProps) => {
         </button>
         <div
           className={
-            isNavExpanded ? "navigation-menu expanded" : "navigation-menu"
+            isNavExpanded ? "header-menu expanded" : "header-menu"
           }
         >
           <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/today">Today</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-            <li>
-              <Link to="/test">Test</Link>
-            </li>
+            {
+              [...links.entries()].map(([key, value], index) =>
+                <li key={index} >
+                  <Link to={key} onClick={() => { setIsNavExpanded(false) }} >{value}</Link>
+                </li>
+              )
+            }
           </ul>
         </div>
-
       </nav>
-      <Outlet />
-    </div>
   );
-  // )
 }
 
-// export default Navbar;
 
 const mapStateToProps = (state: RootState) => ({
   user: state.user.data
 });
 
-export default connect(mapStateToProps)(Navbar);
+export default connect(mapStateToProps)(Header);

@@ -1,78 +1,50 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { foodInnerProps } from '../components/DiaryCommon/Food'
-import customFetcher from '../utils/fetchInstance'
+import { toast } from 'react-toastify'
+import { foodInnerProps } from '../Components/Table/Food'
+import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
+import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById } from '../utils/util'
+import { ImportState } from './ImportState'
 
 export const sendImportedData = createAsyncThunk(
   'import/InterFood',
   async (importData: string[]) => {
-    return customFetcher(
-      `/api/interfood/import`,
+
+    return newFetchWithAuth<InterfoodImportResponse>({
+      url: `/api/interfood/import`,
+      newFetchResolve:
+        (response) => {
+          if (response.error) {
+            throw new Error(response.error.message);
+          }
+          return response
+        },
+      config:
       {
         method: "POST",
         body: JSON.stringify({ data: importData }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
       }
-    ).then(
-      (res) => res.fetchObject.response
-    )
+    })
+
   }
 )
+
 export const getTodayFoods = createAsyncThunk(
   'today/getFood',
   async ({ user, date }: { user: string, date: string }) => {
-    const response = await customFetcher(
-      `/api/diary/getEntry/nickname/${user}/date/${date}`
-    )
-    return response.fetchObject
+    return newFetch<diaryGetEntryNickNameDateResponse>({
+      url: `/api/diary/getEntry/nickname/${user}/date/${date}`,
+      newFetchResolve: (response) => {
+        return response
+      },
+    })
   }
 )
 
-type diaryFood = {
-  id: string;
-  createdAt: Date;
-  User: {
-    email: string;
-  };
-  Food: {
-    name: string;
-    portion: number;
-    FoodProperite: {
-      gramm: number;
-      kcal: number;
-      portein: number;
-      fat: number;
-      ch: number;
-    };
-    Interfood: {
-      InterfoodType: {
-        name: string;
-      };
-    };
-  }
-}
-
-const foodProps = {
-  "gramm": 100,
-  "kcal": 111,
-  "portein": 222,
-  "fat": 333,
-  "ch": 444
-}
-
-export interface ImportState {
-  value: boolean,
-  diaryFood: foodInnerProps[]
-}
-
 const initialState: ImportState = {
   value: false,
-  diaryFood: [
-    // { id: "1", name: "Nagyon de nagyon finom kaja", portion: 450, type: "D123", props: foodProps, dateTime: "10" },
-  ]
-}
+  diaryFood: []
+};
 
 export const importIFSlice = createSlice({
   name: 'importIF',
@@ -80,13 +52,31 @@ export const importIFSlice = createSlice({
   extraReducers: (builder) => {
 
     builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
-      console.log('sendImportedData fulfilled: ', state, payload);
+      toast.success('Import Big Success!! ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     })
     builder.addCase(sendImportedData.rejected, (state, { payload }) => {
-      console.log('sendImportedData rejected: ', state, payload);
+      toast.error('Import Failed!! ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     })
 
-    builder.addCase(getTodayFoods.fulfilled, (state, { payload }) => {
+    builder.addCase(getTodayFoods.fulfilled, (state, { payload }: { payload: diaryGetEntryNickNameDateResponse }) => {
+
+      console.log("getTodayFoods.fulfilled", payload)
 
       const hourMinuteToDateTime = (date: Date) => {
         const hour = date.getHours() - 2
@@ -94,12 +84,11 @@ export const importIFSlice = createSlice({
         return `${hour + minute}`
       }
 
-      const { data }: { data: diaryFood[] } = payload.body
+      const { data } = payload
       const convertedFoodData: foodInnerProps[] = data.map(diaryFood => {
         return {
           id: diaryFood.id,
           name: diaryFood.Food.name,
-          // date: diaryFood.createdAt.toLocaleDateString("en-ca"),
           date: new Date(diaryFood.createdAt).toLocaleDateString("en-ca"),
           dateTime: hourMinuteToDateTime(new Date(diaryFood.createdAt)),
           type: diaryFood.Food.Interfood.InterfoodType.name,

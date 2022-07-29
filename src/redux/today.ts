@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { UserData } from "../types";
+import { createSlice } from "@reduxjs/toolkit";
 import { addOneDay, getYYYYMMDD, removeOneDay } from "../utils/util";
 
 // Define a type for the slice state
@@ -20,7 +19,7 @@ export const todaySlice = createSlice({
   name: "today",
   initialState,
   reducers: {
-    getToDay: (state) => {
+    getTodayDateAsString: (state) => {
       state.todayDateAsString = state.todayDate.toLocaleDateString("en-ca")
     },
     previousDay: (state) => {
@@ -38,5 +37,5 @@ export const todaySlice = createSlice({
   }
 });
 
-export const { getToDay, previousDay, todayDay, nextDay } = todaySlice.actions;
+export const { getTodayDateAsString, previousDay, todayDay, nextDay } = todaySlice.actions;
 export default todaySlice.reducer

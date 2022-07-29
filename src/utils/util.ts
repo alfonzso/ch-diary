@@ -20,6 +20,29 @@ function floatAnimation(follower: HTMLDivElement, food: HTMLDivElement, chDiaryM
   looper(0, follower.offsetTop)
 }
 
+export const initFollowerToFood = () => {
+  const moveToTopABit: number = -15;
+  ([...document.querySelectorAll('.follower')] as HTMLDivElement[]).forEach(follower => {
+    const food = follower.closest(".food") as HTMLDivElement
+
+    if (follower.id === "foodProp") {
+      follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 'px';
+    } else {
+      follower.style.left = food.offsetLeft - document.querySelector('.chDiaryMain')!.scrollLeft + 200 + 'px';
+    }
+
+    follower.style.top = food.offsetTop - document.querySelector('.chDiaryMain')!.scrollTop - follower.offsetHeight + moveToTopABit + 'px';
+  })
+}
+
+export const floatAnimationOnScrollEvent = () => {
+  const chDiaryMain = document.querySelector('.chDiaryMain') as HTMLDivElement;
+  [...document.querySelectorAll('.food')].forEach((food) => {
+    const follower = food.querySelector('.follower') as HTMLDivElement;
+    setTimeout(() => { floatAnimation(follower, food as HTMLDivElement, chDiaryMain) }, 100);
+  })
+}
+
 const getYYYYMMDD = () => {
   return new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} 00:00:00`)
 }
@@ -41,12 +64,12 @@ const generateTimeHHMMSS = (offset: number, date: number) => {
   return theDay
 }
 
-const removeDuplicatedElementsById = <T extends { id?: string } >(arr: T[]) => {
+const removeDuplicatedElementsById = <T extends { id?: string }>(arr: T[]) => {
   return [...new Map(arr.map(v => [v.id, v])).values()]
 }
 
 export {
-  removeDuplicatedElementsById ,
+  removeDuplicatedElementsById,
   floatAnimation,
   getYYYYMMDD,
   generateTimeHHMMSS,

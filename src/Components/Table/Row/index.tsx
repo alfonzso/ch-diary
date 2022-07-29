@@ -1,14 +1,22 @@
-import React from 'react';
 import { ReactElement } from 'react';
-import { drop, allowDrop } from '../../utils/dragAndDrop';
-import { generateTimeHHMMSS } from '../../utils/util';
-import "./Row.scss"
+import { drop, allowDrop } from '../../../utils/dragAndDrop';
+import { generateTimeHHMMSS } from '../../../utils/util';
+import { Food, foodInnerProps } from '../Food';
+import "./index.scss"
 
 interface RowProps {
   idx: number
   hidden: boolean
   date: number
-  comp: ReactElement[]
+  // food: foodInnerProps | null
+  food: ReactElement
+  // setInitFollowers: any
+}
+
+export const EmptyRow = () => {
+  return (
+    <p className='emptyRowFiller'> </p>
+  )
 }
 
 const Row = (props: RowProps) => {
@@ -25,11 +33,11 @@ const Row = (props: RowProps) => {
       </div>
       <div className='columnRight foodColumn' onDrop={drop} onDragOver={allowDrop}>
         {
-          props.comp.map((component, key) => (
-            <React.Fragment key={key}>
-              {component}
-            </React.Fragment>
-          ))
+          <>
+            {/* {props.food ? props.food : <></>} */}
+            {props.food && props.food}
+            <EmptyRow />
+          </>
         }
       </div>
     </div >

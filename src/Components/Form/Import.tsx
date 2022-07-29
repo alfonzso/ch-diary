@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { importToggle, sendImportedData } from "../../redux/importInterFood";
 import { RootState } from "../../redux/store";
-import './ImportFrom.css'
+import './Import.css'
 
 const ImportForm = () => {
 

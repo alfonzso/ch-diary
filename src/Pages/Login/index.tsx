@@ -1,13 +1,11 @@
 import React from 'react';
-import fetchInstance from '../utils/fetchInstance';
-import inMemoryJWTManager from "../utils/inMemoryJwt"
-import { baseURL } from "../App";
-import { add } from '../redux/user';
-import { UserData } from '../types';
+import { newFetch } from '../../utils/fetchInstance';
+import { addUser } from '../../redux/user';
+import { LoginResponse, UserData } from '../../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { RootState } from '../redux/store';
-
+import { RootState } from '../../redux/store';
+import { toast } from 'react-toastify';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -17,7 +15,6 @@ interface LoginProps {
 interface LoginState {
   inputs: { [x: string]: string }
 }
-
 
 class Login extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
@@ -35,21 +32,42 @@ class Login extends React.Component<LoginProps, LoginState> {
     event.preventDefault();
     console.log(this.state.inputs);
 
-    fetch(`${baseURL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
+    newFetch<LoginResponse>({
+      url: `/api/auth/login`,
+      newFetchResolve: (response) => {
+        this.props.dispatch(addUser(response.accessToken))
+        toast.success('Login Succeed ', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       },
-      credentials: 'include',
-      body: JSON.stringify(this.state.inputs)
-    }).then(res => res.json())
-      .then(async (res) => {
-        console.log('--->', res)
-        inMemoryJWTManager.setToken(res.accessToken)
-        const { fetchObject } = await fetchInstance("/api/user/getUser")
-        this.props.dispatch(add(fetchObject.body as UserData))
-      });
+      newFetchReject: (err) => {
+        toast.error(`Login Failed ${err} `, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },
+      config: {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(this.state.inputs)
+      }
+    })
+
   }
 
   render() {
