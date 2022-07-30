@@ -1,6 +1,7 @@
-import { chAppconfig } from "../config";
 import { store } from "../redux/store";
 import { updateUserToken } from "../redux/userSlice";
+import { chAppconfig } from "../config";
+import { getUserStore } from "../redux/hooks";
 import { TokenResponse } from "../types";
 import inMemoryJwt from "./inMemoryJwt";
 
@@ -11,9 +12,6 @@ export interface ResponseErrorHandler {
   }
 }
 
-export const getUserDataFromStore = () => {
-  return store.getState().user.data
-}
 const updateToken = (token: string) => {
   store.dispatch(updateUserToken(token))
 }
@@ -100,7 +98,8 @@ export const newFetch =
 function setTokenInHeader(config: RequestInit = {}) {
   config['headers'] = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${getUserDataFromStore().accesToken}`
+    // Authorization: `Bearer ${getUserDataFromStore().accesToken}`
+    Authorization: `Bearer ${getUserStore().accesToken}`
   }
   return config
 }

@@ -3,10 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { logIn } from '../../redux/userSlice';
-import { LoginResponse } from '../../types';
-import { newFetch } from '../../utils/fetchInstance';
-import { ToastError, ToastSucces } from '../../utils/util';
+import { logMeIn, setEmail, setPassword } from '../../redux/loginSlice';
+// import { updateUserInformations } from '../../redux/userSlice';
+// import { LoginResponse } from '../../types';
+// import { newFetch } from '../../utils/fetchInstance';
+// import { ToastError, ToastSucces } from '../../utils/util';
 
 // interface LoginProps {
 //   dispatch: Dispatch;
@@ -31,11 +32,11 @@ interface InputsTypeV2 {
 
 const Login = () => {
   const userData = useAppSelector(state => state.user.data)
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
-  const [Inputs, setInputs] = useState({
-    data: { email: '', password: '' }
-  } as InputsTypeV2);
+  // const [Email, setEmail] = useState("");
+  // const [Password, setPassword] = useState("");
+  // const [Inputs, setInputs] = useState({
+  //   data: { email: '', password: '' }
+  // } as InputsTypeV2);
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
   // useEffect(() => {
@@ -55,30 +56,31 @@ const Login = () => {
     // if (EmailRef.current) {
     //   setEmail(EmailRef.current.value);
     // }
+    dispatch(logMeIn())
   }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    newFetch<LoginResponse>({
-      url: `/api/auth/login`,
-      newFetchResolve: (response) => {
-        dispatch(logIn(response.accessToken))
-        ToastSucces('Login Succeed ')
-      },
-      newFetchReject: (err) => {
-        ToastError(`Login Failed ${err.message} `)
-      },
-      config: {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(Inputs)
-      }
-    })
+    // newFetch<LoginResponse>({
+    //   url: `/api/auth/login`,
+    //   newFetchResolve: (response) => {
+    //     dispatch(logIn(response.accessToken))
+    //     ToastSucces('Login Succeed ')
+    //   },
+    //   newFetchReject: (err) => {
+    //     ToastError(`Login Failed ${err.message} `)
+    //   },
+    //   config: {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'application/json, text/plain, */*',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     credentials: 'include',
+    //     body: JSON.stringify(Inputs)
+    //   }
+    // })
   }
 
   return (
@@ -90,7 +92,9 @@ const Login = () => {
             type="text"
             name="email"
             // ref={EmailRef}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              dispatch(setEmail(e.target.value))
+            }}
 
           // value={Inputs.data.email}
           // onChange={handleChange}
@@ -101,10 +105,9 @@ const Login = () => {
           <input
             type="password"
             name="password"
-            // ref={PasswordRef}
-            onChange={(e) => setPassword(e.target.value)}
-          // value={Inputs.data.password}
-          // onChange={handleChange}
+            onChange={(e) => {
+              dispatch(setPassword(e.target.value))
+            }}
           />
         </label>
         <br />

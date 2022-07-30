@@ -14,10 +14,22 @@ function Logout() {
 
   const sendLogoutToBackend = () => {
     newFetch<{} & ResponseErrorHandler>({
-      url: `/api/auth/login`,
+      url: `/api/auth/logout`,
+      config: {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      },
       newFetchResolve: () => {
+        console.log(`ToastSucces("Logout Succeed! ")`)
         ToastSucces("Logout Succeed! ")
       },
+      newFetchReject: (err) => {
+        console.log(`ToastSucces("FAAAAAAAAAAAAAAAAIlllll ")`, err)
+      }
     })
   }
 

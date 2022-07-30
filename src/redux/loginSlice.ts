@@ -1,104 +1,73 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { foodInnerProps } from '../Components/Table/Food'
-import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
-import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
-import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/util'
+import { AnyAction, createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
+import { LoginResponse } from '../types'
+import { newFetch } from '../utils/fetchInstance'
+import { ToastError, ToastSucces } from '../utils/util'
+import { RootState } from './store'
+import { updateUserInformations } from './userSlice'
 
-export const sendImportedData = createAsyncThunk(
-  'import/InterFood',
-  async (importData: string[]) => {
+export const logMeIn = createAsyncThunk<LoginResponse, void, { state: RootState, dispatch: Dispatch<AnyAction>, rejectValue: Error }>(
+// export const logMeIn = createAsyncThunk(
+  'login/send',
+  async (_, { getState, dispatch }) => {
+    const state = getState();
 
-    return newFetchWithAuth<InterfoodImportResponse>({
-      url: `/api/interfood/import`,
-      newFetchResolve:
-        (response) => {
-          if (response.error) {
-            throw new Error(response.error.message);
-          }
-          return response
+    return newFetch<LoginResponse>({
+      url: `/api/auth/login`,
+      newFetchResolve: (response) => {
+        dispatch(updateUserInformations(response.accessToken))
+        return response
+      },
+      newFetchReject: (err) => {
+        return err
+      },
+      config: {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
         },
-      config:
-      {
-        method: "POST",
-        body: JSON.stringify({ data: importData }),
+        credentials: 'include',
+        body: JSON.stringify({
+          email: state.login.email, password: state.login.password
+        })
       }
     })
 
-  }
-)
-
-export const getTodayFoods = createAsyncThunk(
-  'today/getFood',
-  async ({ user, date }: { user: string, date: string }) => {
-    return newFetch<diaryGetEntryNickNameDateResponse>({
-      url: `/api/diary/getEntry/nickname/${user}/date/${date}`,
-      newFetchResolve: (response) => {
-        return response
-      },
-    })
   }
 )
 
 interface ImportState {
-  value: boolean;
-  diaryFood: foodInnerProps[];
+  email: string
+  password: string
 }
 
 const initialState: ImportState = {
-  value: false,
-  diaryFood: []
+  email: "",
+  password: ""
 };
 
-export const importIFSlice = createSlice({
-  name: 'importIF',
+export const loginSlice = createSlice({
+  name: 'login',
   initialState,
   extraReducers: (builder) => {
-
-    builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
-      ToastSucces('Import Big Success!! ')
+    builder.addCase(logMeIn.fulfilled, (state, { payload }) => {
+      ToastSucces('Login Succeed ')
     })
-    builder.addCase(sendImportedData.rejected, (state, { payload }) => {
-      ToastError('Import Failed!! ')
-    })
-
-    builder.addCase(getTodayFoods.fulfilled, (state, { payload }: { payload: diaryGetEntryNickNameDateResponse }) => {
-
-      console.log("getTodayFoods.fulfilled", payload)
-
-      const hourMinuteToDateTime = (date: Date) => {
-        const hour = date.getHours() - 2
-        const minute = date.getMinutes() <= 15 ? 0 : 0.5
-        return `${hour + minute}`
-      }
-
-      const { data } = payload
-      const convertedFoodData: foodInnerProps[] = data.map(diaryFood => {
-        return {
-          id: diaryFood.id,
-          name: diaryFood.Food.name,
-          date: new Date(diaryFood.createdAt).toLocaleDateString("en-ca"),
-          dateTime: hourMinuteToDateTime(new Date(diaryFood.createdAt)),
-          type: diaryFood.Food.Interfood.InterfoodType.name,
-          portion: diaryFood.Food.portion,
-          props: diaryFood.Food.FoodProperite
-        }
-      })
-
-      state.diaryFood = removeDuplicatedElementsById([...state.diaryFood, ...convertedFoodData])
-
-    })
-    builder.addCase(getTodayFoods.rejected, (state, { payload }) => {
-      console.log('getTodayFoods rejected: ', state, payload);
+    builder.addCase(logMeIn.rejected, (state, { payload }) => {
+      ToastError(`Login Failed ${payload!.message} `)
     })
   },
   reducers: {
-    importToggle: (state) => {
-      state.value = !state.value
+    setEmail: (state, action) => {
+      state.email = action.payload
+    },
+    setPassword: (state, action) => {
+      state.password = action.payload
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { importToggle } = importIFSlice.actions
+export const { setEmail, setPassword } = loginSlice.actions
 
-export default importIFSlice.reducer
+export default loginSlice.reducer

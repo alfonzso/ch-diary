@@ -4,6 +4,7 @@ import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../t
 import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/util'
 
+// export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[]>(
 export const sendImportedData = createAsyncThunk(
   'import/InterFood',
   async (importData: string[]) => {

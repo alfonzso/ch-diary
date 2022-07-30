@@ -31,7 +31,7 @@ export const userSlice = createSlice({
   name: "userData",
   initialState,
   reducers: {
-    logIn: (state, action: PayloadAction<string>) => {
+    updateUserInformations: (state, action: PayloadAction<string>) => {
       console.log(
         "add func", action, state.data
       )
@@ -60,5 +60,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { logIn, updateUserToken } = userSlice.actions;
+export const { updateUserInformations, updateUserToken } = userSlice.actions;
 export default userSlice.reducer
