@@ -1,6 +1,6 @@
 import { chAppconfig } from "../config";
 import { store } from "../redux/store";
-import { updateUserToken } from "../redux/user";
+import { updateUserToken } from "../redux/userSlice";
 import { TokenResponse } from "../types";
 import inMemoryJwt from "./inMemoryJwt";
 

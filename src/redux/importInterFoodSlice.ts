@@ -3,7 +3,6 @@ import { foodInnerProps } from '../Components/Table/Food'
 import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
 import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/util'
-import { ImportState } from './ImportState'
 
 export const sendImportedData = createAsyncThunk(
   'import/InterFood',
@@ -39,6 +38,11 @@ export const getTodayFoods = createAsyncThunk(
     })
   }
 )
+
+interface ImportState {
+  value: boolean;
+  diaryFood: foodInnerProps[];
+}
 
 const initialState: ImportState = {
   value: false,

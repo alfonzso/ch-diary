@@ -1,21 +1,14 @@
 import { useState } from "react";
-import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
-import { Dispatch } from "redux";
-import { RootState } from '../../redux/store';
-import { UserData } from '../../types';
+import { useAppSelector } from "../../redux/hooks";
 import "./index.scss";
 
-interface HeaderProps {
-  dispatch: Dispatch;
-  user: UserData;
-}
-
-const Header = ({ user, dispatch }: HeaderProps) => {
+const Header = () => {
   const logInOutToggle = {
     "Login": "Logout",
     "Logout": "Login"
   }
+  const userData = useAppSelector(state => state.user.data)
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const [links] = useState(new Map<string, string>([
     ["/", "Home"], ["/today", "Today"],
@@ -24,13 +17,13 @@ const Header = ({ user, dispatch }: HeaderProps) => {
   ]));
 
   const loginOrLogout = () => {
-    return user.nickname === "" ? "Login" : "Logout"
+    return userData.nickname === "" ? "Login" : "Logout"
   }
 
   return (
     <nav className="header">
       <a href="/" className="brand-name">
-        Ch Diary ={">"} {user.nickname}
+        Ch Diary ={">"} {userData.nickname}
       </a>
       <button className="hamburger"
         onClick={() => {
@@ -71,9 +64,4 @@ const Header = ({ user, dispatch }: HeaderProps) => {
   );
 }
 
-
-const mapStateToProps = (state: RootState) => ({
-  user: state.user.data
-});
-
-export default connect(mapStateToProps)(Header);
+export default Header

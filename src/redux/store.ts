@@ -1,7 +1,7 @@
 import { AnyAction, combineReducers, configureStore, Reducer } from "@reduxjs/toolkit";
-import userDataReducer, { UserActionTypes } from "./user"
-import importIFReducer from "./importInterFood"
-import todayReducer from "./today"
+import userDataReducer, { UserActionTypes } from "./userSlice"
+import importIFReducer from "./importInterFoodSlice"
+import todayReducer from "./todaySlice"
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
@@ -20,15 +20,6 @@ const persistConfig = {
 
 // export type AppReducerType = ReturnType<typeof AppReducers> | undefined;
 export type AppReducerType = ReturnType<typeof AppReducers>
-
-// type kek = Reducer<CombinedState<{
-//   user: UserState;
-//   importIF: ImportState;
-//   today: TodayState;
-// }>, AnyAction>
-
-// type kek = Reducer<AppReducerType>
-// type kek =  AppReducerType
 
 const rootReducer: Reducer<AppReducerType> = (state: AppReducerType | undefined, action: AnyAction) => {
 

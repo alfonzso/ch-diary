@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Redirect } from "../../Components/Redirect";
 import { RootState } from "../../redux/store";
-import { logout } from "../../redux/user";
+import { logout } from "../../redux/userSlice";
 import { newFetch, ResponseErrorHandler } from "../../utils/fetchInstance";
 import { ToastSucces } from "../../utils/util";
 
