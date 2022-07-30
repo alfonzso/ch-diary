@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { foodInnerProps } from '../Components/Table/Food'
-import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
-import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
+import { DiaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
+import { newFetch, newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/oneliners'
 
 export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[]>(
@@ -27,52 +27,66 @@ export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string
   }
 )
 
-export const getTodayFoods = createAsyncThunk(
+// type TodayFoodsType =
+//   DiaryGetEntryNickNameDateResponse&string
+interface ITodayFoods {
+  resp: DiaryGetEntryNickNameDateResponse
+  date: string
+  // error?: ResponseErrorHandler
+}
+
+
+// export const getTodayFoods = createAsyncThunk<DiaryGetEntryNickNameDateResponse, { user: string, date: string }>(
+export const getTodayFoods = createAsyncThunk<ITodayFoods, { user: string, date: string }>(
   'today/getFood',
-  async ({ user, date }: { user: string, date: string }) => {
-    return newFetch<diaryGetEntryNickNameDateResponse>({
+  async ({ user, date }) => {
+    return newFetch<DiaryGetEntryNickNameDateResponse, ITodayFoods>({
       url: `/api/diary/getEntry/nickname/${user}/date/${date}`,
       newFetchResolve: (response) => {
-        return response
+        return { resp: response, date }
       },
     })
   }
 )
 
+const hourMinuteToDateTime = (date: Date) => {
+  const hour = date.getHours() - 2
+  const minute = date.getMinutes() <= 15 ? 0 : 0.5
+  return `${hour + minute}`
+}
+
 interface ImportState {
   value: boolean;
   diaryFood: foodInnerProps[];
+  todayFood: foodInnerProps[];
 }
 
 const initialState: ImportState = {
   value: false,
-  diaryFood: []
+  diaryFood: [],
+  todayFood: []
 };
+
 
 export const importIFSlice = createSlice({
   name: 'importIF',
   initialState,
   extraReducers: (builder) => {
 
-    builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
+    builder.addCase(sendImportedData.fulfilled, (state, { payload: { data } }) => {
       ToastSucces('Import Big Success!! ')
     })
     builder.addCase(sendImportedData.rejected, (state, { payload }) => {
       ToastError('Import Failed!! ')
     })
 
-    builder.addCase(getTodayFoods.fulfilled, (state, { payload }: { payload: diaryGetEntryNickNameDateResponse }) => {
+    // builder.addCase(getTodayFoods.fulfilled, (state, { payload }: { payload: diaryGetEntryNickNameDateResponse }) => {
+    builder.addCase(getTodayFoods.fulfilled, (state, { payload: { resp, date } }) => {
 
-      console.log("getTodayFoods.fulfilled", payload)
+      console.log("getTodayFoods.fulfilled", resp.data)
 
-      const hourMinuteToDateTime = (date: Date) => {
-        const hour = date.getHours() - 2
-        const minute = date.getMinutes() <= 15 ? 0 : 0.5
-        return `${hour + minute}`
-      }
 
-      const { data } = payload
-      const convertedFoodData: foodInnerProps[] = data.map(diaryFood => {
+      const convertedFoodData: foodInnerProps[] = resp.data.map(diaryFood => {
         return {
           id: diaryFood.id,
           name: diaryFood.Food.name,
@@ -85,6 +99,7 @@ export const importIFSlice = createSlice({
       })
 
       state.diaryFood = removeDuplicatedElementsById([...state.diaryFood, ...convertedFoodData])
+      state.todayFood = convertedFoodData.filter(data => data.date === date)
 
     })
     builder.addCase(getTodayFoods.rejected, (state, { payload }) => {

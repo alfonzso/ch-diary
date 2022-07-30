@@ -14,8 +14,8 @@ interface idxHiddenFood {
 interface TableProps {
   foodList: foodInnerProps[]
 }
+const Table = ({ foodList }: TableProps) => {
 
-function Table({ foodList }: TableProps) {
   const [initFollowers, setInitFollowers] = useState(false);
   const { everyHalfHour } = useAppSelector(state => state.today);
   const [nowGetTime, setNowGetTime] = useState(0);

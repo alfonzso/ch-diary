@@ -1,3 +1,4 @@
+import Table from '../../Components/Table';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -7,10 +8,9 @@ import { RootState } from '../../redux/store';
 import { getTodayDateAsString, previousDay, todayDay, nextDay } from '../../redux/todaySlice';
 import { FoodProperite } from '../../types/interfood';
 import { ImportForm } from '../../Components/Form/Import';
-import Table from '../../Components/Table';
 import { foodInnerProps } from '../../Components/Table/Food';
-import "./index.scss";
 import { floatAnimationOnScrollEvent } from '../../utils';
+import "./index.scss";
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
   return items.reduce(function (a, b) {
@@ -19,12 +19,19 @@ function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) 
   }, 0);
 }
 
+// const sumCh = ({ portion, props }: foodInnerProps) => {
+//   const num: number = b.portion / b.props.gramm
+//   return 0
+
+// }
+
 const Today = () => {
 
   const { everyHalfHour, todayDateAsString, todayDate } = useAppSelector(state => state.today)
   const userData = useAppSelector(state => state.user.data)
-  const diaryFood = useAppSelector(state => state.importIF.diaryFood)
-  const [todayFoods, setTodayFoods] = useState([] as foodInnerProps[]);
+  // const diaryFood = useAppSelector(state => state.importIF.diaryFood)
+  const todayFoods = useAppSelector(state => state.importIF.todayFood)
+  // const [todayFoods, setTodayFoods] = useState([] as foodInnerProps[]);
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
   useEffect(() => {
@@ -42,13 +49,13 @@ const Today = () => {
 
   }, [todayDateAsString, everyHalfHour, todayDate, userData, dispatch]);
 
-  useEffect(() => {
-    if (diaryFood.length > 0) setTodayFoods(diaryFood.filter(data => data.date === todayDateAsString))
-  }, [diaryFood, todayDateAsString]);
+  // useEffect(() => {
+  //   if (diaryFood.length > 0) setTodayFoods(diaryFood.filter(data => data.date === todayDateAsString))
+  // }, [diaryFood, todayDateAsString]);
 
-  useEffect(() => {
-    if (todayFoods.length > 0) console.log("todayFoods: ", todayFoods);
-  }, [todayFoods]);
+  // useEffect(() => {
+  //   if (todayFoods.length > 0) console.log("todayFoods: ", todayFoods);
+  // }, [todayFoods]);
 
   const htmlRender = () => {
     return (

@@ -1,18 +1,22 @@
 import { ResponseErrorHandler } from "../utils/fetchInstance"
 import { FoodProperite } from "./interfood"
 
-interface apiDiaryGetEntryNickNameDateData {
+interface apiDiaryGetEntry {
   status: boolean
   data: diaryData[]
 }
+// interface apiDiaryGetEntryNickNameDateData {
+//   status: boolean
+//   data: diaryData[]
+// }
 
-interface apiDiaryGetEntryNickNameData {
-  status: boolean
-  data: diaryData[]
-}
+// interface apiDiaryGetEntryNickNameData {
+//   status: boolean
+//   data: diaryData[]
+// }
 
-type DiaryGetEntryNickNameResponse = apiDiaryGetEntryNickNameData & ResponseErrorHandler
-type diaryGetEntryNickNameDateResponse = apiDiaryGetEntryNickNameDateData & ResponseErrorHandler
+type DiaryGetEntryNickNameResponse = apiDiaryGetEntry & ResponseErrorHandler
+type DiaryGetEntryNickNameDateResponse = apiDiaryGetEntry & ResponseErrorHandler
 
 type diaryData = {
   id: string;
@@ -48,7 +52,7 @@ type simpleDiaryData = {
 }
 
 export type {
-  diaryGetEntryNickNameDateResponse,
+  DiaryGetEntryNickNameDateResponse,
   DiaryGetEntryNickNameResponse,
   diaryData,
   simpleDiaryData
