@@ -1,7 +1,5 @@
 import { DragEvent } from 'react';
-import { floatAnimation } from './util';
-
-
+import { floatAnimation } from './util/myAnimation';
 
 function allowDrop(ev: DragEvent<HTMLDivElement>) {
   ev.preventDefault();

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { foodInnerProps } from '../Components/Table/Food'
 import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
 import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
-import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/util'
+import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/oneliners'
 
 export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[]>(
   'import/InterFood',

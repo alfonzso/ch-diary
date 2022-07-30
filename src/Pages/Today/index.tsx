@@ -6,11 +6,11 @@ import { getTodayFoods, importToggle } from '../../redux/importInterFoodSlice';
 import { RootState } from '../../redux/store';
 import { getTodayDateAsString, previousDay, todayDay, nextDay } from '../../redux/todaySlice';
 import { FoodProperite } from '../../types/interfood';
-import { floatAnimationOnScrollEvent } from '../../utils/util';
 import { ImportForm } from '../../Components/Form/Import';
 import Table from '../../Components/Table';
 import { foodInnerProps } from '../../Components/Table/Food';
 import "./index.scss";
+import { floatAnimationOnScrollEvent } from '../../utils';
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
   return items.reduce(function (a, b) {
@@ -77,7 +77,7 @@ const Today = () => {
         </div>
         <div className="tableContent">
           <div className="chDiaryMain" onScroll={(ev) => { ev.preventDefault(); floatAnimationOnScrollEvent() }}>{
-            todayFoods.length > 0 && <Table foodList={todayFoods} />
+            <Table foodList={todayFoods} />
           }</div>
         </div>
 

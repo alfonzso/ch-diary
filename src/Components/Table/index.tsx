@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
-import { getYYYYMMDD, initFollowerToFood } from "../../utils/util";
+import { getYYYYMMDD, initFollowerToFood } from "../../utils";
+// import { getYYYYMMDD, initFollowerToFood } from "../../utils/oneliners";
 import { Food, foodInnerProps } from "./Food";
 import { Row } from "./Row";
 

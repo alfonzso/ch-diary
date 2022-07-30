@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
+import { generateTimeHHMMSS } from '../../../utils';
 import { drop, allowDrop } from '../../../utils/dragAndDrop';
-import { generateTimeHHMMSS } from '../../../utils/util';
 import "./index.scss"
 
 interface RowProps {

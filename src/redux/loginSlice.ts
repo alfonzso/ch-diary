@@ -1,7 +1,7 @@
 import { AnyAction, createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
 import { LoginResponse } from '../types'
 import { newFetch } from '../utils/fetchInstance'
-import { ToastError, ToastSucces } from '../utils/util'
+import { ToastError, ToastSucces } from '../utils/oneliners'
 import { RootState } from './store'
 import { updateUserInformations } from './userSlice'
 

@@ -5,7 +5,7 @@ import { Redirect } from "../../Components/Redirect";
 import { RootState } from "../../redux/store";
 import { logout } from "../../redux/userSlice";
 import { newFetch, ResponseErrorHandler } from "../../utils/fetchInstance";
-import { ToastSucces } from "../../utils/util";
+import { ToastSucces } from "../../utils/oneliners";
 
 function Logout() {
   const [isRedirect, setRedirect] = useState(false)

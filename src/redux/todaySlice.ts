@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addOneDay, getYYYYMMDD, removeOneDay } from "../utils/util";
+import { getYYYYMMDD, removeOneDay, addOneDay } from "../utils";
 
 export interface TodayState {
   everyHalfHour: number
