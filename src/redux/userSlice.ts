@@ -32,25 +32,12 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUserInformations: (state, action: PayloadAction<string>) => {
-      console.log(
-        "add func", action, state.data
-      )
 
       const user = jwt_decode<JwtPayload>(action.payload) as userInfoFromToken
       state.data.id = user.userId
       state.data.nickname = user.userNickName
       state.data.email = user.userEmail
       state.data.accesToken = action.payload
-      // state.data = {
-      //   id: user.userId,
-      //   nickname: user.userNickName,
-      //   email: user.userEmail,
-      //   accesToken: action.payload
-      // }
-
-      console.log(
-        "add func", action, state.data
-      )
 
     },
     updateUserToken: (state, action: PayloadAction<string>) => {

@@ -17,7 +17,7 @@ const AppReducers = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['importIF', 'today']
+  blacklist: ['importIF', 'today', 'login']
 };
 
 // export type AppReducerType = ReturnType<typeof AppReducers> | undefined;
