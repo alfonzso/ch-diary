@@ -5,7 +5,7 @@ import { Redirect } from "../../Components/Redirect";
 import { RootState } from "../../redux/store";
 import { logout } from "../../redux/userSlice";
 import { newFetch, ResponseErrorHandler } from "../../utils/fetchInstance";
-import { ToastSucces } from "../../utils/oneliners";
+import { ToastError, ToastSucces } from "../../utils/oneliners";
 
 function Logout() {
   const [isRedirect, setRedirect] = useState(false)
@@ -23,11 +23,10 @@ function Logout() {
         credentials: 'include',
       },
       newFetchResolve: () => {
-        console.log(`ToastSucces("Logout Succeed! ")`)
         ToastSucces("Logout Succeed! ")
       },
       newFetchReject: (err) => {
-        console.log(`ToastSucces("FAAAAAAAAAAAAAAAAIlllll ")`, err)
+        ToastError("Logout Failed! ")
       }
     })
   }

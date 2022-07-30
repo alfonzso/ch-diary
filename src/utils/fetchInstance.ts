@@ -22,7 +22,7 @@ const fetchWrapper = (
   init?: RequestInit
 ) => {
   const url = urlPath.includes("http") ? urlPath : `${chAppconfig.baseURL}${urlPath}`
-  const defaultReject = (err: Error) => { console.log("defaultReject ", err) }
+  const defaultReject = (err: Error) => { console.log("###)()( defaultReject )()(### ", err) }
   return fetch(url, init)
     .then((response) => response.json())
     .then(resolve)

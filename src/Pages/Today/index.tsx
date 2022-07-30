@@ -27,7 +27,7 @@ const Today = () => {
 
   useEffect(() => {
     if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
-      console.log("Today", todayDate, todayDateAsString, everyHalfHour, userData);
+      console.log("=>> Today ==>> ", todayDate, todayDateAsString, everyHalfHour, userData);
       dispatch(
         getTodayFoods(
           { user: userData.nickname, date: todayDateAsString }

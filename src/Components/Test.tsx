@@ -25,7 +25,6 @@ function Test() {
   const userData = useAppSelector(state => state.user.data)
 
   useEffect(() => {
-    console.log("-----", data)
   }, [data]);
 
   useEffect(() => {

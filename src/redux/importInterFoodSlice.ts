@@ -76,9 +76,6 @@ export const importIFSlice = createSlice({
 
     builder.addCase(getTodayFoods.fulfilled, (state, { payload: { resp, date } }) => {
 
-      console.log("getTodayFoods.fulfilled", resp.data)
-
-
       const convertedFoodData: foodInnerProps[] = resp.data.map(diaryFood => {
         return {
           id: diaryFood.id,
