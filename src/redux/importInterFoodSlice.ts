@@ -4,6 +4,29 @@ import { DiaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../t
 import { newFetch, newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/oneliners'
 
+interface ITodayFoods {
+  resp: DiaryGetEntryNickNameDateResponse
+  date: string
+}
+
+const hourMinuteToDateTime = (date: Date) => {
+  const hour = date.getHours() - 2
+  const minute = date.getMinutes() <= 15 ? 0 : 0.5
+  return `${hour + minute}`
+}
+
+interface ImportState {
+  value: boolean;
+  diaryFood: foodInnerProps[];
+  todayFood: foodInnerProps[];
+}
+
+const initialState: ImportState = {
+  value: false,
+  diaryFood: [],
+  todayFood: []
+};
+
 export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[]>(
   'import/InterFood',
   async (importData) => {
@@ -27,16 +50,6 @@ export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string
   }
 )
 
-// type TodayFoodsType =
-//   DiaryGetEntryNickNameDateResponse&string
-interface ITodayFoods {
-  resp: DiaryGetEntryNickNameDateResponse
-  date: string
-  // error?: ResponseErrorHandler
-}
-
-
-// export const getTodayFoods = createAsyncThunk<DiaryGetEntryNickNameDateResponse, { user: string, date: string }>(
 export const getTodayFoods = createAsyncThunk<ITodayFoods, { user: string, date: string }>(
   'today/getFood',
   async ({ user, date }) => {
@@ -48,25 +61,6 @@ export const getTodayFoods = createAsyncThunk<ITodayFoods, { user: string, date:
     })
   }
 )
-
-const hourMinuteToDateTime = (date: Date) => {
-  const hour = date.getHours() - 2
-  const minute = date.getMinutes() <= 15 ? 0 : 0.5
-  return `${hour + minute}`
-}
-
-interface ImportState {
-  value: boolean;
-  diaryFood: foodInnerProps[];
-  todayFood: foodInnerProps[];
-}
-
-const initialState: ImportState = {
-  value: false,
-  diaryFood: [],
-  todayFood: []
-};
-
 
 export const importIFSlice = createSlice({
   name: 'importIF',
@@ -80,7 +74,6 @@ export const importIFSlice = createSlice({
       ToastError('Import Failed!! ')
     })
 
-    // builder.addCase(getTodayFoods.fulfilled, (state, { payload }: { payload: diaryGetEntryNickNameDateResponse }) => {
     builder.addCase(getTodayFoods.fulfilled, (state, { payload: { resp, date } }) => {
 
       console.log("getTodayFoods.fulfilled", resp.data)

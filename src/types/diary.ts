@@ -5,15 +5,6 @@ interface apiDiaryGetEntry {
   status: boolean
   data: diaryData[]
 }
-// interface apiDiaryGetEntryNickNameDateData {
-//   status: boolean
-//   data: diaryData[]
-// }
-
-// interface apiDiaryGetEntryNickNameData {
-//   status: boolean
-//   data: diaryData[]
-// }
 
 type DiaryGetEntryNickNameResponse = apiDiaryGetEntry & ResponseErrorHandler
 type DiaryGetEntryNickNameDateResponse = apiDiaryGetEntry & ResponseErrorHandler

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { getYYYYMMDD, initFollowerToFood } from "../../utils";
-// import { getYYYYMMDD, initFollowerToFood } from "../../utils/oneliners";
 import { Food, foodInnerProps } from "./Food";
 import { Row } from "./Row";
 
@@ -37,7 +36,6 @@ const Table = ({ foodList }: TableProps) => {
     })
 
     setRowAndFoods(foodListAsDateTimeKey)
-    // }
   }, [everyHalfHour, foodList])
 
   useEffect(() => {
@@ -51,7 +49,6 @@ const Table = ({ foodList }: TableProps) => {
 
 
   return (
-    // <div className="chDiaryTable" ref={myRef}>
     <div className="chDiaryTable"  >
       {
         rowAndFoods.map((v, i) => {
