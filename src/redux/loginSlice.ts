@@ -6,7 +6,6 @@ import { RootState } from './store'
 import { updateUserInformations } from './userSlice'
 
 export const logMeIn = createAsyncThunk<LoginResponse, void, { state: RootState, dispatch: Dispatch<AnyAction>, rejectValue: Error }>(
-// export const logMeIn = createAsyncThunk(
   'login/send',
   async (_, { getState, dispatch }) => {
     const state = getState();

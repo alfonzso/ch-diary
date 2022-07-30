@@ -4,10 +4,9 @@ import { diaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../t
 import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/util'
 
-// export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[]>(
-export const sendImportedData = createAsyncThunk(
+export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[]>(
   'import/InterFood',
-  async (importData: string[]) => {
+  async (importData) => {
 
     return newFetchWithAuth<InterfoodImportResponse>({
       url: `/api/interfood/import`,

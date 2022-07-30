@@ -20,7 +20,6 @@ const persistConfig = {
   blacklist: ['importIF', 'today', 'login']
 };
 
-// export type AppReducerType = ReturnType<typeof AppReducers> | undefined;
 export type AppReducerType = ReturnType<typeof AppReducers>
 
 const rootReducer: Reducer<AppReducerType> = (state: AppReducerType | undefined, action: AnyAction) => {
@@ -29,7 +28,6 @@ const rootReducer: Reducer<AppReducerType> = (state: AppReducerType | undefined,
     state = {} as AppReducerType;
     storage.removeItem('persist:root')
   }
-  // console.log("state, action", state, action)
   return AppReducers(state, action);
 };
 

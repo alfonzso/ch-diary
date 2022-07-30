@@ -2,12 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserData, userInfoFromToken } from "../types";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 
-// Define a type for the slice state
 export interface UserState {
   data: UserData
 }
 
-// Define the initial state using that type
 const initialState: UserState = {
   data: {
     id: "",

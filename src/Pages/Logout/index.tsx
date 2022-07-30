@@ -8,7 +8,6 @@ import { newFetch, ResponseErrorHandler } from "../../utils/fetchInstance";
 import { ToastSucces } from "../../utils/util";
 
 function Logout() {
-  // const [Logout, setLogout] = useState(false);
   const [isRedirect, setRedirect] = useState(false)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 

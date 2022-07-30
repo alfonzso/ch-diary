@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../redux/hooks';
 import { getTodayFoods, importToggle } from '../../redux/importInterFoodSlice';
 import { RootState } from '../../redux/store';
-// import { getTodayDateAsString, nextDay, previousDay, todayDay } from '../../redux/todaySlice';
 import { getTodayDateAsString, previousDay, todayDay, nextDay } from '../../redux/todaySlice';
 import { FoodProperite } from '../../types/interfood';
 import { floatAnimationOnScrollEvent } from '../../utils/util';

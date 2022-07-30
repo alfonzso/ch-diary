@@ -103,6 +103,3 @@ function setTokenInHeader(config: RequestInit = {}) {
   }
   return config
 }
-
-
-// export default customFetcher;
