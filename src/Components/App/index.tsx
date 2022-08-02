@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Link, Outlet, Route, Routes } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Header, Home, Login, Register, Test, Today } from "..";
+import { Home, Login, Logout, Register, Today } from "../../Pages";
+import { Footer, Header } from "../../Layout";
 import { chAppconfig } from "../../config";
-import Footer from "../../Layout/Footer";
+import Test from "../Test";
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
-
 
 function Layout() {
   return (
@@ -35,6 +35,7 @@ function App() {
             <Route path="today" element={<Today />} />
             <Route path="about" element={<About />} />
             <Route path="login" element={<Login />} />
+            <Route path="logout" element={<Logout />} />
             <Route path="register" element={<Register />} />
             <Route path="test" element={<Test />} />
 

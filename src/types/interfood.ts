@@ -8,13 +8,18 @@ export interface FoodProperite {
   ch: number;
 }
 
-export interface apiInterfoodImportData {
+export interface apiInterfoodImportStructure {
   userId?: string,
   foodName: string,
   foodPortion?: number,
   createdAt: Date,
   interFoodType: string,
   foodProp?: FoodProperite
+}
+
+export interface apiInterfoodImportData {
+  status: boolean
+  data: apiInterfoodImportStructure[]
 }
 
 export type InterfoodImportResponse = apiInterfoodImportData & ResponseErrorHandler

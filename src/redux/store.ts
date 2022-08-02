@@ -1,25 +1,37 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userDataReducer from "./user"
-import importIFReducer from "./importInterFood"
-import todayReducer from "./today"
+import { AnyAction, combineReducers, configureStore, Reducer } from "@reduxjs/toolkit";
+import userDataSlice, { UserActionTypes } from "./userSlice"
+import importIFSlice from "./importInterFoodSlice"
+import todaySlice from "./todaySlice"
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
+import loginSlice from "./loginSlice";
 
-
-const reducers = combineReducers({
-  user: userDataReducer,
-  importIF: importIFReducer,
-  today: todayReducer
+const AppReducers = combineReducers({
+  user: userDataSlice,
+  importIF: importIFSlice,
+  today: todaySlice,
+  login: loginSlice
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['importIF','today']
+  blacklist: ['importIF', 'today', 'login']
 };
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+export type AppReducerType = ReturnType<typeof AppReducers>
+
+const rootReducer: Reducer<AppReducerType> = (state: AppReducerType | undefined, action: AnyAction) => {
+
+  if (action.type === UserActionTypes.LOGOUT) { // check for action type
+    state = {} as AppReducerType;
+    storage.removeItem('persist:root')
+  }
+  return AppReducers(state, action);
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,

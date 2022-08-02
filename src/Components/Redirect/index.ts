@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Redirect({ to }: { to: any }) {
+type RedirectType = {
+  to: string
+}
+
+function Redirect({ to }: RedirectType) {
   let navigate = useNavigate();
   useEffect(() => {
     navigate(to);
@@ -9,6 +13,6 @@ function Redirect({ to }: { to: any }) {
   return null;
 }
 
-export{
+export {
   Redirect
 }

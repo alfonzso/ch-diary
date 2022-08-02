@@ -1,118 +1,52 @@
-import React from 'react';
-import { newFetch } from '../../utils/fetchInstance';
-import { addUser } from '../../redux/user';
-import { LoginResponse, UserData } from '../../types';
-import { connect } from 'react-redux';
-import { Dispatch } from "redux";
+import React, { useState } from 'react';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { toast } from 'react-toastify';
+import { logMeIn, setEmail, setPassword } from '../../redux/loginSlice';
+import { Redirect } from '../../Components/Redirect';
 
-interface LoginProps {
-  dispatch: Dispatch;
-  user: UserData;
+const Login = () => {
+  const userData = useAppSelector(state => state.user.data)
+  const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+  const [isRedirect, setRedirect] = useState(false)
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(logMeIn())
+    setRedirect(true)
+  }
+
+  return isRedirect ? (<Redirect to='/' />) : (
+    <div className="loginContainer">
+      <p>FAFA {userData.email}</p>
+      <form onSubmit={(e) => { submitHandler(e) }}>
+        <label>Enter your email:<br />
+          <input
+            type="text"
+            name="email"
+            onChange={(e) => {
+              dispatch(setEmail(e.target.value))
+            }}
+
+          />
+        </label>
+        <br />
+        <label>Enter your pass:<br />
+          <input
+            type="password"
+            name="password"
+            onChange={(e) => {
+              dispatch(setPassword(e.target.value))
+            }}
+          />
+        </label>
+        <br />
+        <input type="submit" />
+      </form>
+    </div>
+  );
+
 }
 
-interface LoginState {
-  inputs: { [x: string]: string }
-}
-
-class Login extends React.Component<LoginProps, LoginState> {
-  constructor(props: LoginProps) {
-    super(props);
-    this.state = {
-      inputs: { email: '', password: '' }
-    };
-  }
-
-  componentDidMount() {
-    console.log(this.state);
-  }
-
-  handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(this.state.inputs);
-
-    newFetch<LoginResponse>({
-      url: `/api/auth/login`,
-      newFetchResolve: (response) => {
-        this.props.dispatch(addUser(response.accessToken))
-        toast.success('Login Succeed ', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      },
-      newFetchReject: (err) => {
-        toast.error(`Login Failed ${err} `, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      },
-      config: {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(this.state.inputs)
-      }
-    })
-
-  }
-
-  render() {
-    const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-      const { name, value } = event.currentTarget
-      this.setState({
-        inputs: {
-          ...this.state.inputs,
-          [name]: value
-        }
-      })
-    }
-
-    return (
-      <div className="loginContainer">
-        <p>FAFA {this.props.user.email}</p>
-        <form onSubmit={this.handleSubmit}>
-          <label>Enter your email:<br />
-            <input
-              type="text"
-              name="email"
-              value={this.state.inputs.email}
-              onChange={handleChange}
-            />
-          </label>
-          <br />
-          <label>Enter your pass:<br />
-            <input
-              type="password"
-              name="password"
-              value={this.state.inputs.password}
-              onChange={handleChange}
-            />
-          </label>
-          <br />
-          <input type="submit" />
-        </form>
-      </div>
-    );
-  }
-}
-
-
-const mapStateToProps = (state: RootState) => ({
-  user: state.user.data
-});
-
-export default connect(mapStateToProps)(Login);
+export default Login;

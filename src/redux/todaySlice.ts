@@ -1,14 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addOneDay, getYYYYMMDD, removeOneDay } from "../utils/util";
+import { getYYYYMMDD, removeOneDay, addOneDay } from "../utils";
 
-// Define a type for the slice state
-interface TodayState {
+export interface TodayState {
   everyHalfHour: number
   todayDateAsString: string
   todayDate: Date
 }
 
-// Define the initial state using that type
 const initialState: TodayState = {
   everyHalfHour: 24 * 2,
   todayDateAsString: "1970-01-01",

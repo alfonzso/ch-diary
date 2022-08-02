@@ -1,9 +1,5 @@
 import { ResponseErrorHandler } from "../utils/fetchInstance"
 
-// interface chInsulinRatio {
-//   value: number
-// }
-
 type UserData = {
   id: string
   email: string

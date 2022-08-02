@@ -1,9 +1,9 @@
 import { AnyAction } from "@reduxjs/toolkit";
+import { RootState } from "../../redux/store";
 import { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
-import { importToggle, sendImportedData } from "../../redux/importInterFood";
-import { RootState } from "../../redux/store";
+import { importToggle, sendImportedData } from "../../redux/importInterFoodSlice";
 import './Import.css'
 
 const ImportForm = () => {

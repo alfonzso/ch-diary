@@ -1,7 +1,7 @@
 import {
   DiaryGetEntryNickNameResponse,
   diaryData, simpleDiaryData,
-  diaryGetEntryNickNameDateResponse
+  DiaryGetEntryNickNameDateResponse
 } from "./diary";
 import { IFetchInstance, IFetchData } from "./fetchInstance";
 import { InterfoodImportResponse } from "./interfood";
@@ -18,7 +18,7 @@ export type {
   UserData,
   diaryData,
   simpleDiaryData,
-  diaryGetEntryNickNameDateResponse,
+  DiaryGetEntryNickNameDateResponse,
   DiaryGetEntryNickNameResponse,
   userInfoFromToken
 }

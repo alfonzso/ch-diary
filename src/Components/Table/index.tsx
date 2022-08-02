@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
-import { getYYYYMMDD, initFollowerToFood } from "../../utils/util";
+import { getYYYYMMDD, initFollowerToFood } from "../../utils";
 import { Food, foodInnerProps } from "./Food";
 import { Row } from "./Row";
 
@@ -13,15 +13,13 @@ interface idxHiddenFood {
 interface TableProps {
   foodList: foodInnerProps[]
 }
+const Table = ({ foodList }: TableProps) => {
 
-function Table({ foodList }: TableProps) {
-  // const myRef = useRef<HTMLDivElement>(null);
   const [initFollowers, setInitFollowers] = useState(false);
   const { everyHalfHour } = useAppSelector(state => state.today);
   const [nowGetTime, setNowGetTime] = useState(0);
   const [rowAndFoods, setRowAndFoods] = useState([] as idxHiddenFood[]);
 
-  // const createHoursList = () => {
   const createHoursList = useCallback(() => {
     let flTemp: foodInnerProps[] = []
     let foodListAsDateTimeKey: idxHiddenFood[] = [];
@@ -38,7 +36,6 @@ function Table({ foodList }: TableProps) {
     })
 
     setRowAndFoods(foodListAsDateTimeKey)
-    // }
   }, [everyHalfHour, foodList])
 
   useEffect(() => {
@@ -52,11 +49,10 @@ function Table({ foodList }: TableProps) {
 
 
   return (
-    // <div className="chDiaryTable" ref={myRef}>
     <div className="chDiaryTable"  >
       {
         rowAndFoods.map((v, i) => {
-          return <Row key={i} idx={i} date={nowGetTime} food={<Food food={v.food} setInitFollowers={setInitFollowers} />} hidden={v.hidden}   />
+          return <Row key={i} idx={i} date={nowGetTime} food={<Food food={v.food} setInitFollowers={setInitFollowers} />} hidden={v.hidden} />
         })
       }
     </div>

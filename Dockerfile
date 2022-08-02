@@ -15,6 +15,9 @@ RUN echo " const localEnvs = { REACT_APP_GIT_VERSION: '$GIT_VERSION' } " > build
 
 # production environment
 FROM nginx:stable-alpine
+RUN apk add --no-cache tzdata && \
+    echo "Europe/Budapest" >  /etc/timezone && \
+    cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 COPY --from=build /app/build /usr/share/nginx/html
 # new
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf

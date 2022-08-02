@@ -1,8 +1,8 @@
-import { chAppconfig } from "../config";
 import { store } from "../redux/store";
-import { updateUserToken } from "../redux/user";
+import { updateUserToken } from "../redux/userSlice";
+import { chAppconfig } from "../config";
+import { getUserStore } from "../redux/hooks";
 import { TokenResponse } from "../types";
-import inMemoryJwt from "./inMemoryJwt";
 
 export interface ResponseErrorHandler {
   error: {
@@ -11,9 +11,6 @@ export interface ResponseErrorHandler {
   }
 }
 
-export const getUserDataFromStore = () => {
-  return store.getState().user.data
-}
 const updateToken = (token: string) => {
   store.dispatch(updateUserToken(token))
 }
@@ -25,7 +22,7 @@ const fetchWrapper = (
   init?: RequestInit
 ) => {
   const url = urlPath.includes("http") ? urlPath : `${chAppconfig.baseURL}${urlPath}`
-  const defaultReject = (err: Error) => { console.log("defaultReject ", err) }
+  const defaultReject = (err: Error) => { console.log("###)()( defaultReject )()(### ", err) }
   return fetch(url, init)
     .then((response) => response.json())
     .then(resolve)
@@ -39,7 +36,6 @@ const retryFetchWithNewToken = (
     "/api/auth/refreshToken",
     (refreshTokenResponse: TokenResponse) => {
       if (refreshTokenResponse.error) throw new Error(JSON.stringify(refreshTokenResponse.error))
-      inMemoryJwt.setToken(refreshTokenResponse.accessToken)
       updateToken(refreshTokenResponse.accessToken)
     },
     tokenReject,
@@ -51,6 +47,14 @@ type newFetchWithAuthParams<T> = {
   url: string
   config?: RequestInit
   newFetchResolve?: (res: T) => T | void
+  newFetchReject?: ((error: Error) => any) | null
+  tokenReject?: ((error: Error) => any) | null
+}
+
+type newFetch<T, K> = {
+  url: string
+  config?: RequestInit
+  newFetchResolve?: (res: T) => T | void | K
   newFetchReject?: ((error: Error) => any) | null
   tokenReject?: ((error: Error) => any) | null
 }
@@ -78,12 +82,12 @@ export const newFetchWithAuth =
   }
 
 export const newFetch =
-  <T extends ResponseErrorHandler>({
+  <T extends ResponseErrorHandler, K = T>({
     url,
     config,
     newFetchResolve = () => { },
     newFetchReject = () => { },
-  }: newFetchWithAuthParams<T>
+  }: newFetch<T, K>
   ) => {
 
     return fetchWrapper(
@@ -100,10 +104,8 @@ export const newFetch =
 function setTokenInHeader(config: RequestInit = {}) {
   config['headers'] = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${getUserDataFromStore().accesToken}`
+    // Authorization: `Bearer ${getUserDataFromStore().accesToken}`
+    Authorization: `Bearer ${getUserStore().accesToken}`
   }
   return config
 }
-
-
-// export default customFetcher;
