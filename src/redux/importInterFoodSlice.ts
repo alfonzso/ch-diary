@@ -31,13 +31,15 @@ export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string
   'import/InterFood',
   async (importData) => {
 
-    return newFetchWithAuth<InterfoodImportResponse>({
+    return newFetchWithAuth<InterfoodImportResponse, Promise<InterfoodImportResponse>>({
       url: `/api/interfood/import`,
       newFetchResolve:
         (response) => {
-          if (response.error) {
-            throw new Error(response.error.message);
-          }
+          // if (response.error) {
+          //   // throw new Error("Failed: /api/interfood/import" + response.error.message);
+          //   console.log("Failed: /api/interfood/import" + response.error.message);
+          //   return Promise.reject(response);
+          // }
           return response
         },
       config:
@@ -67,7 +69,13 @@ export const importIFSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
 
-    builder.addCase(sendImportedData.fulfilled, (state, { payload: { data } }) => {
+    builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
+      if (payload.error) {
+        // throw new Error("Failed: /api/interfood/import" + response.error.message);
+        console.log("Failed: /api/interfood/import" + payload.error.message);
+        ToastError('Import Failed!! ')
+        return
+      }
       ToastSucces('Import Big Success!! ')
     })
     builder.addCase(sendImportedData.rejected, (state, { payload }) => {

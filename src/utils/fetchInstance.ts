@@ -43,10 +43,18 @@ const retryFetchWithNewToken = (
   )
 }
 
-type newFetchWithAuthParams<T> = {
+// type newFetchWithAuthParams<T> = {
+//   url: string
+//   config?: RequestInit
+//   newFetchResolve?: (res: T) => T | void
+//   newFetchReject?: ((error: Error) => any) | null
+//   tokenReject?: ((error: Error) => any) | null
+// }
+
+type newFetchWithAuthParams<T, K> = {
   url: string
   config?: RequestInit
-  newFetchResolve?: (res: T) => T | void
+  newFetchResolve?: (res: T) => T | void | K
   newFetchReject?: ((error: Error) => any) | null
   tokenReject?: ((error: Error) => any) | null
 }
@@ -60,13 +68,13 @@ type newFetch<T, K> = {
 }
 
 export const newFetchWithAuth =
-  <T extends ResponseErrorHandler>({
-    url,
+<T extends ResponseErrorHandler, K = T>({
+  url,
     config,
     newFetchResolve = () => { },
     newFetchReject = () => { },
     tokenReject = () => { },
-  }: newFetchWithAuthParams<T>
+  }: newFetchWithAuthParams<T, K>
   ) => {
 
     const firstFetchResolve = async (response: T) => {
