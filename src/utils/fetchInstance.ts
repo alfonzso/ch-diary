@@ -43,14 +43,6 @@ const retryFetchWithNewToken = (
   )
 }
 
-// type newFetchWithAuthParams<T> = {
-//   url: string
-//   config?: RequestInit
-//   newFetchResolve?: (res: T) => T | void
-//   newFetchReject?: ((error: Error) => any) | null
-//   tokenReject?: ((error: Error) => any) | null
-// }
-
 type newFetchWithAuthParams<T, K> = {
   url: string
   config?: RequestInit
@@ -59,7 +51,7 @@ type newFetchWithAuthParams<T, K> = {
   tokenReject?: ((error: Error) => any) | null
 }
 
-type newFetch<T, K> = {
+type newFetchParams<T, K> = {
   url: string
   config?: RequestInit
   newFetchResolve?: (res: T) => T | void | K
@@ -68,8 +60,8 @@ type newFetch<T, K> = {
 }
 
 export const newFetchWithAuth =
-<T extends ResponseErrorHandler, K = T>({
-  url,
+  <T extends ResponseErrorHandler, K = T>({
+    url,
     config,
     newFetchResolve = () => { },
     newFetchReject = () => { },
@@ -95,7 +87,7 @@ export const newFetch =
     config,
     newFetchResolve = () => { },
     newFetchReject = () => { },
-  }: newFetch<T, K>
+  }: newFetchParams<T, K>
   ) => {
 
     return fetchWrapper(
@@ -112,7 +104,6 @@ export const newFetch =
 function setTokenInHeader(config: RequestInit = {}) {
   config['headers'] = {
     'Content-Type': 'application/json',
-    // Authorization: `Bearer ${getUserDataFromStore().accesToken}`
     Authorization: `Bearer ${getUserStore().accesToken}`
   }
   return config

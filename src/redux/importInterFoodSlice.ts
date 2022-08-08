@@ -1,8 +1,11 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AnyAction, createAsyncThunk, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
 import { foodInnerProps } from '../Components/Table/Food'
 import { DiaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
-import { newFetch, newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance'
+import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/oneliners'
+import { logMeOut } from './logoutSlice'
+import { setRedirectNeeded } from './redirectSlice'
+import { RootState } from './store'
 
 interface ITodayFoods {
   resp: DiaryGetEntryNickNameDateResponse
@@ -27,19 +30,20 @@ const initialState: ImportState = {
   todayFood: []
 };
 
-export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[]>(
+export const sendImportedData = createAsyncThunk<InterfoodImportResponse, string[], { state: RootState, dispatch: ThunkDispatch<RootState, any, AnyAction> }>(
   'import/InterFood',
-  async (importData) => {
+  async (importData, { getState, dispatch }) => {
 
     return newFetchWithAuth<InterfoodImportResponse, Promise<InterfoodImportResponse>>({
       url: `/api/interfood/import`,
       newFetchResolve:
         (response) => {
-          // if (response.error) {
-          //   // throw new Error("Failed: /api/interfood/import" + response.error.message);
-          //   console.log("Failed: /api/interfood/import" + response.error.message);
-          //   return Promise.reject(response);
-          // }
+          if (response.error) {
+            const msg = response.error.message.toLowerCase().includes("token") ? "Session Expired !" : 'Import Failed => ' + response.error.message
+            ToastError(msg)
+            dispatch(setRedirectNeeded(true))
+            dispatch(logMeOut())
+          }
           return response
         },
       config:
@@ -70,13 +74,7 @@ export const importIFSlice = createSlice({
   extraReducers: (builder) => {
 
     builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
-      if (payload.error) {
-        // throw new Error("Failed: /api/interfood/import" + response.error.message);
-        console.log("Failed: /api/interfood/import" + payload.error.message);
-        ToastError('Import Failed!! ')
-        return
-      }
-      ToastSucces('Import Big Success!! ')
+      if (!payload.error) ToastSucces('Import Big Success!! ')
     })
     builder.addCase(sendImportedData.rejected, (state, { payload }) => {
       ToastError('Import Failed!! ')

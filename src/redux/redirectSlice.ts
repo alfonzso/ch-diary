@@ -7,13 +7,13 @@ export const redirectSlice = createSlice({
   },
   reducers: {
     setRedirectNeeded: (state, action: PayloadAction<boolean>) => {
-      // state.todayDateAsString = state.todayDate.toLocaleDateString("en-ca")
       state.redirectNeeded = action.payload
+      console.log('setRedirectNeeded', action.payload);
     }
 
   }
 });
 
-export const { } = redirectSlice.actions;
+export const { setRedirectNeeded } = redirectSlice.actions;
 export default redirectSlice.reducer
 

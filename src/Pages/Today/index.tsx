@@ -10,6 +10,8 @@ import { FoodProperite } from '../../types/interfood';
 import { ImportForm } from '../../Components/Form/Import';
 import { floatAnimationOnScrollEvent } from '../../utils';
 import "./index.scss";
+import { setRedirectNeeded } from '../../redux/redirectSlice';
+import { Redirect } from '../../Components/Redirect';
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
   return items.reduce(function (a, b) {
@@ -21,6 +23,7 @@ function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) 
 const Today = () => {
 
   const { everyHalfHour, todayDateAsString, todayDate } = useAppSelector(state => state.today)
+  const { redirectNeeded } = useAppSelector(state => state.redirect)
   const userData = useAppSelector(state => state.user.data)
   const todayFoods = useAppSelector(state => state.importIF.todayFood)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
@@ -40,9 +43,18 @@ const Today = () => {
 
   }, [todayDateAsString, everyHalfHour, todayDate, userData, dispatch]);
 
+  useEffect(() => {
+    if (redirectNeeded) {
+      setTimeout(() => {
+        dispatch(setRedirectNeeded(false))
+      }, 2000);
+    }
+  }, [dispatch, redirectNeeded]);
+
   const htmlRender = () => {
     return (
       <div className="todayContainer">
+        {redirectNeeded && <Redirect to={'/login'} />}
 
         <div className="importInterFoodContainer">
           <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} > Import </button>
