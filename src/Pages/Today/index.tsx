@@ -1,17 +1,18 @@
 import Table from '../../Components/Table';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../redux/hooks';
 import { getTodayFoods, importToggle } from '../../redux/importInterFoodSlice';
 import { RootState } from '../../redux/store';
 import { getTodayDateAsString, previousDay, todayDay, nextDay } from '../../redux/todaySlice';
 import { FoodProperite } from '../../types/interfood';
-import { ImportForm } from '../../Components/Form/Import';
+import { ImportForm } from '../../Components/Forms/Import';
 import { floatAnimationOnScrollEvent } from '../../utils';
 import "./index.scss";
 import { setRedirectNeeded } from '../../redux/redirectSlice';
 import { Redirect } from '../../Components/Redirect';
+import MoveAblePopup from '../../Components/Forms/MoveAblePopup';
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
   return items.reduce(function (a, b) {
@@ -27,6 +28,7 @@ const Today = () => {
   const userData = useAppSelector(state => state.user.data)
   const todayFoods = useAppSelector(state => state.importIF.todayFood)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
@@ -51,15 +53,23 @@ const Today = () => {
     }
   }, [dispatch, redirectNeeded]);
 
+  const handleMouseMove = (event: React.MouseEvent) => {
+    setCoords({
+      x: event.clientX,
+      y: event.clientY,
+    });
+  };
+
   const htmlRender = () => {
     return (
-      <div className="todayContainer">
+      <div className="todayContainer" onMouseMove={handleMouseMove} >
         {redirectNeeded && <Redirect to={'/login'} />}
 
-        <div className="importInterFoodContainer">
-          <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} > Import </button>
-          <ImportForm />
-        </div>
+        {/* <div className="importInterFoodContainer">
+          <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} > Import </button> */}
+          <ImportForm coords={coords} />
+          {/* <MoveAblePopup coords={coords} />
+        </div> */}
 
         <div className="information">
           <div className="centerColumn">

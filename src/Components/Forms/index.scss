@@ -1,0 +1,28 @@
+.the-x {
+  position: absolute;
+  top: 0;
+  right: 0;
+  /* margin: 0; */
+  margin: 5px;
+  border-radius: 25px;
+  background-color: white;
+  border: none;
+}
+
+
+.moveable-popup {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+
+  width: 400px;
+  padding: 10px;
+
+  z-index: 2;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  background: rgb(255, 255, 255);
+
+}
