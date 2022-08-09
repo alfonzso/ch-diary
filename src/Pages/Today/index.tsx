@@ -28,7 +28,7 @@ const Today = () => {
   const userData = useAppSelector(state => state.user.data)
   const todayFoods = useAppSelector(state => state.importIF.todayFood)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [coords, setCoords] = useState({ left: 0, top: 0 });
 
   useEffect(() => {
     if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
@@ -55,8 +55,8 @@ const Today = () => {
 
   const handleMouseMove = (event: React.MouseEvent) => {
     setCoords({
-      x: event.clientX,
-      y: event.clientY,
+      left: event.clientX,
+      top: event.clientY,
     });
   };
 
@@ -65,11 +65,7 @@ const Today = () => {
       <div className="todayContainer" onMouseMove={handleMouseMove} >
         {redirectNeeded && <Redirect to={'/login'} />}
 
-        {/* <div className="importInterFoodContainer">
-          <button className="importInterFood" onClick={() => { dispatch(importToggle()) }} > Import </button> */}
-          <ImportForm coords={coords} />
-          {/* <MoveAblePopup coords={coords} />
-        </div> */}
+        <ImportForm coords={coords} />
 
         <div className="information">
           <div className="centerColumn">

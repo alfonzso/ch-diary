@@ -1,43 +1,29 @@
-import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
-import { useRef, useState, useEffect, Dispatch, SetStateAction } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { importToggle } from "../../redux/importInterFoodSlice";
-import { RootState } from "../../redux/store";
-import "./index.scss"
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import "./index.scss";
 
-type MoveAblePopupProps = {
-  coords: {
-    x: number;
-    y: number;
-  },
-  children: JSX.Element,
-  // popupToggleFromParent: boolean
-  // closeState: (boolean | Dispatch<SetStateAction<boolean>>)[];
-  closePopupState: [boolean, Dispatch<SetStateAction<boolean>>];
-  // }
-  // setPopupToggleFromParent?: React.Dispatch<React.SetStateAction<boolean>>
-  // send: (e: any) => void
-  // setCoords: React.Dispatch<React.SetStateAction<{
-  //   x: number;
-  //   y: number;
-  // }>>
+export type MouseCoords = {
+  left: number;
+  top: number;
 }
 
+type MoveAblePopupProps = {
+  coords: MouseCoords,
+  children: JSX.Element,
+  closePopupState: [boolean, Dispatch<SetStateAction<boolean>>];
+}
 
 export const MoveAblePopup = ({ coords, children, closePopupState }: MoveAblePopupProps) => {
-
   const moveAblePopupRef = useRef<HTMLDivElement>(null);
-  const [divPoint, setDivPoint] = useState({ x: 0, y: 0 });
-  const [LeftA, setLeftA] = useState<number | undefined>()
-  const [RightA, setRightA] = useState<number | undefined>()
+  const [divPoint, setDivPoint] = useState({ left: 0, top: 0 });
+  const [StyleLeft, setStyleLeft] = useState<number | undefined>()
+  const [StyleTop, setStyleTop] = useState<number | undefined>()
   const [isMDown, setIsMDown] = useState(false);
   const [PopupToggle, setPopupToggle] = closePopupState
 
-
   useEffect(() => {
     if (isMDown) {
-      setLeftA(coords.x - divPoint.x);
-      setRightA(coords.y - divPoint.y);
+      setStyleLeft(coords.left - divPoint.left);
+      setStyleTop(coords.top - divPoint.top);
     }
   }, [coords, isMDown, divPoint]);
 
@@ -45,14 +31,13 @@ export const MoveAblePopup = ({ coords, children, closePopupState }: MoveAblePop
     moveAblePopupRef.current!.style.userSelect = "none"
     setIsMDown(e.target === e.currentTarget)
     setDivPoint({
-      x: coords.x - moveAblePopupRef.current?.offsetLeft!,
-      y: coords.y - moveAblePopupRef.current?.offsetTop!
+      left: coords.left - moveAblePopupRef.current?.offsetLeft!,
+      top: coords.top - moveAblePopupRef.current?.offsetTop!
     });
   }
 
   const handleMouseUp = () => {
     moveAblePopupRef.current!.style.userSelect = "unset"
-
     setIsMDown(false)
   }
 
@@ -60,8 +45,8 @@ export const MoveAblePopup = ({ coords, children, closePopupState }: MoveAblePop
 
     <div className="moveable-popup" ref={moveAblePopupRef}
       style={{
-        top: RightA,
-        left: LeftA,
+        top: StyleTop,
+        left: StyleLeft,
         right: 0
       }}
       onMouseDown={handleMouseDown}
