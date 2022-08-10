@@ -5,47 +5,23 @@
 }
 
 .popup {
-
-  // padding: 100px;
-  // background: red;
   position: absolute;
-  // top: -10px;
-  // left: -10px;
-  // opacity: 0.3;
-  font-size: 75%;
-  width: 150px;
-  padding: 10px 0 10px 0;
-
+  background-color: var(--popup-color);
 }
 
 .popup::before {
-  // border-left: 10px solid red;
-  // border-top: 10px solid red;
-  // border-color: red transparent transparent red;
-  // border-top-color: red;
-  // border-left-color: red;
-  // border-style: solid;
-  // border-top-style: solid;
-  // border-left-style: solid;
-  // border-width: 10px;
-  // border-top-width: 10px;
-  // border-left-width: 10px;
-  // bottom: -19px;
-  // content: "";
-  // height: 0;
-  // left: 0;
-  // position: absolute;
-  // width: 0;
   position: absolute;
-  border-color: grey transparent transparent grey;
-  // border-color: grey;
+  border-color: var(--popup-color);
+  border-right-color: transparent;
+  border-bottom-color: transparent;
   border-style: solid;
   border-width: 10px;
   bottom: -19px;
   content: "";
   left: 0;
-
 }
+
+
 
 
 .food {
@@ -54,7 +30,7 @@
   height: 100%;
   position: relative;
 
-  .foodInfoText {
+  .food-info-text {
     font-size: 75%;
     margin: 0;
     padding: 0;
@@ -62,27 +38,25 @@
     text-align: right;
   }
 
-  .follower {
-    float: left;
-    position: absolute;
-    background-color: grey;
-    margin: 10px;
-    padding: 10px;
-    // width: 10%;
-    width: 170px;
-
-    font-size: 75%;
-
-    // @include mobile {
-    //   width: 150px;
-    // }
-
+  .fi-menu-bar {
+    display: flex;
   }
 
-  #diabInfo {
-    background-color: rgb(34, 139, 165);
-    width: 135px;
+  .fi-food-name {
+    text-align: center;
+    padding: 0px 5px 0px 0px;
+    margin: 0;
+  }
 
+  .fi-toggle-visibility {
+    margin-left: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: burlywood;
+    height: fit-content;
+  }
+
+  .diab-info {
     p {
       text-align: center;
       padding: 0;
@@ -93,44 +67,6 @@
       display: flex;
       justify-content: space-around;
     }
-  }
-
-  #diabInfo:before {
-    border-left: 10px solid rgb(34, 139, 165);
-    border-top: 10px solid rgb(34, 139, 165);
-  }
-
-  .follower:before {
-    content: "";
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    border-left: 10px solid grey;
-    border-right: 10px solid transparent;
-    border-top: 10px solid grey;
-    border-bottom: 10px solid transparent;
-    left: 0px;
-    bottom: -19px;
-
-  }
-
-
-  .followerMenuBar {
-    display: flex;
-  }
-
-  .followerFoodText {
-    text-align: center;
-    padding: 0px 5px 0px 0px;
-    margin: 0;
-  }
-
-  .toggleVisibility {
-    margin-left: auto;
-    padding-left: 5px;
-    padding-right: 5px;
-    background-color: burlywood;
-    height: fit-content;
   }
 
   .foodPropRow {
