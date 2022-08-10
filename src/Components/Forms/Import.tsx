@@ -23,10 +23,6 @@ const ImportForm = ({ coords }: MoveAblePopupProps) => {
     dispatch(sendImportedData(trimmedImpData))
   }
 
-  useEffect(() => {
-    console.log(CloseImport, "CloseImport")
-  }, [CloseImport]);
-
   return (
     <div className="importInterFoodContainer">
       <button className="importInterFood" onClick={() => setCloseImport(pop => !pop)} > Import </button>

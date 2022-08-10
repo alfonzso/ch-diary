@@ -8,9 +8,7 @@ export const redirectSlice = createSlice({
   reducers: {
     setRedirectNeeded: (state, action: PayloadAction<boolean>) => {
       state.redirectNeeded = action.payload
-      console.log('setRedirectNeeded', action.payload);
     }
-
   }
 });
 

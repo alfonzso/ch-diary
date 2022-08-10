@@ -3,6 +3,7 @@ import { drag } from "../../../utils/dragAndDrop";
 import { foodInnerProps, foodProperiteComponentProps, FoodProps } from "./types";
 import './index.scss'
 import { useAppSelector } from "../../../redux/hooks";
+import PopupInfo from "../../PopupInfo";
 
 
 const FoodProperiteComponent = (
@@ -28,6 +29,8 @@ const FoodProperiteComponent = (
 }
 
 const Food = ({ food, setInitFollowers }: FoodProps) => {
+  const [FoodInfoWidth, setFoodInfoWidth] = useState(150);
+  // const foodInfoRef = useRef<HTMLDivElement>(null);
   const [hundredGrammToggle, setHundredGrammToggle] = useState(false)
   const [calculatedCh, setCalculatedCh] = useState(0.0)
   const [hundredGrammValues, setHundredGrammValues] = useState("")
@@ -70,7 +73,7 @@ const Food = ({ food, setInitFollowers }: FoodProps) => {
     <div id={"food_" + food.id} data-id={food.id} className="food" draggable="true" onDragStart={drag} >
       <p className="food-info-text" > {food.portion} g {food.name} {food.type} </p>
 
-      <PopupInfo clsName="food-info" backgroundColor="grey" fontSize="75%" width="150px">
+      <PopupInfo options={{ clsName: "food-info", backgroundColor: "grey", fontSize: "75%", width: `${FoodInfoWidth}px` }}>
         <>
           <div className="fi-menu-bar">
             <p className="fi-food-name" > {food.name} </p>
@@ -81,7 +84,7 @@ const Food = ({ food, setInitFollowers }: FoodProps) => {
         </>
       </PopupInfo>
 
-      <PopupInfo clsName="diab-info" left="400px" backgroundColor="#228ba5" fontSize="75%" width="150px">
+      <PopupInfo options={{ clsName: "diab-info", left: `${FoodInfoWidth + 50}px`, backgroundColor: "#228ba5", fontSize: "75%", width: "150px" }}>
         <>
           <p> CH: {calculatedCh.toFixed(2)} </p>
           <p> Insulin ratio: {userData.chInsulinRatio} </p>
@@ -104,42 +107,6 @@ const Food = ({ food, setInitFollowers }: FoodProps) => {
     </div >
   ) : null
 }
-
-
-type PopupInfoProps = {
-  children: JSX.Element
-  clsName?: string
-  left?: string
-  backgroundColor?: string
-  fontSize?: string
-  width?: string
-  padding?: string
-}
-
-function PopupInfo({ children, clsName, left, backgroundColor, fontSize, width, padding }: PopupInfoProps) {
-  const popupRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <div
-      className={clsName ? clsName + " popup" : "popup"}
-      ref={popupRef}
-      style={
-        {
-          top: popupRef.current?.offsetHeight ? (popupRef.current?.offsetHeight! + 5) * -1 : "unset",
-          left: left ? left : 10,
-          "--popup-color": backgroundColor ? backgroundColor : "black",
-          fontSize: fontSize ? fontSize : "100%",
-          width: width ? width : "100%",
-          padding: padding ? padding : "10px 0 10px 0"
-        } as React.CSSProperties
-      }
-    >
-      {children}
-    </div>
-  );
-}
-
-export default PopupInfo;
 
 export {
   Food
