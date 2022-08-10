@@ -1,36 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { drag } from "../../../utils/dragAndDrop";
-import { foodInnerProps, foodProperiteComponentProps, FoodProps } from "./types";
+import { useEffect, useState } from "react";
+import { drag } from "../../utils/dragAndDrop";
+import { foodInnerProps, FoodProps } from "./types";
+import { useAppSelector } from "../../redux/hooks";
+import PopupInfo from "../PopupInfo";
+import FoodProperiteComponent from "../FoodProperiteComponent";
 import './index.scss'
-import { useAppSelector } from "../../../redux/hooks";
-import PopupInfo from "../../PopupInfo";
-
-
-const FoodProperiteComponent = (
-  { foodProps, portion }: foodProperiteComponentProps
-) => {
-  const num: number = portion / foodProps.gramm
-
-  const render = () => {
-    return Object.entries(foodProps).map(([key, val]: [key: string, val: number]) => {
-      return (
-        <div className="foodPropRow" key={key}>
-          <div> {key} </div> <div>{Number(val * num).toFixed(2)}</div>
-        </div>
-      )
-    })
-  }
-
-  return (
-    <div className="foodPropsContainer">
-      {render()}
-    </div>
-  )
-}
 
 const Food = ({ food, setInitFollowers }: FoodProps) => {
-  const [FoodInfoWidth, setFoodInfoWidth] = useState(150);
-  // const foodInfoRef = useRef<HTMLDivElement>(null);
+  const [FoodInfoWidth, _] = useState(150);
   const [hundredGrammToggle, setHundredGrammToggle] = useState(false)
   const [calculatedCh, setCalculatedCh] = useState(0.0)
   const [hundredGrammValues, setHundredGrammValues] = useState("")

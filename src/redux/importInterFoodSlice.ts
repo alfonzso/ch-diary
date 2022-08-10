@@ -1,5 +1,5 @@
 import { AnyAction, createAsyncThunk, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
-import { foodInnerProps } from '../Components/Table/Food'
+import { foodInnerProps } from '../Components/Food'
 import { DiaryGetEntryNickNameDateResponse, InterfoodImportResponse } from '../types'
 import { newFetch, newFetchWithAuth } from '../utils/fetchInstance'
 import { removeDuplicatedElementsById, ToastError, ToastSucces } from '../utils/oneliners'

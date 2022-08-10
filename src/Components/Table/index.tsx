@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { getYYYYMMDD } from "../../utils";
-import { Food, foodInnerProps } from "./Food";
+import { Food, foodInnerProps } from "../Food";
 import { Row } from "./Row";
 
 interface idxHiddenFood {
