@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { drag } from "../../../utils/dragAndDrop";
 import { foodInnerProps, foodProperiteComponentProps, FoodProps } from "./types";
 import './index.scss'
@@ -28,6 +28,7 @@ const FoodProperiteComponent = (
 }
 
 const Food = ({ food, setInitFollowers }: FoodProps) => {
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const [hundredGrammToggle, setHundredGrammToggle] = useState(false)
   const [calculatedCh, setCalculatedCh] = useState(0.0)
@@ -96,6 +97,21 @@ const Food = ({ food, setInitFollowers }: FoodProps) => {
         </>
 
       </div >
+      <div className="popup"
+        ref={popupRef}
+        style={{
+          top: popupRef.current?.offsetHeight ? (popupRef.current?.offsetHeight! + 5) * -1 : "unset",
+          left: 10,
+          backgroundColor: "grey"
+        }}
+      >
+        <div className="followerMenuBar">
+          <p className="followerFoodText" > {food.name} </p>
+          <div className="toggleVisibility" onClick={() => { setHundredGrammToggle(!hundredGrammToggle) }}> P </div>
+        </div>
+        {hundredGrammToggle && <p> {hundredGrammValues} </p>}
+        <FoodProperiteComponent foodProps={food.props} portion={food.portion} />
+      </div>
     </div >
   ) : null
 }

@@ -4,10 +4,55 @@
   }
 }
 
+.popup {
+
+  // padding: 100px;
+  // background: red;
+  position: absolute;
+  // top: -10px;
+  // left: -10px;
+  // opacity: 0.3;
+  font-size: 75%;
+  width: 150px;
+  padding: 10px 0 10px 0;
+
+}
+
+.popup::before {
+  // border-left: 10px solid red;
+  // border-top: 10px solid red;
+  // border-color: red transparent transparent red;
+  // border-top-color: red;
+  // border-left-color: red;
+  // border-style: solid;
+  // border-top-style: solid;
+  // border-left-style: solid;
+  // border-width: 10px;
+  // border-top-width: 10px;
+  // border-left-width: 10px;
+  // bottom: -19px;
+  // content: "";
+  // height: 0;
+  // left: 0;
+  // position: absolute;
+  // width: 0;
+  position: absolute;
+  border-color: grey transparent transparent grey;
+  // border-color: grey;
+  border-style: solid;
+  border-width: 10px;
+  bottom: -19px;
+  content: "";
+  left: 0;
+
+}
+
+
 .food {
   background-color: rgb(41, 41, 155);
   color: white;
   height: 100%;
+  position: relative;
 
   .foodInfoText {
     font-size: 75%;
