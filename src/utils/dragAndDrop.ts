@@ -1,5 +1,4 @@
 import { DragEvent } from 'react';
-import { floatAnimation } from './util/myAnimation';
 
 function allowDrop(ev: DragEvent<HTMLDivElement>) {
   ev.preventDefault();
@@ -16,10 +15,6 @@ function drop(ev: DragEvent<HTMLDivElement>) {
   (ev.currentTarget.querySelector('.emptyRowFiller') as HTMLDivElement)!.hidden = true;
   const food = document.getElementById(data)! as HTMLDivElement
   ev.currentTarget.appendChild(food);
-  // setTimeout(() => { followMe(food) }, 100);
-  const chDiaryMain = document.querySelector('.chDiaryMain') as HTMLDivElement;
-  const follower = food.querySelector('.follower') as HTMLDivElement;
-  setTimeout(() => { floatAnimation(follower, food, chDiaryMain) }, 100);
 }
 
 export {

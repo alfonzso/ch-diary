@@ -8,7 +8,6 @@ import { RootState } from '../../redux/store';
 import { getTodayDateAsString, previousDay, todayDay, nextDay } from '../../redux/todaySlice';
 import { FoodProperite } from '../../types/interfood';
 import { ImportForm } from '../../Components/Forms/Import';
-import { floatAnimationOnScrollEvent } from '../../utils';
 import "./index.scss";
 import { setRedirectNeeded } from '../../redux/redirectSlice';
 import { Redirect } from '../../Components/Redirect';
@@ -84,7 +83,8 @@ const Today = () => {
           </div>
         </div>
         <div className="tableContent">
-          <div className="chDiaryMain" onScroll={(ev) => { ev.preventDefault(); floatAnimationOnScrollEvent() }}>{
+          {/* <div className="chDiaryMain" onScroll={(ev) => { ev.preventDefault(); floatAnimationOnScrollEvent() }}>{ */}
+          <div className="chDiaryMain" >{
             <Table foodList={todayFoods} />
           }</div>
         </div>
