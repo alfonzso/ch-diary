@@ -16,9 +16,13 @@ RUN npm run genEnv && npm run build
 
 # production environment
 FROM nginx:stable-alpine
+ARG GIT_VERSION
+ENV REACT_APP_GIT_VERSION ${GIT_VERSION:-".-undef-."}
+
 RUN apk add --no-cache tzdata && \
     echo "Europe/Budapest" >  /etc/timezone && \
-    cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+    cp /usr/share/zoneinfo/Europe/Budapest /etc/localtime
+
 COPY --from=build /app/build /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY 99-replace-env.sh /docker-entrypoint.d/
