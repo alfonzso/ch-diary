@@ -1,5 +1,5 @@
 import { store } from "../redux/store";
-import { updateUserToken } from "../redux/userSlice";
+import { updateUserAccessToken } from "../redux/userSlice";
 import { chAppconfig } from "../config";
 import { getUserStore } from "../redux/hooks";
 import { TokenResponse } from "../types";
@@ -12,7 +12,7 @@ export interface ResponseErrorHandler {
 }
 
 const updateToken = (token: string) => {
-  store.dispatch(updateUserToken(token))
+  store.dispatch(updateUserAccessToken(token))
 }
 
 const fetchWrapper = async (
@@ -111,7 +111,7 @@ export const newFetch =
 function setTokenInHeader(config: RequestInit = {}) {
   config['headers'] = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${getUserStore().accesToken}`
+    Authorization: `Bearer ${getUserStore().accessToken}`
   }
   return config
 }

@@ -11,8 +11,11 @@ const initialState: UserState = {
     id: "",
     nickname: "",
     email: "",
-    accesToken: "",
-    chInsulinRatio: 4
+    accessToken: "",
+    refreshToken: "",
+    chInsulinRatio: 4,
+    remaingLoginTime: 0,
+    // isRefreshTokenExpired: false
   }
 }
 
@@ -30,20 +33,33 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUserInformations: (state, action: PayloadAction<string>) => {
-
       const user = jwt_decode<JwtPayload>(action.payload) as userInfoFromToken
       state.data.id = user.userId
       state.data.nickname = user.userNickName
       state.data.email = user.userEmail
-      state.data.accesToken = action.payload
-
     },
-    updateUserToken: (state, action: PayloadAction<string>) => {
-      console.log("###################### Token stored in user");
-      state.data.accesToken = action.payload
-    }
+    updateUserAccessToken: (state, action: PayloadAction<string>) => {
+      state.data.accessToken = action.payload
+    },
+    updateUserRefreshToken: (state, action: PayloadAction<string>) => {
+      state.data.refreshToken = action.payload
+    },
+    // getRefreshTokenStatus: (state) => {
+    //   if (!state.data.refreshToken) return
+    //   const getTokenExp = jwt_decode<JwtPayload>(state.data.refreshToken).exp!
+    //   state.data.isRefreshTokenExpired = new Date(getTokenExp).getTime() - Math.floor(new Date().getTime() / 1000) < 0
+    //   console.log(getTokenExp, new Date(getTokenExp).getTime() - Math.floor(new Date().getTime() / 1000));
+    // },
+    getLoginTime: (state) => {
+      if (!state.data.refreshToken) return
+      const getTokenExp = jwt_decode<JwtPayload>(state.data.refreshToken).exp!
+      const timeDiff = new Date(getTokenExp).getTime() - Math.floor(new Date().getTime() / 1000)
+      state.data.remaingLoginTime = new Date(timeDiff).getTime()
+    },
+
   }
 });
 
-export const { updateUserInformations, updateUserToken } = userSlice.actions;
+// export const { updateUserInformations, updateUserAccessToken, updateUserRefreshToken, getRefreshTokenStatus, getLoginTime } = userSlice.actions;
+export const { updateUserInformations, updateUserAccessToken, updateUserRefreshToken, getLoginTime } = userSlice.actions;
 export default userSlice.reducer

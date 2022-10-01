@@ -82,18 +82,14 @@ function Test() {
           // FAFA
         }} >fafa</button>
         <div>
-          <p>{
-            new Date(
-              jwt_decode<JwtPayload>(userData.accesToken).exp!
-            ).getTime() - Math.floor(new Date().getTime() / 1000)
-          } second and byeee ... </p>
+          <p>
+            acccesToken: {new Date(jwt_decode<JwtPayload>(userData.accessToken).exp!).getTime() - Math.floor(new Date().getTime() / 1000)} sec
+            <br />
+            refreshToken: {new Date(jwt_decode<JwtPayload>(userData.refreshToken).exp!).getTime() - Math.floor(new Date().getTime() / 1000)} sec
+          </p>
           <p>{Math.floor(new Date().getTime() / 1000)}</p>
-          <p>{
-            new Date(
-              jwt_decode<JwtPayload>(
-                userData.accesToken).exp!
-            ).getTime()
-          }</p>
+          <p>{new Date(jwt_decode<JwtPayload>(userData.accessToken).exp!).getTime()}</p>
+          <p>{new Date(jwt_decode<JwtPayload>(userData.refreshToken).exp!).getTime()}</p>
         </div>
 
         <div className="test-header">

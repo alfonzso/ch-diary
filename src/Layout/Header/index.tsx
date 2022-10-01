@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
+import { logMeOut } from "../../redux/logoutSlice";
+import { setRedirectNeeded } from "../../redux/redirectSlice";
+import { RootState } from "../../redux/store";
+import { getLoginTime } from "../../redux/userSlice";
 import "./index.scss";
 
 const Header = () => {
@@ -9,6 +15,9 @@ const Header = () => {
     "Logout": "Login"
   }
   const userData = useAppSelector(state => state.user.data)
+  const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+  const [loginInterval, setLoginInterval] = useState(setInterval(() => { }, 0));
+
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const [links] = useState(new Map<string, string>([
     ["/", "Home"], ["/today", "Today"],
@@ -20,11 +29,44 @@ const Header = () => {
     return userData.nickname === "" ? "Login" : "Logout"
   }
 
+  useEffect(() => {
+    if (userData.nickname != "") {
+      const tmpInterval = setInterval(() => {
+        dispatch(getLoginTime())
+      }, 10000);
+      setLoginInterval(tmpInterval)
+    }
+  }, [userData.nickname]);
+
+  useEffect(() => {
+    if (userData.remaingLoginTime < 0) {
+      clearInterval(loginInterval);
+        dispatch(setRedirectNeeded(true))
+        dispatch(logMeOut())
+    }
+  }, [userData.remaingLoginTime]);
+
+  const padTime = (time: number) => {
+    return time.toString().padStart(2, '0')
+  }
+  const prettyDate = (seconds: number) => {
+    let days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    let hours = Math.floor(seconds / 3600);
+    seconds -= hours * 3600;
+    let minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
+    let kek = `${days}d - ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`
+    // console.log(kek);
+    return kek
+  }
+
   return (
     <nav className="header">
-      <a href="/" className="brand-name">
-        Ch Diary ={">"} {userData.nickname}
-      </a>
+      <div className="headerInfoBar">
+        <p> Ch Diary ={">"} {userData.nickname} </p>
+        <p className="remainingSessionTime">{userData.remaingLoginTime > 0 ? prettyDate(userData.remaingLoginTime) : null}</p>
+      </div>
       <button className="hamburger"
         onClick={() => {
           setIsNavExpanded(!isNavExpanded);

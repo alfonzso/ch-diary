@@ -57,6 +57,16 @@
   background-color: #2642af;
 }
 
+.headerInfoBar {
+  display: flex;
+  width: 225px;
+  justify-content: space-evenly;
+}
+
+.remainingSessionTime {
+  font-size: 10px;
+}
+
 @media screen and (max-width: 1024px) {
   .hamburger {
     display: block;

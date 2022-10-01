@@ -1,12 +1,9 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import jwt_decode, { JwtPayload } from "jwt-decode";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { useAppSelector } from "../../redux/hooks";
 import { sendImportedData } from "../../redux/importInterFoodSlice";
-import { logMeOut } from "../../redux/logoutSlice";
-import { setRedirectNeeded } from "../../redux/redirectSlice";
 import { RootState } from "../../redux/store";
 import './Import.css';
 import MoveAblePopup, { MouseCoords } from "./MoveAblePopup";
@@ -28,23 +25,6 @@ const ImportForm = ({ coords }: MoveAblePopupProps) => {
     console.log("textarea VAL: ", trimmedImpData);
     dispatch(sendImportedData(trimmedImpData))
   }
-
-  const getTokenExp = () => {
-    return jwt_decode<JwtPayload>(userData.accesToken).exp!
-  }
-
-  const isTokenExpired = () => {
-    return new Date(getTokenExp()).getTime() - Math.floor(new Date().getTime() / 1000) < 0
-  }
-
-  useEffect(() => {
-    if (importToggle) {
-      if (isTokenExpired()) {
-        dispatch(setRedirectNeeded(true))
-        dispatch(logMeOut())
-      }
-    }
-  }, [importToggle, userData]);
 
   return (
     <div className="importInterFoodContainer">

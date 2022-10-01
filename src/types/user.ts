@@ -4,8 +4,12 @@ type UserData = {
   id: string
   email: string
   nickname: string
-  accesToken: string
+  accessToken: string
+  refreshToken: string
   chInsulinRatio: number
+  // remaingLoginTime: Date | null
+  remaingLoginTime: number
+  // isRefreshTokenExpired: boolean
   // role: string
 }
 
