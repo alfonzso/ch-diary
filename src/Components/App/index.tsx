@@ -32,7 +32,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="today" element={<Today />} />
+            <Route path="myDailyCourses" element={<Today />} />
             <Route path="about" element={<About />} />
             <Route path="login" element={<Login />} />
             <Route path="logout" element={<Logout />} />

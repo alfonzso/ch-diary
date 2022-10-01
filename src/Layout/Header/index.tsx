@@ -20,7 +20,7 @@ const Header = () => {
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const [links] = useState(new Map<string, string>([
-    ["/", "Home"], ["/today", "Today"],
+    ["/", "Home"], ["/myDailyCourses", "My daily courses"],
     ["/about", "About"], ["/login", "Login"],
     ["/logout", "Logout"], ["/register", "Register"], ["/test", "Test"],
   ]));
