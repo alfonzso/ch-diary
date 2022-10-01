@@ -15,7 +15,7 @@ const updateToken = (token: string) => {
   store.dispatch(updateUserToken(token))
 }
 
-const fetchWrapper = (
+const fetchWrapper = async (
   urlPath: string,
   resolve?: (res: any) => any,
   reject?: ((error: Error) => any) | null,
@@ -23,10 +23,17 @@ const fetchWrapper = (
 ) => {
   const url = urlPath.includes("http") ? urlPath : `${chAppconfig.baseURL}${urlPath}`
   const defaultReject = (err: Error) => { console.log("###)()( defaultReject )()(### ", err) }
-  return fetch(url, init)
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), 5000);
+
+  const response = await fetch(url, { ...init, signal: controller.signal })
     .then((response) => response.json())
     .then(resolve)
     .catch(reject !== null ? reject : defaultReject)
+
+  clearTimeout(id);
+  return response;
 }
 
 const retryFetchWithNewToken = (

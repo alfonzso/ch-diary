@@ -64,6 +64,9 @@ export const getTodayFoods = createAsyncThunk<ITodayFoods, { user: string, date:
       newFetchResolve: (response) => {
         return { resp: response, date }
       },
+      newFetchReject(error) {
+        return Promise.reject(error)
+      },
     })
   }
 )
@@ -76,11 +79,13 @@ export const importIFSlice = createSlice({
     builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
       if (!payload.error) ToastSucces('Import Big Success!! ')
     })
+
     builder.addCase(sendImportedData.rejected, (state, { payload }) => {
       ToastError('Import Failed!! ')
     })
 
     builder.addCase(getTodayFoods.fulfilled, (state, { payload: { resp, date } }) => {
+      if (!(resp && date)) return
 
       const convertedFoodData: foodInnerProps[] = resp.data.map(diaryFood => {
         return {
@@ -98,8 +103,10 @@ export const importIFSlice = createSlice({
       state.todayFood = convertedFoodData.filter(data => data.date === date)
 
     })
+
     builder.addCase(getTodayFoods.rejected, (state, { payload }) => {
-      console.log('getTodayFoods rejected: ', state, payload);
+      // console.log('getTodayFoods rejected: ', state, payload);
+      ToastError("Can't get today's food ! ")
     })
   },
   reducers: {

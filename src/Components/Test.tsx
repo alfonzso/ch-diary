@@ -5,7 +5,7 @@ import { chDiarySchema } from "../data/tableSchema";
 import { useFetch } from "../Hooks";
 import { useAppSelector } from "../redux/hooks";
 import { DiaryGetEntryNickNameResponse, DiaryTestResponse, simpleDiaryData } from '../types';
-import {  newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
+import { newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
 import { Redirect } from "./Redirect";
 import './Test.scss';
 
@@ -81,6 +81,21 @@ function Test() {
         <button name="fafa" onClick={() => {
           // FAFA
         }} >fafa</button>
+        <div>
+          <p>{
+            new Date(
+              jwt_decode<JwtPayload>(userData.accesToken).exp!
+            ).getTime() - Math.floor(new Date().getTime() / 1000)
+          } second and byeee ... </p>
+          <p>{Math.floor(new Date().getTime() / 1000)}</p>
+          <p>{
+            new Date(
+              jwt_decode<JwtPayload>(
+                userData.accesToken).exp!
+            ).getTime()
+          }</p>
+        </div>
+
         <div className="test-header">
           <div className="item">z</div>
           <div className="item dataTable" style={{ height: 400, width: '100%' }}>
@@ -103,19 +118,6 @@ function Test() {
           <div className="diary-res">
             <p>{diaryRes.message}</p>
             <p>{diaryRes.data.userNickName}</p>
-            <p>{
-              new Date(
-                jwt_decode<JwtPayload>(
-                  userData.accesToken).exp!
-              ).getTime() - Math.floor(new Date().getTime() / 1000)
-            } second and byeee ... </p>
-            <p>{Math.floor(new Date().getTime() / 1000)}</p>
-            <p>{
-              new Date(
-                jwt_decode<JwtPayload>(
-                  userData.accesToken).exp!
-              ).getTime()
-            }</p>
           </div>
         }
 
