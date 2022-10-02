@@ -2,7 +2,6 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { MouseEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
-import { useAppSelector } from "../../redux/hooks";
 import { sendImportedData } from "../../redux/importInterFoodSlice";
 import { RootState } from "../../redux/store";
 import './Import.css';
@@ -17,7 +16,6 @@ const ImportForm = ({ coords }: MoveAblePopupProps) => {
 
   const [importData, setImportData] = useState('')
   const [importToggle, setImportToggle] = useState(false);
-  const userData = useAppSelector(state => state.user.data)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
   const sendImportInterFood = (ev: MouseEvent<HTMLButtonElement>) => {

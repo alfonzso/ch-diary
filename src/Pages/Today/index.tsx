@@ -1,17 +1,15 @@
-import Table from '../../Components/Table';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import Table from '../../Components/Table';
 import { useAppSelector } from '../../redux/hooks';
-import { getTodayFoods, importToggle } from '../../redux/importInterFoodSlice';
-import { RootState } from '../../redux/store';
-import { getTodayDateAsString, previousDay, todayDay, nextDay } from '../../redux/todaySlice';
-import { FoodProperite } from '../../types/interfood';
 import { ImportForm } from '../../Components/Forms/Import';
-import "./index.scss";
-import { setRedirectNeeded } from '../../redux/redirectSlice';
 import { Redirect } from '../../Components/Redirect';
-import MoveAblePopup from '../../Components/Forms/MoveAblePopup';
+import { setRedirectNeeded } from '../../redux/redirectSlice';
+import { RootState } from '../../redux/store';
+import { getTodayDateAsString, getTodayFoods, nextDay, previousDay, todayDay } from '../../redux/todaySlice';
+import { FoodProperite } from '../../types/interfood';
+import "./index.scss";
 
 function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
   return items.reduce(function (a, b) {
@@ -25,24 +23,24 @@ const Today = () => {
   const { everyHalfHour, todayDateAsString, todayDate } = useAppSelector(state => state.today)
   const { redirectNeeded } = useAppSelector(state => state.redirect)
   const userData = useAppSelector(state => state.user.data)
-  const todayFoods = useAppSelector(state => state.importIF.todayFood)
+  const todayFoods = useAppSelector(state => state.today.todayFood)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   const [coords, setCoords] = useState({ left: 0, top: 0 });
 
   useEffect(() => {
-    if (todayDateAsString !== "1970-01-01" && userData.nickname !== "") {
-      console.log("=>> Today ==>> ", todayDate, todayDateAsString, everyHalfHour, userData);
+    if (todayDateAsString !== "1970-01-01") {
+      console.log("=>> Today ==>> ", todayDate, todayDateAsString, everyHalfHour);
       dispatch(
         getTodayFoods(
-          { user: userData.nickname, date: todayDateAsString }
+          { date: todayDateAsString }
         )
       );
     } else {
       dispatch(getTodayDateAsString())
-      console.warn("Something is empty: ", todayDateAsString, userData.nickname);
+      console.warn("Something is empty: ", todayDateAsString);
     }
 
-  }, [todayDateAsString, everyHalfHour, todayDate, userData, dispatch]);
+  }, [todayDateAsString, everyHalfHour, todayDate, dispatch]);
 
   useEffect(() => {
     if (redirectNeeded) {
@@ -83,7 +81,6 @@ const Today = () => {
           </div>
         </div>
         <div className="tableContent">
-          {/* <div className="chDiaryMain" onScroll={(ev) => { ev.preventDefault(); floatAnimationOnScrollEvent() }}>{ */}
           <div className="chDiaryMain" >{
             <Table foodList={todayFoods} />
           }</div>

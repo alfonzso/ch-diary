@@ -29,7 +29,7 @@ const Food = ({ food, setInitFollowers }: FoodProps) => {
   }, [food]);
 
   useEffect(() => {
-    if (userData) {
+    if (userData.chInsulinRatio) {
       const calcInsList = [...Array(3).keys()].map((v, idx) => {
         return {
           insulin: calculatedCh / (userData.chInsulinRatio + v),
@@ -40,7 +40,7 @@ const Food = ({ food, setInitFollowers }: FoodProps) => {
         calcInsList
       )
     }
-  }, [userData, calculatedCh]);
+  }, [userData.chInsulinRatio, calculatedCh]);
 
   useEffect(() => {
     if (insulinNeeded.length > 0) setInitFollowers(true)

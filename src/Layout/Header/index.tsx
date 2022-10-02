@@ -30,21 +30,21 @@ const Header = () => {
   }
 
   useEffect(() => {
-    if (userData.nickname != "") {
+    if (userData.nickname !== "") {
       const tmpInterval = setInterval(() => {
         dispatch(getLoginTime())
       }, 10000);
       setLoginInterval(tmpInterval)
     }
-  }, [userData.nickname]);
+  }, [dispatch, userData.nickname]);
 
   useEffect(() => {
     if (userData.remaingLoginTime < 0) {
       clearInterval(loginInterval);
-        dispatch(setRedirectNeeded(true))
-        dispatch(logMeOut())
+      dispatch(setRedirectNeeded(true))
+      dispatch(logMeOut())
     }
-  }, [userData.remaingLoginTime]);
+  }, [dispatch, userData.remaingLoginTime, loginInterval]);
 
   const padTime = (time: number) => {
     return time.toString().padStart(2, '0')

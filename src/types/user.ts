@@ -1,4 +1,5 @@
 import { ResponseErrorHandler } from "../utils/fetchInstance"
+import { UserPayload } from "./token"
 
 type UserData = {
   id: string
@@ -13,16 +14,15 @@ type UserData = {
   // role: string
 }
 
+interface TData extends UserPayload {
+  iat: number
+  exp: number
+}
+
 interface apiDiaryTestData {
   success: boolean,
   message: string,
-  data: {
-    userId: string,
-    userEmail: string,
-    userNickName: string,
-    iat: number,
-    exp: number
-  }
+  data: TData
 }
 
 type DiaryTestResponse = apiDiaryTestData & ResponseErrorHandler

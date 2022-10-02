@@ -1,9 +1,20 @@
 import { ResponseErrorHandler } from "../utils/fetchInstance"
 
+export type UserPayload = {
+    id: string
+    email: string
+    nickname: string
+};
+
+// export interface jwtUserPayload{
+//   user: UserPayload
+// }
+
 interface userInfoFromToken {
-  userId: string
-  userNickName: string
-  userEmail: string
+  user: UserPayload
+  // userId: string
+  // userNickName: string
+  // userEmail: string
   jti: string
 }
 

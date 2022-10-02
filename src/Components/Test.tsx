@@ -31,7 +31,7 @@ function Test() {
 
     if (userData.nickname) {
       newFetchWithAuth<DiaryGetEntryNickNameResponse>({
-        url: `/api/diary/getEntry/nickname/alfonzso`,
+        url: `/api/diary/getEntry/`,
         newFetchResolve:
           (diaryObject) => {
             const newListOfDiary: simpleDiaryData[] = diaryObject.data.map(chDiary => {
@@ -50,7 +50,7 @@ function Test() {
       })
     }
 
-  }, [userData]);
+  }, [userData.nickname]);
 
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
     newFetchWithAuth<DiaryTestResponse>({
@@ -113,7 +113,9 @@ function Test() {
         {diaryRes && diaryRes.data &&
           <div className="diary-res">
             <p>{diaryRes.message}</p>
-            <p>{diaryRes.data.userNickName}</p>
+            <p>{diaryRes.data.nickname}</p>
+            <p>{diaryRes.data.iat}</p>
+            <p>{diaryRes.data.exp}</p>
           </div>
         }
 
