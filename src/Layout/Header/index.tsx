@@ -18,6 +18,7 @@ const Header = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   const [loginInterval, setLoginInterval] = useState(setInterval(() => { }, 0));
 
+  const [remaingLoginTimeBy10Seconds, setRemaingLoginTimeBy10Seconds] = useState(0);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const [links] = useState(new Map<string, string>([
     ["/", "Home"], ["/myDailyCourses", "My daily courses"],
@@ -33,7 +34,7 @@ const Header = () => {
     if (userData.nickname !== "") {
       const tmpInterval = setInterval(() => {
         dispatch(getLoginTime())
-      }, 10000);
+      }, 1000);
       setLoginInterval(tmpInterval)
     }
   }, [dispatch, userData.nickname]);
@@ -46,6 +47,15 @@ const Header = () => {
     }
   }, [dispatch, userData.remaingLoginTime, loginInterval]);
 
+  useEffect(() => {
+    if (userData.remaingLoginTime % 10 === 0) {
+      setRemaingLoginTimeBy10Seconds(userData.remaingLoginTime)
+    }
+    if (remaingLoginTimeBy10Seconds === 0) {
+      setRemaingLoginTimeBy10Seconds(userData.remaingLoginTime)
+    }
+  }, [userData.remaingLoginTime]);
+
   const padTime = (time: number) => {
     return time.toString().padStart(2, '0')
   }
@@ -56,16 +66,17 @@ const Header = () => {
     seconds -= hours * 3600;
     let minutes = Math.floor(seconds / 60);
     seconds -= minutes * 60;
-    let kek = `${days}d - ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`
+    return `${days}d - ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`
+    // let kek = `${days}d - ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`
     // console.log(kek);
-    return kek
+    // return kek
   }
 
   return (
     <nav className="header">
       <div className="headerInfoBar">
         <p> Ch Diary ={">"} {userData.nickname} </p>
-        <p className="remainingSessionTime">{userData.remaingLoginTime > 0 ? prettyDate(userData.remaingLoginTime) : null}</p>
+        <p className="remainingSessionTime">{userData.remaingLoginTime > 0 ? prettyDate(remaingLoginTimeBy10Seconds) : null}</p>
       </div>
       <button className="hamburger"
         onClick={() => {

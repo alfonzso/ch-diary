@@ -1,9 +1,10 @@
 import { allowDrop, drag, drop } from "./dragAndDrop";
-import { ToastSucces, ToastError, removeDuplicatedElementsById } from "./oneliners";
+import { ToastSucces, ToastError, removeDuplicatedElementsById, delay } from "./oneliners";
 import { getYYYYMMDD, removeOneDay, addOneDay, generateTimeHHMMSS } from "./util/myDate";
 
 
 export {
+  delay,
 
   getYYYYMMDD,
   removeOneDay,

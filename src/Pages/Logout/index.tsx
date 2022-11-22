@@ -18,11 +18,11 @@ function Logout() {
 
   useEffect(() => {
     if (isLoggedOut === LogoutStates.SUCCES) {
-      ToastSucces('Login Succeed ')
+      ToastSucces('Logout Succeed ')
       setRedirect(true)
       dispatch(setLogoutToInitState())
     } else if (isLoggedOut !== LogoutStates.INIT) {
-      ToastError(`Login Failed ${logoutError.message} `)
+      ToastError(`Logout Failed ${logoutError.message} `)
     }
   }, [isLoggedOut, logoutError, dispatch]);
 

@@ -9,12 +9,14 @@ import { RootState } from './store'
 
 interface ImportState {
   value: boolean;
+  event: boolean;
   // diaryFood: foodInnerProps[];
   // todayFood: foodInnerProps[];
 }
 
 const initialState: ImportState = {
   value: false,
+  event: false,
   // diaryFood: [],
   // todayFood: []
 };
@@ -67,10 +69,12 @@ export const importIFSlice = createSlice({
 
     builder.addCase(sendImportedData.fulfilled, (state, { payload }) => {
       if (!payload.error) ToastSucces('Import Big Success!! ')
+      state.event = !state.event
     })
 
     builder.addCase(sendImportedData.rejected, (state, { payload }) => {
       ToastError('Import Failed!! ')
+      state.event = !state.event
     })
 
     // builder.addCase(getTodayFoods.fulfilled, (state, { payload: { resp, date } }) => {
