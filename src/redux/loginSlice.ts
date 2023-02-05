@@ -3,7 +3,7 @@ import { LoginResponse } from '../types'
 import { newFetch } from '../utils/fetchInstance'
 import { ToastError, ToastSucces } from '../utils/oneliners'
 import { RootState } from './store'
-import { updateUserInformations } from './userSlice'
+import { updateUserAccessToken, updateUserInformations, updateUserRefreshToken } from './userSlice'
 
 export const logMeIn = createAsyncThunk<LoginResponse, void, { state: RootState, dispatch: Dispatch<AnyAction>, rejectValue: Error }>(
   'login/send',
@@ -14,6 +14,8 @@ export const logMeIn = createAsyncThunk<LoginResponse, void, { state: RootState,
       url: `/api/auth/login`,
       newFetchResolve: (response) => {
         dispatch(updateUserInformations(response.accessToken))
+        dispatch(updateUserAccessToken(response.accessToken))
+        dispatch(updateUserRefreshToken(response.refreshToken))
         return response
       },
       newFetchReject: (err) => {

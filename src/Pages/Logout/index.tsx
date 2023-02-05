@@ -1,43 +1,30 @@
-import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Redirect } from "../../Components/Redirect";
+import { useAppSelector } from "../../redux/hooks";
+import { logMeOut, LogoutStates, setLogoutToInitState } from "../../redux/logoutSlice";
 import { RootState } from "../../redux/store";
-import { logout } from "../../redux/userSlice";
-import { newFetch, ResponseErrorHandler } from "../../utils/fetchInstance";
 import { ToastError, ToastSucces } from "../../utils/oneliners";
 
 function Logout() {
   const [isRedirect, setRedirect] = useState(false)
+  const { isLoggedOut, logoutError } = useAppSelector(state => state.logout)
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
 
-  const sendLogoutToBackend = () => {
-    newFetch<{} & ResponseErrorHandler>({
-      url: `/api/auth/logout`,
-      config: {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-      },
-      newFetchResolve: () => {
-        ToastSucces("Logout Succeed! ")
-      },
-      newFetchReject: (err) => {
-        ToastError("Logout Failed! ")
-      }
-    })
-  }
+  useEffect(() => {
+    dispatch(logMeOut())
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(
-      logout()
-    )
-    sendLogoutToBackend()
-    setRedirect(true)
-  }, [dispatch]);
+    if (isLoggedOut === LogoutStates.SUCCES) {
+      ToastSucces('Logout Succeed ')
+      setRedirect(true)
+      dispatch(setLogoutToInitState())
+    } else if (isLoggedOut !== LogoutStates.INIT) {
+      ToastError(`Logout Failed ${logoutError.message} `)
+    }
+  }, [isLoggedOut, logoutError, dispatch]);
 
   return (<>
     {isRedirect && <Redirect to='/' />}

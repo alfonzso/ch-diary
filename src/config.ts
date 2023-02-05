@@ -6,6 +6,6 @@ export interface jsonConfig {
 
 export const chAppconfig: jsonConfig = {
   title: "ChDiary",
-  baseURL: (window as any)._env_.REACT_APP_BE_URL as string || 'http://localhost:8080',
-  appVersion: (window as any)._env_.REACT_APP_GIT_VERSION as string || 'fafa'
+  baseURL: process.env.REACT_APP_BE_URL || 'http://localhost:8080',
+  appVersion: process.env.REACT_APP_GIT_VERSION || 'fafa'
 }

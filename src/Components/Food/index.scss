@@ -1,0 +1,80 @@
+@mixin mobile() {
+  @media only screen and (max-width: 1024px) {
+    @content
+  }
+}
+
+.popup {
+  position: absolute;
+  background-color: var(--popup-color);
+}
+
+.popup::before {
+  position: absolute;
+  border-color: var(--popup-color);
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-style: solid;
+  border-width: 10px;
+  bottom: -19px;
+  content: "";
+  left: 0;
+}
+
+
+
+
+.food {
+  background-color: rgb(41, 41, 155);
+  color: white;
+  height: 100%;
+  position: relative;
+
+  .food-info-text {
+    font-size: 75%;
+    margin: 0;
+    padding: 0;
+    padding-right: 10px;
+    text-align: right;
+  }
+
+  .fi-menu-bar {
+    display: flex;
+  }
+
+  .fi-food-name {
+    text-align: center;
+    padding: 0px 5px 0px 0px;
+    margin: 0;
+  }
+
+  .fi-toggle-visibility {
+    margin-left: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: burlywood;
+    height: fit-content;
+  }
+
+  .diab-info {
+    p {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    .insulin-ratio-and-need {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+
+  .foodPropRow {
+    display: flex;
+  }
+
+  .foodPropRow>div {
+    flex: 1
+  }
+
+}

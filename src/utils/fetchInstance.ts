@@ -1,5 +1,5 @@
 import { store } from "../redux/store";
-import { updateUserToken } from "../redux/userSlice";
+import { updateUserAccessToken } from "../redux/userSlice";
 import { chAppconfig } from "../config";
 import { getUserStore } from "../redux/hooks";
 import { TokenResponse } from "../types";
@@ -12,10 +12,10 @@ export interface ResponseErrorHandler {
 }
 
 const updateToken = (token: string) => {
-  store.dispatch(updateUserToken(token))
+  store.dispatch(updateUserAccessToken(token))
 }
 
-const fetchWrapper = (
+const fetchWrapper = async (
   urlPath: string,
   resolve?: (res: any) => any,
   reject?: ((error: Error) => any) | null,
@@ -23,10 +23,17 @@ const fetchWrapper = (
 ) => {
   const url = urlPath.includes("http") ? urlPath : `${chAppconfig.baseURL}${urlPath}`
   const defaultReject = (err: Error) => { console.log("###)()( defaultReject )()(### ", err) }
-  return fetch(url, init)
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), 5000);
+
+  const response = await fetch(url, { ...init, signal: controller.signal })
     .then((response) => response.json())
     .then(resolve)
     .catch(reject !== null ? reject : defaultReject)
+
+  clearTimeout(id);
+  return response;
 }
 
 const retryFetchWithNewToken = (
@@ -43,15 +50,15 @@ const retryFetchWithNewToken = (
   )
 }
 
-type newFetchWithAuthParams<T> = {
+type newFetchWithAuthParams<T, K> = {
   url: string
   config?: RequestInit
-  newFetchResolve?: (res: T) => T | void
+  newFetchResolve?: (res: T) => T | void | K
   newFetchReject?: ((error: Error) => any) | null
   tokenReject?: ((error: Error) => any) | null
 }
 
-type newFetch<T, K> = {
+type newFetchParams<T, K> = {
   url: string
   config?: RequestInit
   newFetchResolve?: (res: T) => T | void | K
@@ -60,13 +67,13 @@ type newFetch<T, K> = {
 }
 
 export const newFetchWithAuth =
-  <T extends ResponseErrorHandler>({
+  <T extends ResponseErrorHandler, K = T>({
     url,
     config,
     newFetchResolve = () => { },
     newFetchReject = () => { },
     tokenReject = () => { },
-  }: newFetchWithAuthParams<T>
+  }: newFetchWithAuthParams<T, K>
   ) => {
 
     const firstFetchResolve = async (response: T) => {
@@ -87,7 +94,7 @@ export const newFetch =
     config,
     newFetchResolve = () => { },
     newFetchReject = () => { },
-  }: newFetch<T, K>
+  }: newFetchParams<T, K>
   ) => {
 
     return fetchWrapper(
@@ -104,8 +111,7 @@ export const newFetch =
 function setTokenInHeader(config: RequestInit = {}) {
   config['headers'] = {
     'Content-Type': 'application/json',
-    // Authorization: `Bearer ${getUserDataFromStore().accesToken}`
-    Authorization: `Bearer ${getUserStore().accesToken}`
+    Authorization: `Bearer ${getUserStore().accessToken}`
   }
   return config
 }

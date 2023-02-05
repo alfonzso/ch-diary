@@ -31,3 +31,16 @@
 .closeImportInterFood {
   margin-left: auto;
 }
+
+.popup-children{
+  display: flex;
+  flex-flow: column;
+  height: 200px;
+
+}
+
+#importFoodTextArea {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}

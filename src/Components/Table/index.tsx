@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
-import { getYYYYMMDD, initFollowerToFood } from "../../utils";
-import { Food, foodInnerProps } from "./Food";
+import { getYYYYMMDD } from "../../utils";
+import { Food, foodInnerProps } from "../Food";
 import { Row } from "./Row";
 
 interface idxHiddenFood {
@@ -42,10 +42,6 @@ const Table = ({ foodList }: TableProps) => {
     setNowGetTime(getYYYYMMDD().getTime())
     createHoursList()
   }, [foodList, createHoursList]);
-
-  useEffect(() => {
-    initFollowerToFood()
-  }, [rowAndFoods, initFollowers]);
 
 
   return (

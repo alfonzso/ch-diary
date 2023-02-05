@@ -5,7 +5,7 @@ import { chDiarySchema } from "../data/tableSchema";
 import { useFetch } from "../Hooks";
 import { useAppSelector } from "../redux/hooks";
 import { DiaryGetEntryNickNameResponse, DiaryTestResponse, simpleDiaryData } from '../types';
-import {  newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
+import { newFetchWithAuth, ResponseErrorHandler } from '../utils/fetchInstance';
 import { Redirect } from "./Redirect";
 import './Test.scss';
 
@@ -31,7 +31,7 @@ function Test() {
 
     if (userData.nickname) {
       newFetchWithAuth<DiaryGetEntryNickNameResponse>({
-        url: `/api/diary/getEntry/nickname/alfonzso`,
+        url: `/api/diary/getEntry/`,
         newFetchResolve:
           (diaryObject) => {
             const newListOfDiary: simpleDiaryData[] = diaryObject.data.map(chDiary => {
@@ -50,7 +50,7 @@ function Test() {
       })
     }
 
-  }, [userData]);
+  }, [userData.nickname]);
 
   const shoot = (event: MouseEvent<HTMLButtonElement>) => {
     newFetchWithAuth<DiaryTestResponse>({
@@ -81,6 +81,17 @@ function Test() {
         <button name="fafa" onClick={() => {
           // FAFA
         }} >fafa</button>
+        <div>
+          <p>
+            acccesToken: {new Date(jwt_decode<JwtPayload>(userData.accessToken).exp!).getTime() - Math.floor(new Date().getTime() / 1000)} sec
+            <br />
+            refreshToken: {new Date(jwt_decode<JwtPayload>(userData.refreshToken).exp!).getTime() - Math.floor(new Date().getTime() / 1000)} sec
+          </p>
+          <p>{Math.floor(new Date().getTime() / 1000)}</p>
+          <p>{new Date(jwt_decode<JwtPayload>(userData.accessToken).exp!).getTime()}</p>
+          <p>{new Date(jwt_decode<JwtPayload>(userData.refreshToken).exp!).getTime()}</p>
+        </div>
+
         <div className="test-header">
           <div className="item">z</div>
           <div className="item dataTable" style={{ height: 400, width: '100%' }}>
@@ -102,20 +113,9 @@ function Test() {
         {diaryRes && diaryRes.data &&
           <div className="diary-res">
             <p>{diaryRes.message}</p>
-            <p>{diaryRes.data.userNickName}</p>
-            <p>{
-              new Date(
-                jwt_decode<JwtPayload>(
-                  userData.accesToken).exp!
-              ).getTime() - Math.floor(new Date().getTime() / 1000)
-            } second and byeee ... </p>
-            <p>{Math.floor(new Date().getTime() / 1000)}</p>
-            <p>{
-              new Date(
-                jwt_decode<JwtPayload>(
-                  userData.accesToken).exp!
-              ).getTime()
-            }</p>
+            <p>{diaryRes.data.nickname}</p>
+            <p>{diaryRes.data.iat}</p>
+            <p>{diaryRes.data.exp}</p>
           </div>
         }
 

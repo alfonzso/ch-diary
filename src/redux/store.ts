@@ -6,18 +6,22 @@ import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
 import loginSlice from "./loginSlice";
+import logoutSlice from "./logoutSlice";
+import redirectSlice from "./redirectSlice";
 
 const AppReducers = combineReducers({
   user: userDataSlice,
   importIF: importIFSlice,
   today: todaySlice,
-  login: loginSlice
+  login: loginSlice,
+  logout: logoutSlice,
+  redirect: redirectSlice
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['importIF', 'today', 'login']
+  blacklist: ['importIF', 'today', 'login', 'logout', 'redirect']
 };
 
 export type AppReducerType = ReturnType<typeof AppReducers>
