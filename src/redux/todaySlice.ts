@@ -17,14 +17,16 @@ interface ITodayFoods {
 
 export interface TodayState {
   everyHalfHour: number
-  todayDateAsString: string
+  todayAsYYYYMMDD: string
+  todayAshhmmss: string
   todayDate: Date
   todayFood: foodInnerProps[];
 }
 
 const initialState: TodayState = {
   everyHalfHour: 24 * 2,
-  todayDateAsString: "1970-01-01",
+  todayAsYYYYMMDD: "1970-01-01",
+  todayAshhmmss: "00:00:00.000Z",
   todayDate: getYYYYMMDD(),
   todayFood: []
 }
@@ -44,6 +46,12 @@ export const getTodayFoods = createAsyncThunk<ITodayFoods, { date: string }>(
   }
 )
 
+const fixedDate = (date: Date) => {
+  const offset = date.getTimezoneOffset()
+  date = new Date(date.getTime() - (offset * 60 * 1000))
+  return date.toISOString().split('T')[0]
+}
+
 export const todaySlice = createSlice({
   name: "today",
   initialState,
@@ -56,7 +64,7 @@ export const todaySlice = createSlice({
         return {
           id: diaryFood.id,
           name: diaryFood.Food.name,
-          date: new Date(diaryFood.createdAt).toLocaleDateString("en-ca"),
+          date: fixedDate(new Date(diaryFood.createdAt)),
           dateTime: hourMinuteToDateTime(new Date(diaryFood.createdAt)),
           type: diaryFood.Food.Interfood.InterfoodType.name,
           portion: diaryFood.Food.portion,
@@ -76,19 +84,22 @@ export const todaySlice = createSlice({
   },
   reducers: {
     getTodayDateAsString: (state) => {
-      state.todayDateAsString = state.todayDate.toLocaleDateString("en-ca")
+      let getTodayDate = getYYYYMMDD();
+      state.todayDate = getTodayDate;
+      state.todayAsYYYYMMDD = fixedDate(getTodayDate)
     },
     previousDay: (state) => {
-      state.todayDate = removeOneDay(state.todayDate)
-      state.todayDateAsString = state.todayDate.toLocaleDateString("en-ca")
+      state.todayDate = removeOneDay(state.todayDate);
+      [state.todayAsYYYYMMDD, state.todayAshhmmss] = state.todayDate.toISOString().split('T')
     },
     todayDay: (state) => {
-      state.todayDate = getYYYYMMDD()
-      state.todayDateAsString = state.todayDate.toLocaleDateString("en-ca")
+      let getTodayDate = getYYYYMMDD();
+      state.todayDate = getTodayDate;
+      state.todayAsYYYYMMDD = fixedDate(getTodayDate)
     },
     nextDay: (state) => {
-      state.todayDate = addOneDay(state.todayDate)
-      state.todayDateAsString = state.todayDate.toLocaleDateString("en-ca")
+      state.todayDate = addOneDay(state.todayDate);
+      [state.todayAsYYYYMMDD, state.todayAshhmmss] = state.todayDate.toISOString().split('T')
     }
   }
 });

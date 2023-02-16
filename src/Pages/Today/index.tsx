@@ -20,7 +20,7 @@ function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) 
 
 const Today = () => {
 
-  const { everyHalfHour, todayDateAsString, todayDate } = useAppSelector(state => state.today)
+  const { everyHalfHour, todayAsYYYYMMDD, todayDate } = useAppSelector(state => state.today)
   const { redirectNeeded } = useAppSelector(state => state.redirect)
   const userData = useAppSelector(state => state.user.data)
   const todayFoods = useAppSelector(state => state.today.todayFood)
@@ -28,19 +28,19 @@ const Today = () => {
   const [coords, setCoords] = useState({ left: 0, top: 0 });
 
   useEffect(() => {
-    if (todayDateAsString !== "1970-01-01") {
-      console.log("=>> Today ==>> ", todayDate, todayDateAsString, everyHalfHour);
+    if (todayAsYYYYMMDD !== "1970-01-01") {
+      console.log("=>> Today ==>> ", todayDate, todayAsYYYYMMDD, everyHalfHour);
       dispatch(
         getTodayFoods(
-          { date: todayDateAsString }
+          { date: todayAsYYYYMMDD }
         )
       );
     } else {
       dispatch(getTodayDateAsString())
-      console.warn("Something is empty: ", todayDateAsString);
+      console.warn("Something is empty: ", todayAsYYYYMMDD);
     }
 
-  }, [todayDateAsString, everyHalfHour, todayDate, dispatch]);
+  }, [todayAsYYYYMMDD, everyHalfHour, todayDate, dispatch]);
 
   useEffect(() => {
     if (redirectNeeded) {
@@ -69,7 +69,7 @@ const Today = () => {
 
             <div className='dateChanger'>
               <div className="previousDay"> <button onClick={() => { dispatch(previousDay()) }} > &lt; </button></div>
-              <div className="todayDay"> <button onClick={() => { dispatch(todayDay()) }} > {todayDateAsString} </button></div>
+              <div className="todayDay"> <button onClick={() => { dispatch(todayDay()) }} > {todayAsYYYYMMDD} </button></div>
               <div className="nextDay"> <button onClick={() => { dispatch(nextDay()) }} > &gt; </button></div>
             </div>
 
