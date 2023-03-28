@@ -1,7 +1,7 @@
-type FoodProperite = {
+type FoodProperty = {
   gramm: number;
-  kcal: number;
-  portein: number;
+  energy: number;
+  protein: number;
   fat: number;
   ch: number;
 }
@@ -10,7 +10,7 @@ interface foodInnerProps {
   id: string
   type: string
   portion: number
-  props: FoodProperite
+  props: FoodProperty
   name: string
   dateTime: string
   date: string
@@ -21,14 +21,14 @@ interface FoodProps {
   setInitFollowers: any
 }
 
-interface foodProperiteComponentProps {
-  foodProps: FoodProperite
+interface foodPropertyComponentProps {
+  foodProps: FoodProperty
   portion: number
 }
 
 export type {
-  FoodProperite,
+  FoodProperty,
   foodInnerProps,
   FoodProps,
-  foodProperiteComponentProps,
+  foodPropertyComponentProps,
 }

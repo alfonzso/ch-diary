@@ -1,5 +1,5 @@
 import { ResponseErrorHandler } from "../utils/fetchInstance"
-import { FoodProperite } from "./interfood"
+import { FoodProperty } from "./interfood"
 
 interface apiDiaryGetEntry {
   status: boolean
@@ -17,7 +17,7 @@ type diaryData = {
         name: string;
       };
     };
-    FoodProperite: FoodProperite,
+    FoodProperty: FoodProperty,
     name: string;
     portion: number;
   };
@@ -30,8 +30,8 @@ type diaryData = {
 
 type simpleDiaryData = {
   gramm: number;
-  kcal: number;
-  portein: number;
+  energy: number;
+  protein: number;
   fat: number;
   ch: number;
   id: string;

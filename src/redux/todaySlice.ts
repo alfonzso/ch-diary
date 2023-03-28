@@ -69,7 +69,7 @@ export const todaySlice = createSlice({
           dateTime: hourMinuteToDateTime(new Date(diaryFood.createdAt)),
           type: diaryFood.Food.Interfood.InterfoodType.name,
           portion: diaryFood.Food.portion,
-          props: diaryFood.Food.FoodProperite
+          props: diaryFood.Food.FoodProperty
         }
       })
 

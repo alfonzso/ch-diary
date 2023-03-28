@@ -42,7 +42,7 @@ function Test() {
                 foodName: chDiary.Food.name,
                 foodType: chDiary.Food.Interfood.InterfoodType.name,
                 portion: chDiary.Food.portion,
-                ...chDiary.Food.FoodProperite
+                ...chDiary.Food.FoodProperty
               }
             })
             setFoodRes(newListOfDiary)

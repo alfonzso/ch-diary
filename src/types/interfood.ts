@@ -1,9 +1,9 @@
 import { ResponseErrorHandler } from "../utils/fetchInstance";
 
-export interface FoodProperite {
+export interface FoodProperty {
   gramm: number;
-  kcal: number;
-  portein: number;
+  energy: number;
+  protein: number;
   fat: number;
   ch: number;
 }
@@ -14,7 +14,7 @@ export interface apiInterfoodImportStructure {
   foodPortion?: number,
   createdAt: Date,
   interFoodType: string,
-  foodProp?: FoodProperite
+  foodProp?: FoodProperty
 }
 
 export interface apiInterfoodImportData {
