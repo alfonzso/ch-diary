@@ -49,7 +49,8 @@ export const getTodayFoods = createAsyncThunk<ITodayFoods, { date: string }>(
 const fixedDate = (date: Date) => {
   const offset = date.getTimezoneOffset()
   date = new Date(date.getTime() - (offset * 60 * 1000))
-  return date.toISOString().split('T')[0]
+  let [todayAsYYYYMMDD, todayAshhmmss] = date.toISOString().split('T')
+  return { todayAsYYYYMMDD, todayAshhmmss }
 }
 
 export const todaySlice = createSlice({
@@ -64,11 +65,11 @@ export const todaySlice = createSlice({
         return {
           id: diaryFood.id,
           name: diaryFood.Food.name,
-          date: fixedDate(new Date(diaryFood.createdAt)),
+          date: fixedDate(new Date(diaryFood.createdAt)).todayAsYYYYMMDD,
           dateTime: hourMinuteToDateTime(new Date(diaryFood.createdAt)),
           type: diaryFood.Food.Interfood.InterfoodType.name,
           portion: diaryFood.Food.portion,
-          props: diaryFood.Food.FoodProperite
+          props: diaryFood.Food.FoodProperty
         }
       })
 
@@ -86,20 +87,28 @@ export const todaySlice = createSlice({
     getTodayDateAsString: (state) => {
       let getTodayDate = getYYYYMMDD();
       state.todayDate = getTodayDate;
-      state.todayAsYYYYMMDD = fixedDate(getTodayDate)
+      state.todayAsYYYYMMDD = fixedDate(getTodayDate).todayAsYYYYMMDD
     },
     previousDay: (state) => {
-      state.todayDate = removeOneDay(state.todayDate);
-      [state.todayAsYYYYMMDD, state.todayAshhmmss] = state.todayDate.toISOString().split('T')
+      let previousDay = removeOneDay(state.todayDate);
+      let fixedPreviousDay = fixedDate(previousDay)
+      console.log("nextDay, fixedNextDay", previousDay, fixedPreviousDay);
+      state.todayDate = previousDay;
+      state.todayAsYYYYMMDD = fixedDate(previousDay).todayAsYYYYMMDD
+      state.todayAshhmmss = fixedDate(previousDay).todayAshhmmss
     },
     todayDay: (state) => {
       let getTodayDate = getYYYYMMDD();
       state.todayDate = getTodayDate;
-      state.todayAsYYYYMMDD = fixedDate(getTodayDate)
+      state.todayAsYYYYMMDD = fixedDate(getTodayDate).todayAsYYYYMMDD
     },
     nextDay: (state) => {
-      state.todayDate = addOneDay(state.todayDate);
-      [state.todayAsYYYYMMDD, state.todayAshhmmss] = state.todayDate.toISOString().split('T')
+      let nextDay = addOneDay(state.todayDate);
+      let fixedNextDay = fixedDate(nextDay)
+      console.log("nextDay, fixedNextDay", nextDay, fixedNextDay);
+      state.todayDate = nextDay;
+      state.todayAsYYYYMMDD = fixedNextDay.todayAsYYYYMMDD
+      state.todayAshhmmss = fixedNextDay.todayAshhmmss
     }
   }
 });

@@ -3,7 +3,7 @@ import { drag } from "../../utils/dragAndDrop";
 import { foodInnerProps, FoodProps } from "./types";
 import { useAppSelector } from "../../redux/hooks";
 import PopupInfo from "../PopupInfo";
-import FoodProperiteComponent from "../FoodProperiteComponent";
+import FoodPropertyComponent from "../FoodPropertyComponent";
 import './index.scss'
 
 const Food = ({ food, setInitFollowers }: FoodProps) => {
@@ -57,7 +57,7 @@ const Food = ({ food, setInitFollowers }: FoodProps) => {
             <div className="fi-toggle-visibility" onClick={() => { setHundredGrammToggle(!hundredGrammToggle) }}> P </div>
           </div>
           {hundredGrammToggle && <p> {hundredGrammValues} </p>}
-          <FoodProperiteComponent foodProps={food.props} portion={food.portion} />
+          <FoodPropertyComponent foodProps={food.props} portion={food.portion} />
         </>
       </PopupInfo>
 

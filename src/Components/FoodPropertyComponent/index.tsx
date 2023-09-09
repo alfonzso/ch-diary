@@ -1,7 +1,7 @@
-import { foodProperiteComponentProps } from "../Food/types"
+import { foodPropertyComponentProps } from "../Food/types"
 
-const FoodProperiteComponent = (
-  { foodProps, portion }: foodProperiteComponentProps
+const FoodPropertyComponent = (
+  { foodProps, portion }: foodPropertyComponentProps
 ) => {
   const num: number = portion / foodProps.gramm
 
@@ -22,4 +22,4 @@ const FoodProperiteComponent = (
   )
 }
 
-export default FoodProperiteComponent
+export default FoodPropertyComponent

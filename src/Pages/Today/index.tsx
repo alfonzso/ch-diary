@@ -8,10 +8,10 @@ import { Redirect } from '../../Components/Redirect';
 import { setRedirectNeeded } from '../../redux/redirectSlice';
 import { RootState } from '../../redux/store';
 import { getTodayDateAsString, getTodayFoods, nextDay, previousDay, todayDay } from '../../redux/todaySlice';
-import { FoodProperite } from '../../types/interfood';
+import { FoodProperty } from '../../types/interfood';
 import "./index.scss";
 
-function sumCh<T extends { portion: number, props: FoodProperite }>(items: T[]) {
+function sumCh<T extends { portion: number, props: FoodProperty }>(items: T[]) {
   return items.reduce(function (a, b) {
     const num: number = b.portion / b.props.gramm
     return a + (b.props.ch * num);
